@@ -10,8 +10,7 @@ const cors = require('cors');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
-const swaggerJsdoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -61,39 +60,7 @@ app.use((req, res, next) => {
     next();
 });
 
-const options = {
-    definition: {
-        openapi: "3.1.0",
-        info: {
-            title: "Sumer Backend API",
-            version: "0.1.0",
-            description:
-                "This is the backend of the Sumer project. Powered by HexaSoft",
-            license: {
-                name: "HexaSoft",
-                url: "https://hexasoft.noxus-solutions.com/",
-            },
-            contact: {
-                name: "Youssef Mohamed",
-                url: "https://github.com/yousseffninja",
-                email: "yousseffmohamedd22@gmail.com",
-            },
-        },
-        servers: [
-            {
-                url: "http://localhost:3000",
-            },
-        ],
-    },
-    apis: ["./routes/*.js"],
-};
-
-const specs = swaggerJsdoc(options);
-app.use(
-    "/swagger-api",
-    swaggerUi.serve,
-    swaggerUi.setup(specs)
-);
+app.use('/api/v1/users', userRoutes);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
