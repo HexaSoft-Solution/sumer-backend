@@ -432,7 +432,15 @@
         "produces": ["application/json"],
         "consumes": ["application/json"],
         "tags": ["Users"],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "task id that needs to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -519,7 +527,7 @@
       "patch" : {
         "produces": ["application/json"],
         "consumes": ["application/json"],
-        "tags": ["Users"],
+        "tags": ["Update User"],
         "parameters": [
           {
             "in": "body",
@@ -559,7 +567,7 @@
       "patch" : {
         "produces": ["application/json"],
         "consumes": ["application/json"],
-        "tags": ["Users"],
+        "tags": ["Update User"],
         "parameters": [
           {
             "in": "body",
@@ -599,7 +607,7 @@
       "delete" : {
         "produces": ["application/json"],
         "consumes": ["application/json"],
-        "tags": ["Users"],
+        "tags": ["Update User"],
         "parameters": [],
         "security": [
           {
@@ -628,7 +636,7 @@
     "/api/v1/uploadPersonalPhoto" : {
       "patch" : {
         "consumes": ["multipart/form-data"],
-        "tags": ["Users"],
+        "tags": ["Update User"],
         "parameters": [
           {
             "in": "formData",
@@ -661,8 +669,87 @@
           }
         }
       }
+    },
+    "/api/v1/address" : {
+      "post" : {
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "tags": ["Update User"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "task object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddAddress"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Response"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value",
+            "schema": {
+              "$ref": "#/definitions/InvalidResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/address/{addressId}" : {
+      "delete" : {
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "tags": ["Update User"],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "task id that needs to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Response"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value",
+            "schema": {
+              "$ref": "#/definitions/InvalidResponse"
+            }
+          }
+        }
+      }
     }
   },
+
   "definitions": {
     "signUp": {
       "type": "object",
@@ -781,6 +868,29 @@
           "type": "string"
         },
         "passwordConfirm": {
+          "type": "string"
+        }
+      }
+    },
+    "AddAddress": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "houseNo": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "string"
+        },
+        "houseType": {
           "type": "string"
         }
       }

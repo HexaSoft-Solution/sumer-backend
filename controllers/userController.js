@@ -1,9 +1,11 @@
 const User = require('../models/userModel');
+const Address = require('../models/addressModel')
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const cloudinary = require("../utils/cloudinary");
 const jwt = require("jsonwebtoken");
+const {add} = require("nodemon/lib/rules");
 
 const signToken = (id) =>
     jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -113,8 +115,61 @@ exports.uploadPersonalPhoto = catchAsync(async (req, res, next) => {
     });
 });
 
+exports.addAddress = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const { street, city, houseNo, latitude, longitude, houseType } = req.body;
+    const address = await Address.create({
+        street,
+        city,
+        houseNo,
+        latitude,
+        longitude,
+        houseType
+    });
+
+    await User.findByIdAndUpdate(userId, {
+        $push: { addresses: address.id },
+    }, { new: true })
+
+    res.status(201).json({
+        status: "success",
+        message: "Address Add successful"
+    })
+})
+
+exports.deleteAddress = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const addressId = req.params.addressId;
+    await Address.findByIdAndRemove(addressId)
+    await User.findByIdAndUpdate(userId, {
+        $pull: { addresses: addressId }
+    });
+
+    res.status(201).json({
+        status: "success",
+        message: "address remove successful"
+    })
+})
 
 exports.getUsers = factory.getAll(User);
-exports.getUser = factory.getOne(User);
+exports.getUser = catchAsync(async (req, res, next) => {
+    let user = await User.findById(req.params.id);
+
+    if (!user) {
+        return next(new AppError('No document found with that ID. 404'));
+    }
+
+    const addressId = user.addresses
+
+    const address = await Address.find({
+        _id: { $in: addressId }
+    })
+
+    res.status(200).json({
+        status: 'success',
+        user,
+        address
+    });
+});
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);

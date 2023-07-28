@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
     },
     role:{
         type: String,
-        enum: ['individual', 'consultant', 'business', 'admin', ],
+        enum: ['individual', 'consultant', 'business', 'admin', 'deliver', 'salon service'],
         default: 'individual',
     },
     birthDate: {
@@ -65,6 +65,10 @@ const userSchema = new mongoose.Schema({
         maxLength: 32,
         select: false,
     },
+    addresses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Address',
+    },],
     passwordConfirm: {
         type: String,
         required: [true, 'Please confirm your password'],

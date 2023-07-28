@@ -90,5 +90,16 @@ router
         userController.deleteUser
     );
 
+router
+    .post(
+        '/address',
+        authController.protect,
+        userController.addAddress
+    )
+    .delete(
+        '/address/:addressId',
+        authController.protect,
+        userController.deleteAddress
+    )
 
 module.exports = router;
