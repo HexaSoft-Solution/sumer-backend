@@ -16,6 +16,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 const app = express();
 
@@ -70,6 +71,7 @@ app.use('/swagger-api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

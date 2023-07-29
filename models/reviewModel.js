@@ -4,6 +4,7 @@ const Product = require('./productModel');
 const reviewSchema = new mongoose.Schema(
     {
         fullName: String,
+        userPhoto: String,
         review: {
             type: String,
             required: [true, 'Review can not be empty!'],

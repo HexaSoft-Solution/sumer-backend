@@ -187,19 +187,21 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         availabilityCount,
         howToUse,
         highlights,
+        owner: userId
     });
 
     await Category.findByIdAndUpdate(category, {
         $push: { "ProductsIds": product.id }
     });
 
-    await User.findByIdAndUpdate(userId, {
+    const owner = await User.findByIdAndUpdate(userId, {
        $push: { "productsCreated": product.id },
     });
 
     res.status(201).json({
         status: "success",
-        product
+        product,
+        owner
     });
 });
 
