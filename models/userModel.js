@@ -82,6 +82,14 @@ const userSchema = new mongoose.Schema({
     passwordChangedAt: {
         type: Date,
     },
+    lovedProducts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+    }],
+    productsCreated: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+    }],
     createdAt: {
         type: Date,
         default: Date.now()

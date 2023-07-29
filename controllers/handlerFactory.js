@@ -20,10 +20,7 @@ exports.deleteOne = (Model) =>
 
 exports.updateOne = (Model) =>
     catchAsync(async (req, res, next) => {
-        const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        });
+        const doc = await Model.findByIdAndUpdate(req.params.id, req.body);
 
         if (!doc) {
             return next(new AppError('No document found with that ID. 404'));
@@ -60,6 +57,27 @@ exports.getOne = (Model, popOptions) =>
 
         res.status(200).json({
             status: 'success',
+            data: {
+                doc,
+            },
+        });
+    });
+
+exports.search = (Model) =>
+    catchAsync(async (req, res, next) => {
+        let filter = {};
+        if (req.params.id) filter = { model: req.params.id };
+        const key = req.params.key
+
+        const features = new APIFeatures(Model.find({name:{ $regex:'.*'+key+'.*'} }), req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .Pagination();
+        const doc = await features.query;
+        res.status(200).json({
+            status: 'success',
+            results: doc.length,
             data: {
                 doc,
             },
