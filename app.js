@@ -13,10 +13,10 @@ const swaggerDocument = require('./swagger.json');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/ProductRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
+const reviewRoutes = require('./routes/ReviewRoutes');
 
 const app = express();
 
