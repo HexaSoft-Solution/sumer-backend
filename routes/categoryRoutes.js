@@ -7,7 +7,6 @@ const router = express.Router();
 router
     .route('/')
     .get(
-        authController.protect,
         categoryController.getAllCategories
     )
     .post(

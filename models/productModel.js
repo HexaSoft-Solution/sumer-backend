@@ -9,7 +9,6 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-
     discount: {
         type: Number,
         default: 0
@@ -67,10 +66,18 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    Reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review',
+    }],
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
         required: true
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     voucher: {
         type: mongoose.Schema.Types.ObjectId,
