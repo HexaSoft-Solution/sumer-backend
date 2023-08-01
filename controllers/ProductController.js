@@ -176,6 +176,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         availabilityCount,
         howToUse,
         highlights,
+        color,
     } = req.body;
 
     const product = await Product.create({
@@ -187,6 +188,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         availabilityCount,
         howToUse,
         highlights,
+        color,
         owner: userId
     });
 

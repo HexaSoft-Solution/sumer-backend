@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const validator = require('validator')
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -31,6 +32,11 @@ const productSchema = new mongoose.Schema({
         },
     ],
     availabilityCount: Number,
+    color: {
+        type: String,
+        required: [true, 'Must be not Empty !'],
+        validate: [validator.isHexColor, "Please enter valid hex color code"],
+    },
     howToUse: {
         type: String,
         required: [true, 'Must be not Empty !'],
