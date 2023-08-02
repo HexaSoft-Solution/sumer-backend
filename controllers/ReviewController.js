@@ -80,7 +80,6 @@ exports.deleteReview = catchAsync(async (req, res, next) => {
     const review = await Review.findById(reviewId)
 
     let data;
-    console.log(req.user.role)
     if (review.user.id === req.user.id || req.user.role === 'admin') {
         await Product.findByIdAndUpdate(review.product, {
             $pull: { Reviews: reviewId },

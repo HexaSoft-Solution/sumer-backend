@@ -252,7 +252,9 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
 exports.searchProduct = factory.search(Product)
 
 exports.deleteProduct = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
     const productIds = req.params.id;
+
     const currentProduct = await Product.findById(productIds)
 
     await Category.findByIdAndUpdate(currentProduct.category, {
@@ -260,6 +262,10 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
     });
 
     await Product.findByIdAndDelete(productIds)
+
+    await User.findByIdAndUpdate(userId, {
+        $pull: { "productsCreated": productIds }
+    })
 
     res.status(201).json({
         status: 'Deleting Success',
