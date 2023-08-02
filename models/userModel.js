@@ -86,9 +86,17 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
     }],
+    lovedSalons: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Salon',
+    }],
     productsCreated: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
+    }],
+    salonCreated: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Salon',
     }],
     createdAt: {
         type: Date,

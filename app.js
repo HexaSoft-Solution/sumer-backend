@@ -17,6 +17,8 @@ const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/ProductRoutes');
 const reviewRoutes = require('./routes/ReviewRoutes');
+const salonRoutes = require('./routes/salonRoutes');
+const salonReviewRoutes = require('./routes/salonReviewRoutes');
 
 const app = express();
 
@@ -72,6 +74,8 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
+app.use('/api/v1/salons', salonRoutes);
+app.use('/api/v1/salonReviews', salonReviewRoutes);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
