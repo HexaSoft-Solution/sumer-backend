@@ -7,7 +7,7 @@ const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('./path/swagger-output.json');
 
 
 const AppError = require('./utils/appError');
@@ -17,6 +17,7 @@ const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/ProductRoutes');
 const reviewRoutes = require('./routes/ReviewRoutes');
+const discountVoucherRoutes = require('./routes/discountVoucherRoutes');
 const salonRoutes = require('./routes/salonRoutes');
 const salonReviewRoutes = require('./routes/salonReviewRoutes');
 
@@ -74,6 +75,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
+app.use('/api/v1/discountVouchers', discountVoucherRoutes);
 app.use('/api/v1/salons', salonRoutes);
 app.use('/api/v1/salonReviews', salonReviewRoutes);
 

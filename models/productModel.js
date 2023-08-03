@@ -10,9 +10,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    discount: {
+    discountPercentage: {
         type: Number,
-        default: 0
+        default: 0,
+        max: 60,
     },
     discountedPrice: {
         type: Number,
@@ -31,7 +32,10 @@ const productSchema = new mongoose.Schema({
             cloudinaryId: String,
         },
     ],
-    availabilityCount: Number,
+    availabilityCount: {
+        type: Number,
+        default: 1,
+    },
     color: {
         type: String,
         required: [true, 'Must be not Empty !'],

@@ -25,8 +25,28 @@ exports.getCategory = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.createCategory = factory.createOne(Category);
-exports.updateCategory = factory.updateOne(Category);
+exports.createCategory = catchAsync(async (req, res, next) => {
+    const { name, desc } = req.body ;
+
+    const category = await Category.create({ name, desc });
+
+    res.status(201).json({
+        status: "success",
+        category
+    });
+});
+
+exports.updateCategory = catchAsync(async (req, res, next) => {
+    const categoryId = req.params.id;
+    const { name, desc } = req.body ;
+
+    const category = await Category.findByIdAndUpdate(categoryId, { name, desc });
+
+    res.status(201).json({
+        status: "success",
+        category
+    });
+});
 
 exports.deleteCategory = catchAsync(async (req, res, next) => {
     const doc = await Category.findById(req.params.id);

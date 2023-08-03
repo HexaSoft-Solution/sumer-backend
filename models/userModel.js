@@ -98,6 +98,21 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Salon',
     }],
+    cart: [{
+        product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product',
+        },
+        quantity: {
+            type: Number,
+            default: 1,
+            min: 1,
+        },
+    }],
+    vouchers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Voucher',
+    }],
     createdAt: {
         type: Date,
         default: Date.now()

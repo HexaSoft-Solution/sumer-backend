@@ -15,6 +15,17 @@ router
     )
 
 router
+    .route('/cart')
+    .patch(
+        authController.protect,
+        ProductController.addToCart
+    )
+    .delete(
+        authController.protect,
+        ProductController.removeFromCart
+    )
+
+router
     .route('/:id')
     .get(ProductController.getProduct)
     .patch(
