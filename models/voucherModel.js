@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const voucherSchema  = new mongoose.Schema({
     code: {
         type: String,
+        unique: true,
         required: true
     },
     discountPercentage: {
@@ -18,7 +19,7 @@ const voucherSchema  = new mongoose.Schema({
     expireDate: {
         type: Date,
         required: true
-    }, // New field for voucher expiration date
+    },
     used: {
         type: Boolean,
         default: false
