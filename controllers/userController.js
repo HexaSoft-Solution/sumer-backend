@@ -1,11 +1,14 @@
 const User = require('../models/userModel');
 const Address = require('../models/addressModel')
+const Voucher = require('../models/voucherModel');
+
+
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const cloudinary = require("../utils/cloudinary");
+
 const jwt = require("jsonwebtoken");
-const {add} = require("nodemon/lib/rules");
 
 const signToken = (id) =>
     jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -156,6 +159,13 @@ exports.getUser = catchAsync(async (req, res, next) => {
         return next(new AppError('No document found with that ID. 404'));
     }
 
+
+    const voucherId = user.vouchers
+
+    const voucher = await Voucher.find({
+        _id: { $in: voucherId }
+    });
+
     const addressId = user.addresses
 
     const address = await Address.find({
@@ -165,6 +175,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         user,
+        voucher,
         address
     });
 });

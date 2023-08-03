@@ -7,6 +7,7 @@ const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
+const AppError = require('../utils/appError');
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
     let filter = {};
@@ -271,3 +272,53 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
         status: 'Deleting Success',
     })
 })
+
+exports.addToCart = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const { productId, quantity } = req.body;
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+        return next(new AppError('Product not found', 404))
+    }
+
+    if (!product.availabilityCount) {
+        return next(new AppError('Product is not available in stock', 400))
+    }
+
+
+    if (product.availabilityCount < +quantity) {
+        return next(new AppError('Product is not available in stock', 400));
+    }
+
+    await User.findByIdAndUpdate(userId, {
+        $push:
+            {
+                "cart": {
+                    product: productId,
+                    quantity: quantity
+                }
+            }
+    })
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Product added to cart successfully'
+    });
+});
+
+
+exports.removeFromCart = catchAsync(async (req, res, next) => {
+    const { _id } = req.body;
+    const userId = req.user.id;
+
+    await User.findByIdAndUpdate(userId, {
+        $pull: { "cart": { _id } }
+    });
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Product removed from cart successfully'
+    });
+});

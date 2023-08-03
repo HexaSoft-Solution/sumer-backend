@@ -109,6 +109,10 @@ const userSchema = new mongoose.Schema({
             min: 1,
         },
     }],
+    vouchers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Voucher',
+    }],
     createdAt: {
         type: Date,
         default: Date.now()

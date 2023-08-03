@@ -32,7 +32,10 @@ const productSchema = new mongoose.Schema({
             cloudinaryId: String,
         },
     ],
-    availabilityCount: Number,
+    availabilityCount: {
+        type: Number,
+        default: 1,
+    },
     color: {
         type: String,
         required: [true, 'Must be not Empty !'],
