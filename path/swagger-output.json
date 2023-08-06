@@ -1307,7 +1307,7 @@
       }
     },
     "/api/v1/payment/paymentCallback/{invoice_id}": {
-      "patch": {
+      "get": {
         "description": "",
         "parameters": [
           {
@@ -1316,6 +1316,26 @@
             "required": true,
             "type": "string"
           },
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/buyProductConnection": {
+      "patch": {
+        "description": "",
+        "parameters": [
           {
             "name": "authorization",
             "in": "header",
@@ -1327,11 +1347,48 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
+                "type": {
+                  "example": "any"
+                },
+                "number": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "cvc": {
+                  "example": "any"
+                },
+                "month": {
+                  "example": "any"
+                },
+                "year": {
                   "example": "any"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paymentConnection": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
