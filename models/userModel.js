@@ -109,6 +109,14 @@ const userSchema = new mongoose.Schema({
             min: 1,
         },
     }],
+    productCreationAvailability: {
+        type: Number,
+        default: 0,
+    },
+    productAds: {
+        type: Number,
+        default: 0,
+    },
     vouchers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Voucher',

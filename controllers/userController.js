@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const Address = require('../models/addressModel')
 const Voucher = require('../models/voucherModel');
-
+const Product = require('../models/productModel');
 
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
@@ -159,7 +159,6 @@ exports.getUser = catchAsync(async (req, res, next) => {
         return next(new AppError('No document found with that ID. 404'));
     }
 
-
     const voucherId = user.vouchers
 
     const voucher = await Voucher.find({
@@ -172,9 +171,20 @@ exports.getUser = catchAsync(async (req, res, next) => {
         _id: { $in: addressId }
     })
 
+    const cart = user.cart
+    console.log(cart)
+    const arr = []
+    await Promise.all(cart.map(async (e, i) => {
+        const product = await Product.findById(e.product);
+        arr.push({
+            product
+        });
+    }));
+
     res.status(200).json({
         status: 'success',
         user,
+        cart: arr,
         voucher,
         address
     });
