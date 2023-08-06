@@ -168,6 +168,10 @@ exports.deleteMultiplePhoto = catchAsync(async (req, res, next) => {
 exports.createProduct = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
 
+    if (!req.user.productCreationAvailability){
+        return next(new AppError("You have reached your product creation limit", 400))
+    }
+
     const {
         name,
         desc,
@@ -198,7 +202,8 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     });
 
     const owner = await User.findByIdAndUpdate(userId, {
-       $push: { "productsCreated": product.id },
+        $push: { "productsCreated": product.id },
+        $inc: { "productCreationAvailability": -1 }
     });
 
     res.status(201).json({
@@ -207,6 +212,37 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         owner
     });
 });
+
+exports.makeProductTrend = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+    const productId = req.params.id;
+
+    const user = await User.findById(userId);
+
+    if (user.role === 'business' && !user.productsCreated.includes(productId)) {
+        return res.status(400).json({
+            status: 'fail',
+            message: "You are not allowed to update this product"
+        });
+    }
+
+    if (!user.productAds) {
+        return next(new AppError("You dont have enough connection", 400))
+    }
+
+    await Product.findByIdAndUpdate(productId, {
+        $set: { "trending": true }
+    });
+
+    await User.findByIdAndUpdate(userId, {
+        $inc: { "productAds": -1 }
+    });
+
+    res.status(201).json({
+        status: "Success",
+        message: "Product is now trending"
+    })
+})
 
 exports.updateProduct = catchAsync(async (req, res, next) => {
     const userId = req.user.id
