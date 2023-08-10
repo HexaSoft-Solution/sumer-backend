@@ -2,6 +2,8 @@ const User = require('../models/userModel');
 const Product = require('../models/productModel');
 const Transaction = require('../models/transactionModel');
 const Invoice = require('../models/invoiceModel');
+const Salon = require('../models/salonModel');
+const SalonBooking = require('../models/salonBookingModel');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -16,6 +18,19 @@ const getProductDetails = async (productId) => {
 const generateRandomInvoiceId = () => {
     return Math.floor(10000 + Math.random() * 90000).toString();
 };
+
+const parseDate = (date) => {
+    if (typeof date === 'string') {
+        const parts = date.split('/');
+        if (parts.length === 3) {
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parseInt(parts[2], 10);
+            return new Date(year, month, day);
+        }
+    }
+    return date;
+}
 
 exports.viewCart = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
@@ -181,6 +196,105 @@ exports.verifyBuyConnection = catchAsync(async (req, res, next) => {
             {
                 $inc: { connections: 10, productAds: 2 },
             }, { new: true }
+        );
+
+        res.status(200).json({status: 'success', message: 'Payment processed successfully.'});
+    } else {
+        res.status(400).json({ status: 'error', message: 'Payment failed or not yet paid.' });
+    }
+});
+
+exports.salonBooking = catchAsync(async (req, res, next) => {
+    const {
+        salonId,
+        startTime,
+        endTime,
+        day,
+        date,
+        type,
+        number,
+        name,
+        cvc,
+        month,
+        year,
+    } = req.body;
+
+    const salon = await Salon.findById(salonId);
+    if (!salon) {
+        return next(new AppError('Salon not found.', 404));
+    }
+
+    const bookings = await SalonBooking.find({
+        salon: salonId,
+        day: day,
+        date: parseDate(date)
+    });
+
+    let conflict = bookings.map(booking => {
+        if (booking.day === day && booking.salon === salonId) {
+            if (booking.startTime <= startTime && booking.endTime >= startTime) {
+                return true;
+            }
+            if (booking.startTime <= endTime && booking.endTime >= endTime) {
+                return true;
+            }
+            if (booking.startTime >= startTime && booking.endTime <= endTime) {
+                return true;
+            }
+        }
+    });
+
+    if(bookings.length === 0)
+        conflict = false;
+
+    if(conflict) {
+        return next(new AppError('Salon is already booked at this time.', 400));
+    }
+
+    const source = { type, number, name, cvc, month, year };
+    const newBooking = await SalonBooking.create({
+        salon: salonId,
+        startTime,
+        endTime,
+        day,
+        date,
+    });
+
+    const startParts = startTime.split(':');
+    const endParts = endTime.split(':');
+
+    const startHours = parseInt(startParts[0], 10);
+    const endHours = parseInt(endParts[0], 10);
+
+    const payment = await moyasar.createPayment((endHours - startHours) * salon.pricePerHour, 'Book Salon', source, [], newBooking.id, req.protocol, req.get('host'), "bookSalon");
+
+    if(!payment) {
+        return next(new AppError('Payment failed.', 400));
+    }
+
+
+    salon.booking.push(newBooking._id);
+    await salon.save();
+
+    res.status(201).json({
+        status: "Success",
+        message: 'Booking created successfully',
+        booking: newBooking,
+        callback_url: payment.callback_url,
+        payment: payment.source.transaction_url
+    });
+})
+
+exports.verifyBookingSalon = catchAsync(async (req, res, next) => {
+    const paymentId = req.query.id;
+    const bookingId = req.params.bookingId;
+
+    let payment = await moyasar.fetchPayment(paymentId);
+
+    if (payment.status === 'paid') {
+
+        await SalonBooking.findByIdAndUpdate(bookingId,
+            { paymentStatus: "Paid" }
         );
 
         res.status(200).json({status: 'success', message: 'Payment processed successfully.'});

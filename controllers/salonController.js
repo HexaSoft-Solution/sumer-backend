@@ -156,14 +156,16 @@ exports.createSalon = catchAsync(async (req, res, next) => {
         name,
         service,
         desc,
+        pricePerHour,
         address,
         phone
     } = req.body;
 
     const salon = await Salon.create({
         name,
-        service,
+        service: [{name: service}],
         desc,
+        pricePerHour,
         address,
         phone,
         owner: userId,
@@ -173,7 +175,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
         $push: { "salonCreated": salon._id }
     });
 
-    res.status(2201).json({
+    res.status(201).json({
        status: "success",
        message: "Salon created successfully",
        salon

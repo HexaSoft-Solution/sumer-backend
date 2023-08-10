@@ -9,7 +9,6 @@ const salonSchema = new mongoose.Schema({
         name: {
             type: String,
             required: [true, 'A salon must have a service name'],
-            enum: ['Hair', "Makeup artist", "SPA", "Nails", "Massage", "Waxing", "Facial", "Eyelash", "Eyebrow", "Hair removal", "Hair coloring", "Haircut", "Hair styling", "Hair extension", "Hair straightening", "Hair treatment", "Hair perm", "Hair braiding", "Hair relaxing", "Hair bleaching", "Hair curling", "Hair rebonding", "Hair transplant", "Hair loss treatment", "Hair restoration", "Hair weaving", "Hair thickening", "Hair bonding", "Hair spa", "Hair glossing", "Hair gloss", "Hair lamination", "Hair botox", "Hair gloss treatment", "Hair glossing treatment", "Hair lamination treatment", "Hair botox treatment", "Hair glossing", "Hair lamination", "Hair botox", "Hair gloss treatment", "Hair glossing treatment", "Hair lamination treatment", "Hair botox treatment", "Hair glossing", "Hair lamination", "Hair botox", "Hair gloss treatment", "Hair glossing treatment", "Hair laminatio treatment", "Hair botox treatment"],
         },
         ServicePhoto: String,
         cloudinaryId: String,
@@ -21,6 +20,14 @@ const salonSchema = new mongoose.Schema({
     address:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Address'
+    }],
+    pricePerHour: {
+        type: Number,
+        required: [true, 'A salon must have a price per hour'],
+    },
+    booking: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SalonBooking'
     }],
     salonPhoto: String,
     cloudinaryId: String,
@@ -36,6 +43,7 @@ const salonSchema = new mongoose.Schema({
             message: 'Provided phone number is invalid.'
         },
     },
+    
     salonReviews: [{
        type: mongoose.Schema.Types.ObjectId,
         ref: 'SalonReview',
