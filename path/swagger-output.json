@@ -1401,6 +1401,91 @@
         }
       }
     },
+    "/api/v1/payment/bookSalon": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "salonId": {
+                  "example": "any"
+                },
+                "startTime": {
+                  "example": "any"
+                },
+                "endTime": {
+                  "example": "any"
+                },
+                "day": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                },
+                "type": {
+                  "example": "any"
+                },
+                "number": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "cvc": {
+                  "example": "any"
+                },
+                "month": {
+                  "example": "any"
+                },
+                "year": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/verifyPaymentSalon/{bookingId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/v1/salons/": {
       "get": {
         "description": "",
@@ -1433,6 +1518,9 @@
                 "desc": {
                   "example": "any"
                 },
+                "pricePerHour": {
+                  "example": "any"
+                },
                 "address": {
                   "example": "any"
                 },
@@ -1444,8 +1532,8 @@
           }
         ],
         "responses": {
-          "2201": {
-            "description": ""
+          "201": {
+            "description": "Created"
           }
         }
       }
@@ -1765,6 +1853,23 @@
             "required": true,
             "type": "string"
           },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/salonBooking/": {
+      "get": {
+        "description": "",
+        "parameters": [
           {
             "name": "authorization",
             "in": "header",

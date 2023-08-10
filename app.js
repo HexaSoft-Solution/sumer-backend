@@ -21,6 +21,7 @@ const discountVoucherRoutes = require('./routes/discountVoucherRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const salonRoutes = require('./routes/salonRoutes');
 const salonReviewRoutes = require('./routes/salonReviewRoutes');
+const salonBookingRoutes = require('./routes/salonBookingRoutes');
 
 const app = express();
 
@@ -80,6 +81,7 @@ app.use('/api/v1/discountVouchers', discountVoucherRoutes);
 app.use('/api/v1/payment', paymentRoutes);
 app.use('/api/v1/salons', salonRoutes);
 app.use('/api/v1/salonReviews', salonReviewRoutes);
+app.use('/api/v1/salonBooking', salonBookingRoutes);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

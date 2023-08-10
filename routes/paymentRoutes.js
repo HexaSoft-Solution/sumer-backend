@@ -41,4 +41,18 @@ router
         paymentController.verifyBuyConnection
     )
 
+
+router
+    .route('/bookSalon')
+    .patch(
+        authController.protect,
+        paymentController.salonBooking
+    );
+
+router
+    .route('/verifyPaymentSalon/:bookingId')
+    .get(
+        paymentController.verifyBookingSalon
+    );
+
 module.exports = router;
