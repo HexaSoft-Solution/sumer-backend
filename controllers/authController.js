@@ -1,7 +1,10 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+
 const User = require('../models/userModel');
+const Salon = require('../models/salonModel');
+
 const sendEmail = require('../utils/emails');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -37,6 +40,12 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+
+    const salon = await Salon.create({
+        name: req.body.salonName,
+        phone: req.body.phone,
+    });
+
     const newUser = await User.create({
         name: req.body.name,
         firstName: req.body.firstName,
@@ -50,6 +59,8 @@ exports.signup = catchAsync(async (req, res, next) => {
         password: req.body.password,
         passwordConfirm: req.body.passwordConfirm,
     });
+
+    newUser.salonCreated.push(salon.id)
 
     const OTP = Math.floor(100000 + Math.random() * 900000).toString()
     const verifyEmailToken = newUser.createVerifyEmailOTP(OTP);

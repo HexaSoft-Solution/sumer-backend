@@ -15,7 +15,6 @@ const salonSchema = new mongoose.Schema({
     }],
     desc: {
         type: String,
-        required: [true, 'A salon must have a description'],
     },
     address:[{
         type: mongoose.Schema.Types.ObjectId,
@@ -23,7 +22,7 @@ const salonSchema = new mongoose.Schema({
     }],
     pricePerHour: {
         type: Number,
-        required: [true, 'A salon must have a price per hour'],
+        default: 0
     },
     booking: [{
         type: mongoose.Schema.Types.ObjectId,
