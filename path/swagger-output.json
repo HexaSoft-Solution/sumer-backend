@@ -41,6 +41,12 @@
                 "stockName": {
                   "example": "any"
                 },
+                "salonName": {
+                  "example": "any"
+                },
+                "role": {
+                  "example": "any"
+                },
                 "email": {
                   "example": "any"
                 },
