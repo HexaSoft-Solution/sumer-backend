@@ -26,6 +26,12 @@
             "schema": {
               "type": "object",
               "properties": {
+                "salonName": {
+                  "example": "any"
+                },
+                "phone": {
+                  "example": "any"
+                },
                 "name": {
                   "example": "any"
                 },
@@ -41,16 +47,10 @@
                 "stockName": {
                   "example": "any"
                 },
-                "salonName": {
-                  "example": "any"
-                },
                 "role": {
                   "example": "any"
                 },
                 "email": {
-                  "example": "any"
-                },
-                "phone": {
                   "example": "any"
                 },
                 "password": {
@@ -639,6 +639,9 @@
                 "size": {
                   "example": "any"
                 },
+                "brand": {
+                  "example": "any"
+                },
                 "category": {
                   "example": "any"
                 },
@@ -792,6 +795,9 @@
                   "example": "any"
                 },
                 "size": {
+                  "example": "any"
+                },
+                "brand": {
                   "example": "any"
                 },
                 "category": {

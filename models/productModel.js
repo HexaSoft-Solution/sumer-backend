@@ -15,6 +15,11 @@ const productSchema = new mongoose.Schema({
         default: 0,
         max: 60,
     },
+    brand: {
+        type: String,
+        default: "Exxample",
+        trim: true,
+    },
     discountedPrice: {
         type: Number,
         default: 0
@@ -101,6 +106,16 @@ productSchema.virtual('reviews', {
     ref: 'Review',
     foreignField: 'product',
     localField: '_id',
+});
+
+productSchema.pre(/^find/, function (next) {
+
+    this.populate({
+        path: 'category',
+        select: 'name',
+    });
+
+    next();
 });
 
 
