@@ -31,6 +31,7 @@ app.use(cors({
     credentials:true,
     optionSuccessStatus:200
 }));
+
 app.use(helmet({
         crossOriginEmbedderPolicy: false,
         crossOriginResourcePolicy: {

@@ -127,6 +127,10 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    consultation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Consultation"
+    },
     modifiedAt:{
         type: Date
     },
