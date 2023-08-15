@@ -127,6 +127,14 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    consultantConnection: {
+        type: Number,
+        default: 0
+    },
+    createConsultation: {
+        type: Boolean,
+        default: false
+    },
     consultation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Consultation"

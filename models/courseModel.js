@@ -9,7 +9,7 @@ const CourseSchema = new mongoose.Schema({
         type: Date,
         requires: [true, "Please provide a issue date"]
     },
-    ServicePhoto: String,
+    coursePhoto: String,
     cloudinaryId: String,
 });
 

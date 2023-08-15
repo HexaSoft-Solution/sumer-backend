@@ -55,4 +55,32 @@ router
         paymentController.verifyBookingSalon
     );
 
+router
+    .route('create-consultation-profile')
+    .post(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        paymentController.createConsultantProfilePayment
+    );
+router
+    .route('/verify-consultation-profile/')
+    .get(
+        authController.protect,
+        paymentController.verifyCreateConsultationProfile
+    );
+
+router
+    .route('/buy-consultant-connection')
+    .patch(
+        authController.protect,
+        paymentController.consultationContectionsPayment
+    );
+
+router
+    .route('verify-buying-consultant-connection')
+    .get(
+        authController.protect,
+        paymentController.verifyBuyingConsultationsConnection
+    );
+
 module.exports = router;

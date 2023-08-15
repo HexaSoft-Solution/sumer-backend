@@ -39,8 +39,13 @@ const ConsultationSchema = new mongoose.Schema({
     timestamps: true
 });
 
+
+
 ConsultationSchema.pre(/^find/, function (next) {
-    this.populate('service').populate('certificates').populate('courses');
+    this.populate('service').populate('certificates').populate('courses').populate({
+        path: 'owner',
+        select: 'firstName lastName userPhoto',
+    });
     next();
 });
 

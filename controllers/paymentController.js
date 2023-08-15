@@ -302,3 +302,87 @@ exports.verifyBookingSalon = catchAsync(async (req, res, next) => {
         res.status(400).json({ status: 'error', message: 'Payment failed or not yet paid.' });
     }
 });
+
+exports.createConsultantProfilePayment = catchAsync(async (req, res, next) => {
+    const {
+        type,
+        number,
+        name,
+        cvc,
+        month,
+        year,
+    } = req.body;
+
+    const source = { type, number, name, cvc, month, year };
+
+    const payment = await moyasar.createPayment(40, 'Create Consultation Profile', source, [], "0", req.protocol, req.get('host'), "createSalonProfile");
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Checkout successful!',
+        paymentId: payment.id,
+        callback_url: payment.callback_url,
+        payment: payment.source.transaction_url
+    });
+})
+
+exports.verifyCreateConsultationProfile = catchAsync(async (req, res, next) => {
+    const paymentId = req.query.id;
+    const userId = req.user.id;
+
+    let payment = await moyasar.fetchPayment(paymentId);
+
+    if (payment.status === 'paid') {
+
+        await User.findByIdAndUpdate(userId, {
+            createConsultation: true
+        })
+
+        res.status(200).json({status: 'success', message: 'Payment processed successfully.'});
+    } else {
+        res.status(400).json({ status: 'error', message: 'Payment failed or not yet paid.' });
+    }
+})
+
+exports.consultationContectionsPayment = catchAsync(async (req, res, next) => {
+    const {
+        connections,
+        type,
+        number,
+        name,
+        cvc,
+        month,
+        year,
+    } = req.body;
+
+    const source = { type, number, name, cvc, month, year };
+
+    const payment = await moyasar.createPayment(connections * 10, 'Buy Consultation Connections', source, [], connections, req.protocol, req.get('host'), "buyConsultationConnection");
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Checkout successful!',
+        paymentId: payment.id,
+        callback_url: payment.callback_url,
+        payment: payment.source.transaction_url
+    });
+})
+
+exports.verifyBuyingConsultationsConnection = catchAsync(async (req, res, next) => {
+    const paymentId = req.query.id;
+    const connection = req.params.id
+    const userId = req.user.id;
+
+    let payment = await moyasar.fetchPayment(paymentId);
+
+    if (payment.status === 'paid') {
+
+        await User.findByIdAndUpdate(userId, {
+            "$inc": { "connections": connection }
+        })
+
+        res.status(200).json({status: 'success', message: 'Payment processed successfully.'});
+    } else {
+        res.status(400).json({ status: 'error', message: 'Payment failed or not yet paid.' });
+    }
+})

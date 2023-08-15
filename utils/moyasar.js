@@ -8,6 +8,10 @@ const createPayment = async (amount, description, source, metadata, invoiceId, h
             callback = `${http}://${url}/api/v1/payment/paymentConnection`
         } else if (type === "bookSalon") {
             callback = `${http}://${url}/api/v1/payment/verifyPaymentSalon/${invoiceId}`
+        } else if (type === "createSalonProfile"){
+            callback = `${http}://${url}/api/v1/payment/verifyPaymentCreateConsultation`
+        } else if (type === "buyConsultationConnection") {
+            callback = `${http}://${url}/api/v1/payment/verifyPaymentConsultationConnection/${invoiceId}`
         }
         const response = await axios.post(
             'https://api.moyasar.com/v1/payments',
