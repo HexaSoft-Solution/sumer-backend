@@ -3,6 +3,8 @@ const Service = require('../models/serviceModel');
 const Certificate = require('../models/certificateModel');
 const Course = require('../models/courseModel');
 const User = require('../models/userModel');
+const Consultant = require('../models/consultantModel');
+const Message = require('../models/messageModel');
 
 const factory = require('./handlerFactory');
 
@@ -398,3 +400,104 @@ exports.deleteCoursePhoto = catchAsync(async (req, res, next) => {
         updatedCourse
     })
 })
+
+exports.consultationSendChat = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+    const consultantId = req.params.id
+
+    const { messageChat } = req.body
+
+    const consultant = await Consultant.findById(consultantId)
+
+    if (userId !== consultant.consultant._id.toString()) {
+        return next(new AppError("You don't have access to this chat", 400));
+    }
+
+    if (consultant.status === "Ended") {
+        return next(new AppError("This chat has ended", 400));
+    }
+
+    const message = await Message.create({
+        sender: userId,
+        receiver: consultant.user,
+        message: messageChat
+    })
+
+    const updatedConsultant = await Consultant.findByIdAndUpdate(consultantId, {
+        $push: { messages: message._id }
+    })
+
+    res.status(200).json({
+        status: 'success',
+        message,
+        updatedConsultant
+    })
+});
+
+exports.userSendChat = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+    const consultantId = req.params.id
+
+    const { messageChat } = req.body
+
+    const consultant = await Consultant.findById(consultantId)
+
+    if (userId !== consultant.user._id.toString()) {
+        return next(new AppError("You don't have access to this chat", 400));
+    }
+
+    if (consultant.status === "Ended") {
+        return next(new AppError("This chat has ended", 400));
+    }
+
+    const message = await Message.create({
+        sender: userId,
+        receiver: consultant.consultant,
+        message: messageChat
+    })
+
+    const updatedConsultant = await Consultant.findByIdAndUpdate(consultantId, {
+        $push: { messages: message._id }
+    })
+
+    res.status(200).json({
+        status: 'success',
+        message,
+        updatedConsultant
+    })
+});
+
+
+exports.viewConsultation = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+    const consultantId = req.params.id
+
+    const consultant = await Consultant.findById(consultantId)
+
+    if (userId !== consultant.user._id.toString() && userId !== consultant.consultant._id.toString()) {
+        return next(new AppError("You don't have access to this chat", 400));
+    }
+
+    if (consultant.status === "Ended") {
+        return next(new AppError("This chat has ended", 400));
+    }
+
+    res.status(200).json({
+        status: 'success',
+        consultant
+    })
+});
+
+exports.activeConsultation = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+    const consultantId = req.params.id
+
+    const updatedConsultant = await Consultation.findByIdAndUpdate(consultantId, {
+        status: "Confirmed"
+    })
+
+    res.status(200).json({
+        status: 'success',
+        updatedConsultant
+    })
+});

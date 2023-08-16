@@ -56,14 +56,14 @@ router
     );
 
 router
-    .route('create-consultation-profile')
+    .route('/create-consultation-profile')
     .post(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
         paymentController.createConsultantProfilePayment
     );
 router
-    .route('/verify-consultation-profile/')
+    .route('/verifyPaymentCreateConsultation/')
     .get(
         authController.protect,
         paymentController.verifyCreateConsultationProfile
@@ -77,10 +77,25 @@ router
     );
 
 router
-    .route('verify-buying-consultant-connection')
+    .route('/verifyPaymentConsultationConnection/:id')
     .get(
         authController.protect,
         paymentController.verifyBuyingConsultationsConnection
+    );
+
+router
+    .route('/buy-consultation-ticket')
+    .patch(
+        authController.protect,
+        paymentController.buyConsultantTicket
+    );
+
+
+router
+    .route('/verify-buying-consultation-ticket/:id')
+    .get(
+        authController.protect,
+        paymentController.verifyBuyingConsultationsTicket
     );
 
 module.exports = router;

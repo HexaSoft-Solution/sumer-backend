@@ -57,7 +57,7 @@ router
     )
 
 router
-    .route('certificate')
+    .route('/certificate')
     .post(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
@@ -106,6 +106,36 @@ router
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
         consultationController.deleteCoursePhoto
+    )
+
+router
+    .route('/active-consultant/:id')
+    .patch(
+        authController.protect,
+        authController.restrictTo('admin'),
+        consultationController.activeConsultation
+    )
+
+router
+    .route('/view-consultation/:id')
+    .get(
+        authController.protect,
+        consultationController.viewConsultation
+    )
+
+router
+    .route('/consultant-send-message/:id')
+    .post(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.consultationSendChat
+    )
+
+router
+    .route('/user-send-message/:id')
+    .post(
+        authController.protect,
+        consultationController.userSendChat
     )
 
 module.exports = router;

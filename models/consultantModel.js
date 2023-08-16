@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ConsultantSchema = new mongoose.Schema({
-   sender: {
+   user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
    },
@@ -22,7 +22,7 @@ const ConsultantSchema = new mongoose.Schema({
 
 ConsultantSchema.pre(/^find/, function (next) {
     this.populate({
-        path: 'sender',
+        path: 'user',
         select: 'firstName lastName userPhoto',
     }).populate({
         path: 'consultant',
