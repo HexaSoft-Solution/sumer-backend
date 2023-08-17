@@ -14,6 +14,7 @@ const cloudinary = require("../utils/cloudinary");
 
 exports.getAllConsultations = factory.getAll(Consultation);
 exports.searchConsultations = factory.search(Consultation);
+exports.getConsultantation = factory.getOne(Consultation)
 
 exports.createConsultationProfile = catchAsync(async (req, res, next) => {
 

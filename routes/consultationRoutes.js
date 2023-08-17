@@ -22,6 +22,7 @@ router
 
 router
     .route('/:id')
+    .get(consultationController.getConsultantation)
     .patch(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),

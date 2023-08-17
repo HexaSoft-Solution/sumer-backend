@@ -2182,6 +2182,22 @@
       }
     },
     "/api/v1/consultation/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
       "patch": {
         "description": "",
         "parameters": [
