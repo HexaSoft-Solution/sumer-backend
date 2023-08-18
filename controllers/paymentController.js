@@ -426,9 +426,14 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
 
     if (payment.status === 'paid') {
 
-        await Consultant.create({
+        const consultant = await Consultant.create({
             user: userId,
             consultant: consultationId
+        })
+
+        await Consultation.findOneAndUpdate({owner: consultationId}, {
+            "$push": { "consultants": consultant._id },
+            "$inc": { "balance": (payment.amount) / 1000 }
         })
 
         res.status(200).json({status: 'success', message: 'Payment processed successfully.'});

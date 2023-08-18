@@ -35,6 +35,14 @@ const ConsultationSchema = new mongoose.Schema({
         enum: ['Pending', 'Confirmed', 'Cancelled'],
         default: 'Pending'
     },
+    consultants: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Consultant",
+    }],
+    balance: {
+        type: Number,
+        default: 0
+    },
 }, {
     timestamps: true
 });
@@ -45,6 +53,10 @@ ConsultationSchema.pre(/^find/, function (next) {
     this.populate('service').populate('certificates').populate('courses').populate({
         path: 'owner',
         select: 'firstName lastName userPhoto',
+    })
+    .populate({
+        path: 'consultants',
+        select: 'user messages',
     });
     next();
 });
