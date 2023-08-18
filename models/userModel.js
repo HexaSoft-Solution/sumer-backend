@@ -137,7 +137,8 @@ const userSchema = new mongoose.Schema({
     },
     consultation: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Consultation"
+        ref: "Consultation",
+        default: "",
     },
     modifiedAt:{
         type: Date
