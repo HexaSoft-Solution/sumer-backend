@@ -18,7 +18,13 @@ router
     .route('search/:key')
     .get(consultationController.searchConsultations)
 
-
+router
+    .route('/my-profile')
+    .get(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.getMyProfile
+    )
 
 router
     .route('/:id')
@@ -28,6 +34,16 @@ router
         authController.restrictTo('admin', 'consultant'),
         consultationController.updateConsultationProfile
     )
+    .put(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.endConsultant
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.deleteConsultation
+    )
 
 router
     .route('/service')
@@ -36,12 +52,19 @@ router
         authController.restrictTo('admin', 'consultant'),
         consultationController.addServices
     )
+
+router
+    .route('/service/:id')
+    .patch(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.editService
+    )
     .delete(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
         consultationController.deleteService
     )
-
 
 
 router
@@ -63,6 +86,14 @@ router
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
         consultationController.addCertificate
+    )
+
+router
+    .route('/certificate/:id')
+    .patch(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.editCertificate
     )
     .delete(
         authController.protect,
@@ -89,6 +120,15 @@ router
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
         consultationController.addCourse
+    )
+
+
+router
+    .route('/course/:id')
+    .patch(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.editCourse
     )
     .delete(
         authController.protect,
@@ -122,6 +162,18 @@ router
     .get(
         authController.protect,
         consultationController.viewConsultation
+    )
+
+router
+    .route('/message/:id')
+    .patch(
+        authController.protect,
+        consultationController.editMessage
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.deleteMessage
     )
 
 router

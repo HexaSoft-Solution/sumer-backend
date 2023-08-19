@@ -15,6 +15,48 @@ const cloudinary = require("../utils/cloudinary");
 exports.getAllConsultations = factory.getAll(Consultation);
 exports.searchConsultations = factory.search(Consultation);
 exports.getConsultantation = factory.getOne(Consultation)
+exports.deleteConsultation = factory.deleteOne(Consultation);
+exports.deleteMessage = factory.deleteOne(Message)
+
+
+exports.getMyProfile = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+
+    const consultation = await Consultation.findOne({ owner: userId })
+
+    if (!consultation) {
+        return next(new AppError("You don't have a consultation profile", 400));
+    }
+
+    res.status(200).json({
+        status: 'success',
+        consultation
+    })
+});
+
+exports.endConsultant = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+    const consultantId = req.params.id
+
+    const consultant = await Consultant.findById(consultantId)
+
+    if (userId !== consultant.consultant._id.toString()) {
+        return next(new AppError("You don't have access to this chat", 400));
+    }
+
+    if (consultant.status === "Ended") {
+        return next(new AppError("This chat has ended", 400));
+    }
+
+    const updatedConsultant = await Consultant.findByIdAndUpdate(consultantId, {
+        status: "Ended"
+    })
+
+    res.status(200).json({
+        status: 'success',
+        updatedConsultant
+    })
+});
 
 exports.createConsultationProfile = catchAsync(async (req, res, next) => {
 
@@ -88,6 +130,40 @@ exports.addServices = catchAsync(async (req, res, next) => {
     })
 });
 
+exports.editService = catchAsync(async (req, res, next) => {
+    const serviceId = req.params.id
+
+    const consultationId = req.user.consultation
+
+    if (!consultationId) {
+        return next(new AppError("You don't have a consultation profile", 400));
+    }
+
+    const consultation = await Consultation.findById(consultationId)
+
+    if (!consultation.services.include(serviceId)) {
+        return next(new AppError("You don't have this service", 400));
+    }
+
+    const { name, description } = req.body
+
+    const service = await Service.findById(serviceId)
+
+    if (!service) {
+        return next(new AppError("You don't have this service", 400));
+    }
+
+    const updatedService = await Service.findByIdAndUpdate(serviceId, {
+        name,
+        description
+    })
+
+    res.status(200).json({
+        status: 'success',
+        updatedService
+    })
+})
+
 exports.addServicesPhoto = catchAsync(async (req, res, next) => {
     const serviceId = req.params.id
 
@@ -96,8 +172,8 @@ exports.addServicesPhoto = catchAsync(async (req, res, next) => {
     if (!consultationId) {
         return next(new AppError("You don't have a consultation profile", 400));
     }
-    const consultation = await Consultation.findById(consultationId)
 
+    const consultation = await Consultation.findById(consultationId)
 
     if (!consultation.services.include(serviceId)) {
         return next(new AppError("You don't have this service", 400));
@@ -201,6 +277,37 @@ exports.addCertificate = catchAsync(async (req, res, next) => {
         certificate,
         updateConsultation
     })
+})
+
+exports.editCertificate = catchAsync(async (req, res, next) => {
+    const consultationId = req.user.consultation
+
+    const certificateId = req.params.id
+
+    if (!consultationId) {
+        return next(new AppError("You don't have a consultation profile", 400));
+    }
+
+    const { title, issueDate, expireDate, certificateID, certificateURL } = req.body
+
+    const consultation = await Consultation.findById(consultationId);
+
+    if (!consultation.certificates.include(certificateId)) {
+        return next(new AppError("You don't have this certificate", 400));
+    }
+
+    const updatedCertificate = await Certificate.findByIdAndUpdate(certificateId, {
+        title,
+        issueDate,
+        expireDate,
+        certificateID,
+        certificateURL
+    })
+
+    res.status(201).json({
+        status: 'success',
+        updatedCertificate
+    });
 })
 
 exports.addCertificatePhoto = catchAsync(async (req, res, next) => {
@@ -316,6 +423,34 @@ exports.addCourse = catchAsync(async (req, res, next) => {
     })
 })
 
+exports.editCourse = catchAsync(async (req, res, next) => {
+    const consultationId = req.user.consultation
+
+    const courseId = req.params.id
+
+    if (!consultationId) {
+        return next(new AppError("You don't have a consultation profile", 400));
+    }
+
+    const { courseName, issueDate } = req.body
+
+    const consultation = await Consultation.findById(consultationId);
+
+    if (!consultation.courses.include(courseId)) {
+        return next(new AppError("You don't have this course", 400));
+    }
+
+    const updatedCourse = await Course.findByIdAndUpdate(courseId, {
+        courseName,
+        issueDate
+    })
+
+    res.status(201).json({
+        status: 'success',
+        updatedCourse
+    });
+})
+
 exports.addCoursePhoto = catchAsync(async (req, res, next) => {
     const courseId = req.params.id
 
@@ -406,7 +541,7 @@ exports.consultationSendChat = catchAsync(async (req, res, next) => {
     const userId = req.user.id
     const consultantId = req.params.id
 
-    const { messageChat } = req.body
+    const { messageChat, reply } = req.body
 
     const consultant = await Consultant.findById(consultantId)
 
@@ -421,7 +556,8 @@ exports.consultationSendChat = catchAsync(async (req, res, next) => {
     const message = await Message.create({
         sender: userId,
         receiver: consultant.user,
-        message: messageChat
+        message: messageChat,
+        reply
     })
 
     const updatedConsultant = await Consultant.findByIdAndUpdate(consultantId, {
@@ -439,7 +575,7 @@ exports.userSendChat = catchAsync(async (req, res, next) => {
     const userId = req.user.id
     const consultantId = req.params.id
 
-    const { messageChat } = req.body
+    const { messageChat, reply } = req.body
 
     const consultant = await Consultant.findById(consultantId)
 
@@ -454,7 +590,8 @@ exports.userSendChat = catchAsync(async (req, res, next) => {
     const message = await Message.create({
         sender: userId,
         receiver: consultant.consultant,
-        message: messageChat
+        message: messageChat,
+        reply
     })
 
     const updatedConsultant = await Consultant.findByIdAndUpdate(consultantId, {
@@ -468,6 +605,29 @@ exports.userSendChat = catchAsync(async (req, res, next) => {
     })
 });
 
+
+exports.editMessage = catchAsync(async (req, res, next)  => {
+    const { message, reply } = req.body
+    const userId = req.user.id;
+
+    const messageId = req.params.id
+
+    const messsage = await Message.findById(messageId)
+
+    if (userId !== messsage.sender._id.toString()) {
+        return next(new AppError("You don't have access to this chat", 400));
+    }
+
+    const updatedMessage = await Message.findByIdAndUpdate(messageId, {
+        message,
+        reply
+    })
+
+    res.status(201).json({
+        status: 'success',
+        updatedMessage
+    });
+})
 
 exports.viewConsultation = catchAsync(async (req, res, next) => {
     const userId = req.user.id

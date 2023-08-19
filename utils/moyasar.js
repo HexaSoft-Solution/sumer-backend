@@ -1,19 +1,19 @@
 const axios = require("axios");
-const createPayment = async (amount, description, source, metadata, invoiceId, http, url, type) => {
+const createPayment = async (amount, description, source, metadata, invoiceId, user, http, url, type) => {
     try {
         let callback;
         if (type === "buyProduct") {
             callback = `${http}://${url}/api/v1/payment/paymentCallback/${invoiceId}`
         } else if (type === "buyProductConnections"){
-            callback = `${http}://${url}/api/v1/payment/paymentConnection`
+            callback = `${http}://${url}/api/v1/payment/paymentConnection/${user}`
         } else if (type === "bookSalon") {
             callback = `${http}://${url}/api/v1/payment/verifyPaymentSalon/${invoiceId}`
         } else if (type === "createSalonProfile"){
-            callback = `${http}://${url}/api/v1/payment/verifyPaymentCreateConsultation`
+            callback = `${http}://${url}/api/v1/payment/verifyPaymentCreateConsultation/${user}`
         } else if (type === "buyConsultationConnection") {
-            callback = `${http}://${url}/api/v1/payment/verifyPaymentConsultationConnection/${invoiceId}`
+            callback = `${http}://${url}/api/v1/payment/verifyPaymentConsultationConnection/${invoiceId}/${user}`
         } else if (type === "buyConsultationTicket") {
-            callback = `${http}://${url}/api/v1/payment/verify-buying-consultation-ticket/${invoiceId}`
+            callback = `${http}://${url}/api/v1/payment/verify-buying-consultation-ticket/${invoiceId}/${user}`
         }
         const response = await axios.post(
             'https://api.moyasar.com/v1/payments',

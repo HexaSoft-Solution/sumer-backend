@@ -109,7 +109,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
     const source = { type, number, name, cvc, month, year };
 
     const invoiceId = generateRandomInvoiceId();
-    const payment = await moyasar.createPayment(totalCartAmount, 'Cart payment', source, metadataArray, invoiceId, req.protocol, req.get('host'), "buyProduct");
+    const payment = await moyasar.createPayment(totalCartAmount, 'Cart payment', source, metadataArray, invoiceId, "", req.protocol, req.get('host'), "buyProduct");
 
     const invoice = new Invoice({
         invoiceId: invoiceId,
@@ -175,7 +175,7 @@ exports.buyProductConnections = catchAsync(async (req, res, next) => {
 
     const source = { type, number, name, cvc, month, year };
 
-    const payment = await moyasar.createPayment(40, 'Buy Product Connections', source, [], "0", req.protocol, req.get('host'), "buyProductConnections");
+    const payment = await moyasar.createPayment(40, 'Buy Product Connections', source, [], "0", req.user.id, req.protocol, req.get('host'), "buyProductConnections");
 
     res.status(200).json({
         status: 'success',
@@ -187,7 +187,7 @@ exports.buyProductConnections = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyBuyConnection = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
+    const userId = req.params.user;
     const paymentId = req.query.id;
     const payment = await moyasar.fetchPayment(paymentId);
 
@@ -267,7 +267,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
     const startHours = parseInt(startParts[0], 10);
     const endHours = parseInt(endParts[0], 10);
 
-    const payment = await moyasar.createPayment((endHours - startHours) * salon.pricePerHour, 'Book Salon', source, [], newBooking.id, req.protocol, req.get('host'), "bookSalon");
+    const payment = await moyasar.createPayment((endHours - startHours) * salon.pricePerHour, 'Book Salon', source, [], newBooking.id, req.user.id, req.protocol, req.get('host'), "bookSalon");
 
     if(!payment) {
         return next(new AppError('Payment failed.', 400));
@@ -316,7 +316,7 @@ exports.createConsultantProfilePayment = catchAsync(async (req, res, next) => {
 
     const source = { type, number, name, cvc, month, year };
 
-    const payment = await moyasar.createPayment(40, 'Create Consultation Profile', source, [], "0", req.protocol, req.get('host'), "createSalonProfile");
+    const payment = await moyasar.createPayment(40, 'Create Consultation Profile', source, [], "0", req.user.id, req.protocol, req.get('host'), "createSalonProfile");
 
     res.status(200).json({
         status: 'success',
@@ -329,7 +329,7 @@ exports.createConsultantProfilePayment = catchAsync(async (req, res, next) => {
 
 exports.verifyCreateConsultationProfile = catchAsync(async (req, res, next) => {
     const paymentId = req.query.id;
-    const userId = req.user.id;
+    const userId = req.params.user;
 
     let payment = await moyasar.fetchPayment(paymentId);
 
@@ -358,7 +358,7 @@ exports.consultationContectionsPayment = catchAsync(async (req, res, next) => {
 
     const source = { type, number, name, cvc, month, year };
 
-    const payment = await moyasar.createPayment(connections * 10, 'Buy Consultation Connections', source, [], connections, req.protocol, req.get('host'), "buyConsultationConnection");
+    const payment = await moyasar.createPayment(connections * 10, 'Buy Consultation Connections', source, [], connections, req.user.id, req.protocol, req.get('host'), "buyConsultationConnection");
 
     res.status(200).json({
         status: 'success',
@@ -372,7 +372,7 @@ exports.consultationContectionsPayment = catchAsync(async (req, res, next) => {
 exports.verifyBuyingConsultationsConnection = catchAsync(async (req, res, next) => {
     const paymentId = req.query.id;
     const connection = req.params.id
-    const userId = req.user.id;
+    const userId = req.params.user;
 
     let payment = await moyasar.fetchPayment(paymentId);
 
@@ -406,7 +406,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
 
     console.log(consultation.owner)
 
-    const payment = await moyasar.createPayment(consultation.price, 'Buy Consultation Ticket', source, [], consultation.owner._id, req.protocol, req.get('host'), "buyConsultationTicket");
+    const payment = await moyasar.createPayment(consultation.price, 'Buy Consultation Ticket', source, [], consultation.owner._id, req.user.id, req.protocol, req.get('host'), "buyConsultationTicket");
 
     res.status(200).json({
         status: 'success',
@@ -420,7 +420,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
 exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
     const paymentId = req.query.id;
     const consultationId = req.params.id
-    const userId = req.user.id;
+    const userId = req.params.user;
 
     let payment = await moyasar.fetchPayment(paymentId);
 

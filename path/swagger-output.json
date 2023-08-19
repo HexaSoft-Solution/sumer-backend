@@ -1388,10 +1388,16 @@
         }
       }
     },
-    "/api/v1/payment/paymentConnection": {
+    "/api/v1/payment/paymentConnection/{user}": {
       "patch": {
         "description": "",
         "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -1542,10 +1548,16 @@
         }
       }
     },
-    "/api/v1/payment/verifyPaymentCreateConsultation/": {
+    "/api/v1/payment/verifyPaymentCreateConsultation/{user}": {
       "get": {
         "description": "",
         "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -1614,12 +1626,18 @@
         }
       }
     },
-    "/api/v1/payment/verifyPaymentConsultationConnection/{id}": {
+    "/api/v1/payment/verifyPaymentConsultationConnection/{id}/{user}": {
       "get": {
         "description": "",
         "parameters": [
           {
             "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1692,12 +1710,18 @@
         }
       }
     },
-    "/api/v1/payment/verify-buying-consultation-ticket/{id}": {
+    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{user}": {
       "get": {
         "description": "",
         "parameters": [
           {
             "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2181,6 +2205,23 @@
         }
       }
     },
+    "/api/v1/consultation/my-profile": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/consultation/{id}": {
       "get": {
         "description": "",
@@ -2189,6 +2230,48 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -2265,14 +2348,58 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/v1/consultation/service/{id}": {
       "delete": {
         "description": "",
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "authorization",
             "in": "header",
             "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -2365,10 +2492,18 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/v1/consultation/certificate/{id}": {
       "delete": {
         "description": "",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -2378,6 +2513,51 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "issueDate": {
+                  "example": "any"
+                },
+                "expireDate": {
+                  "example": "any"
+                },
+                "certificateID": {
+                  "example": "any"
+                },
+                "certificateURL": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       }
@@ -2456,10 +2636,18 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/v1/consultation/course/{id}": {
       "delete": {
         "description": "",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -2469,6 +2657,42 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "courseName": {
+                  "example": "any"
+                },
+                "issueDate": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       }
@@ -2563,6 +2787,65 @@
         }
       }
     },
+    "/api/v1/consultation/message/{id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "any"
+                },
+                "reply": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
     "/api/v1/consultation/consultant-send-message/{id}": {
       "post": {
         "description": "",
@@ -2585,6 +2868,9 @@
               "type": "object",
               "properties": {
                 "messageChat": {
+                  "example": "any"
+                },
+                "reply": {
                   "example": "any"
                 }
               }
@@ -2620,6 +2906,9 @@
               "type": "object",
               "properties": {
                 "messageChat": {
+                  "example": "any"
+                },
+                "reply": {
                   "example": "any"
                 }
               }

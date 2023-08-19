@@ -13,6 +13,10 @@ const MessageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    reply: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
+    },
     date: {
         type: Date,
         default: Date.now()
