@@ -141,7 +141,9 @@ exports.editService = catchAsync(async (req, res, next) => {
 
     const consultation = await Consultation.findById(consultationId)
 
-    if (!consultation.services.include(serviceId)) {
+    console.log(consultation)
+
+    if (!consultation.service.find(e => e._id.toString()  === serviceId)) {
         return next(new AppError("You don't have this service", 400));
     }
 
@@ -234,7 +236,7 @@ exports.deleteService = catchAsync(async (req, res, next) => {
     }
     const consultation = await Consultation.findById(consultationId)
 
-    if (!consultation.services.include(serviceId)) {
+    if (!consultation.services.find(e => e._id.toString() === serviceId)) {
         return next(new AppError("You don't have this service", 400));
     }
 
@@ -292,7 +294,7 @@ exports.editCertificate = catchAsync(async (req, res, next) => {
 
     const consultation = await Consultation.findById(consultationId);
 
-    if (!consultation.certificates.include(certificateId)) {
+    if (!consultation.certificates.find(e => e._id.toString() === certificateId)) {
         return next(new AppError("You don't have this certificate", 400));
     }
 
@@ -355,7 +357,7 @@ exports.deleteCertificate = catchAsync(async (req, res, next) => {
     }
     const consultation = await Consultation.findById(consultationId)
 
-    if (!consultation.certificates.include(certificateId)) {
+    if (!consultation.certificates.find(e => e._id.toString() === certificateId)) {
         return next(new AppError("You don't have this certificate", 400));
     }
 
@@ -436,7 +438,7 @@ exports.editCourse = catchAsync(async (req, res, next) => {
 
     const consultation = await Consultation.findById(consultationId);
 
-    if (!consultation.courses.include(courseId)) {
+    if (!consultation.courses.find(e => e._id.toString() === courseId)) {
         return next(new AppError("You don't have this course", 400));
     }
 
@@ -495,7 +497,7 @@ exports.deleteCourse = catchAsync(async (req, res, next) => {
     }
     const consultation = await Consultation.findById(consultationId)
 
-    if (!consultation.courses.include(courseId)) {
+    if (!consultation.courses.find(e => e._id.toString() === courseId)) {
         return next(new AppError("You don't have this course", 400));
     }
 
