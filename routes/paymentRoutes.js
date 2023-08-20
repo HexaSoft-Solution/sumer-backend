@@ -37,7 +37,6 @@ router
 router
     .route('/paymentConnection/:user')
     .patch(
-        authController.protect,
         paymentController.verifyBuyConnection
     )
 
@@ -65,7 +64,6 @@ router
 router
     .route('/verifyPaymentCreateConsultation/:user')
     .get(
-        authController.protect,
         paymentController.verifyCreateConsultationProfile
     );
 
@@ -79,7 +77,6 @@ router
 router
     .route('/verifyPaymentConsultationConnection/:id/:user')
     .get(
-        authController.protect,
         paymentController.verifyBuyingConsultationsConnection
     );
 
@@ -92,9 +89,8 @@ router
 
 
 router
-    .route('/verify-buying-consultation-ticket/:id/:user')
+    .route('/verify-buying-consultation-ticket/:id/:user/:title')
     .get(
-        authController.protect,
         paymentController.verifyBuyingConsultationsTicket
     );
 

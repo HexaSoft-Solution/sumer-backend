@@ -390,6 +390,7 @@ exports.verifyBuyingConsultationsConnection = catchAsync(async (req, res, next) 
 
 exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
     const {
+        title,
         consultationId,
         type,
         number,
@@ -406,7 +407,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
 
     console.log(consultation.owner)
 
-    const payment = await moyasar.createPayment(consultation.price, 'Buy Consultation Ticket', source, [], consultation.owner._id, req.user.id, req.protocol, req.get('host'), "buyConsultationTicket");
+    const payment = await moyasar.createPayment(consultation.price, 'Buy Consultation Ticket', source, [{'title': title}], consultation.owner._id, req.user.id, req.protocol, req.get('host'), "buyConsultationTicket");
 
     res.status(200).json({
         status: 'success',
@@ -420,6 +421,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
 exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
     const paymentId = req.query.id;
     const consultationId = req.params.id
+    const title = req.params.title
     const userId = req.params.user;
 
     let payment = await moyasar.fetchPayment(paymentId);
@@ -427,6 +429,7 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
     if (payment.status === 'paid') {
 
         const consultant = await Consultant.create({
+            title,
             user: userId,
             consultant: consultationId
         })

@@ -1399,11 +1399,6 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "id",
             "in": "query",
             "type": "string"
@@ -1559,11 +1554,6 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "id",
             "in": "query",
             "type": "string"
@@ -1643,11 +1633,6 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "id",
             "in": "query",
             "type": "string"
@@ -1678,6 +1663,9 @@
             "schema": {
               "type": "object",
               "properties": {
+                "title": {
+                  "example": "any"
+                },
                 "consultationId": {
                   "example": "any"
                 },
@@ -1710,7 +1698,7 @@
         }
       }
     },
-    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{user}": {
+    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{user}/{title}": {
       "get": {
         "description": "",
         "parameters": [
@@ -1727,8 +1715,9 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "title",
+            "in": "path",
+            "required": true,
             "type": "string"
           },
           {
@@ -2336,10 +2325,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "description": {
+                "data": {
                   "example": "any"
                 }
               }
@@ -2471,19 +2457,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "issueDate": {
-                  "example": "any"
-                },
-                "expireDate": {
-                  "example": "any"
-                },
-                "certificateID": {
-                  "example": "any"
-                },
-                "certificateURL": {
+                "data": {
                   "example": "any"
                 }
               }
@@ -2624,10 +2598,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "courseName": {
-                  "example": "any"
-                },
-                "issueDate": {
+                "data": {
                   "example": "any"
                 }
               }

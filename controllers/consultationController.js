@@ -117,9 +117,26 @@ exports.addServices = catchAsync(async (req, res, next) => {
         return next(new AppError("You don't have a consultation profile", 400));
     }
 
-    const { name, description } = req.body
+    const { name, description } = JSON.parse(req.body.data);
+    const { path } = req.file
 
-    const service = await Service.create({ name, description });
+    const result = await cloudinary.uploader.upload(path, {
+        public_id: `/${name}-${Math.r * 10000000000}/${name}Photo`,
+        folder: 'services',
+        resource_type: 'image',
+    });
+
+
+    if (!result) {
+        return next(new AppError('Something went wrong with the image upload', 400));
+    }
+
+    const service = await Service.create({
+        name,
+        description,
+        servicePhoto: result.secure_url,
+        cloudinaryId: result.public_id,
+    });
 
     await Consultation.findByIdAndUpdate(consultationId, {
         $push: { service: service._id }
@@ -261,14 +278,26 @@ exports.addCertificate = catchAsync(async (req, res, next) => {
         return next(new AppError("You don't have a consultation profile", 400));
     }
 
-    const { title, issueDate, expireDate, certificateID, certificateURL } = req.body
+    const { title, issueDate, expireDate, certificateID, certificateURL } = JSON.parse(req.body.data);
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `/${title}-${Math.random() * 10000000000}/${title}Photo`,
+        folder: 'certificates',
+        resource_type: 'image',
+    });
+
+    if (!result) {
+        return next(new AppError('Something went wrong with the image upload', 400));
+    }
 
     const certificate = await Certificate.create({
         title,
         issueDate,
         expireDate,
         certificateID,
-        certificateURL
+        certificateURL,
+        certificatePhoto: result.secure_url,
+        cloudinaryId: result.public_id,
     })
 
     const updateConsultation = await Consultation.findByIdAndUpdate(consultationId, {
@@ -409,11 +438,23 @@ exports.addCourse = catchAsync(async (req, res, next) => {
         return next(new AppError("You don't have a consultation profile", 400));
     }
 
-    const { courseName, issueDate } = req.body
+    const { courseName, issueDate } = JSON.parse(req.body.data)
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `/${courseName}-${Math.random() * 100000000}/${courseName}Photo`,
+        folder: 'courses',
+        resource_type: 'image',
+    });
+
+    if (!result.secure_url) {
+        return next(new AppError('Something went wrong with the image upload', 400));
+    }
 
     const course = await Course.create({
         courseName,
-        issueDate
+        issueDate,
+        coursePhoto: result.secure_url,
+        cloudinaryId: result.public_id,
     })
 
     const updatedConsultation = await Consultation.findByIdAndUpdate(consultationId, {

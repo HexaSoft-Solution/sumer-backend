@@ -52,6 +52,7 @@ router
     .post(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
+        upload.single('image'),
         consultationController.addServices
     )
 
@@ -88,6 +89,7 @@ router
     .post(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
+        upload.single('image'),
         consultationController.addCertificate
     )
 
@@ -123,6 +125,7 @@ router
     .post(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
+        upload.single('image'),
         consultationController.addCourse
     )
 
