@@ -3,6 +3,8 @@ const express = require('express');
 const consultationController = require('../controllers/consultationController');
 const authController = require('../controllers/authController');
 
+const upload = require('../utils/multer');
+
 const router = express.Router();
 
 router
@@ -72,6 +74,7 @@ router
     .patch(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
+        upload.single('image'),
         consultationController.addServicesPhoto
     )
     .delete(
@@ -106,6 +109,7 @@ router
     .patch(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
+        upload.single('image'),
         consultationController.addCertificatePhoto
     )
     .delete(
@@ -141,6 +145,7 @@ router
     .patch(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
+        upload.single('image'),
         consultationController.addCoursePhoto
     )
     .delete(

@@ -2306,6 +2306,9 @@
                 },
                 "about": {
                   "example": "any"
+                },
+                "price": {
+                  "example": "any"
                 }
               }
             }

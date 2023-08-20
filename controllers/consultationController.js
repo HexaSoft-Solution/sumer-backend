@@ -95,11 +95,12 @@ exports.updateConsultationProfile = catchAsync(async (req, res, next) => {
         return next(new AppError("You don't have a consultation profile", 400));
     }
 
-    const { Specialization, about } = req.body
+    const { Specialization, about, price } = req.body
 
     const updatedConsultation = await Consultation.findByIdAndUpdate(consultationId, {
         Specialization,
-        about
+        about,
+        price
     })
 
     res.status(200).json({
@@ -177,13 +178,14 @@ exports.addServicesPhoto = catchAsync(async (req, res, next) => {
 
     const consultation = await Consultation.findById(consultationId)
 
-    if (!consultation.services.include(serviceId)) {
+    if (!consultation.service.find(e => e._id.toString() === serviceId)) {
         return next(new AppError("You don't have this service", 400));
     }
 
     const service = await Service.findById(serviceId)
+    const { path } = req.file
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    const result = await cloudinary.uploader.upload(path, {
         public_id: `/${serviceId}/${service.name}Photo`,
         folder: 'services',
         resource_type: 'image',
@@ -210,7 +212,7 @@ exports.deleteservicePhoto = catchAsync(async (req, res, next) => {
     }
     const consultation = await Consultation.findById(consultationId)
 
-    if (!consultation.services.include(serviceId)) {
+    if (!consultation.service.find(e => e._id.toString() === serviceId)) {
         return next(new AppError("You don't have this service", 400));
     }
 
@@ -322,7 +324,7 @@ exports.addCertificatePhoto = catchAsync(async (req, res, next) => {
     }
     const consultation = await Consultation.findById(consultationId);
 
-    if (!consultation.certificates.include(certificateId)) {
+    if (!consultation.certificates.find(e => e._id.toString() === certificateId)) {
         return next(new AppError("You don't have this certificate", 400));
     }
 
@@ -384,7 +386,7 @@ exports.deleteCertificatePhoto = catchAsync(async (req, res, next) => {
     }
     const consultation = await Consultation.findById(consultationId)
 
-    if (!consultation.certificates.include(certificateId)) {
+    if (!consultation.certificates.find(e => e._id.toString() === certificateId)) {
         return next(new AppError("You don't have this certificate", 400));
     }
 
@@ -463,7 +465,7 @@ exports.addCoursePhoto = catchAsync(async (req, res, next) => {
     }
     const consultation = await Consultation.findById(consultationId);
 
-    if (!consultation.courses.include(courseId)) {
+    if (!consultation.courses.find(e => e._id.toString() === courseId)) {
         return next(new AppError("You don't have this course", 400));
     }
 
@@ -524,7 +526,7 @@ exports.deleteCoursePhoto = catchAsync(async (req, res, next) => {
     }
     const consultation = await Consultation.findById(consultationId)
 
-    if (!consultation.courses.include(courseId)) {
+    if (!consultation.courses.find(e => e._id.toString() === courseId)) {
         return next(new AppError("You don't have this course", 400));
     }
 
