@@ -75,7 +75,7 @@ router
     );
 
 router
-    .route('/verifyPaymentConsultationConnection/:id/:user')
+    .route('/verifyPaymentConsultationConnection/:consult/:user')
     .get(
         paymentController.verifyBuyingConsultationsConnection
     );

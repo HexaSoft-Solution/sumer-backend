@@ -117,11 +117,20 @@ exports.addServices = catchAsync(async (req, res, next) => {
         return next(new AppError("You don't have a consultation profile", 400));
     }
 
+    /*
+          #swagger.consumes = ['multipart/form-data']
+          #swagger.parameters['image'] = {
+              in: 'formData',
+              type: 'file',
+              required: 'true',
+              description: 'Some description...',
+        } */
+
     const { name, description } = JSON.parse(req.body.data);
     const { path } = req.file
 
     const result = await cloudinary.uploader.upload(path, {
-        public_id: `/${name}-${Math.r * 10000000000}/${name}Photo`,
+        public_id: `/${name}-${Math.random() * 10000000000}/${name}Photo`,
         folder: 'services',
         resource_type: 'image',
     });

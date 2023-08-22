@@ -94,7 +94,20 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 });
 
 exports.createUser = catchAsync(async (req, res, next) => {
-    const newUser = await User.create(req.body);
+
+    const newUser = await User.create({
+        name: req.body.name,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        username: req.body.username,
+        stockName: req.body.stockName,
+        salonName: req.body.salonName,
+        role: req.body.role,
+        email: req.body.email,
+        phone: req.body.phone,
+        password: req.body.password,
+        passwordConfirm: req.body.passwordConfirm,
+    });
     createSendToken(newUser, 201, res);
 });
 

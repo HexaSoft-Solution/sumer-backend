@@ -6,6 +6,7 @@ const Salon = require('../models/salonModel');
 const SalonBooking = require('../models/salonBookingModel');
 const Consultation = require('../models/consultationModel');
 const Consultant = require('../models/consultantModel')
+const BusinussProfile = require('../models/businessProfileModel')
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -148,7 +149,8 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
         const transactionsArr = invoice.transactions
         for (const transactionId of transactionsArr) {
             const transaction = await Transaction.findById(transactionId);
-            await Product.findOneAndUpdate({ _id: transaction.product }, { $inc: { availabilityCount: -transaction.quantity } }, { new: true })
+            const product = await Product.findOneAndUpdate({ _id: transaction.product }, { $inc: { availabilityCount: -transaction.quantity } }, { new: true })
+            await BusinussProfile.findOneAndUpdate({ user: product.owner }, { $inc: { balance: transaction.price }, $push: { Transactions: transaction.id } }, { new: true })
         }
 
         const transactions = await Transaction.find({_id: {$in: invoice.transactions}});
@@ -420,7 +422,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
 
 exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
     const paymentId = req.query.id;
-    const consultationId = req.params.id
+    const consultationId = req.params.consult
     const title = req.params.title
     const userId = req.params.user;
 

@@ -6,6 +6,10 @@ const upload = require('../utils/multer');
 
 const router = express.Router();
 
+
+// #swagger.tags = ['Users']
+
+
 router.param('id', (req, res, next, val) => {
     console.log(`user id ${val}`)
     next();
