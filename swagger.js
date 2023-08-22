@@ -1,4 +1,4 @@
-const swaggerAutogen = require("swagger-autogen")({openapi: '3.0.0'});
+const swaggerAutogen = require("swagger-autogen")({ openapi: "3.0.0" });
 const { models, generateSchemas } = require("./m2s");
 const fs = require("node:fs");
 const doc = {
@@ -22,7 +22,11 @@ const doc = {
   ],
   securityDefinitions: {}, // by default: empty object
   definitions: {}, // by default: empty object (Swagger 2.0)
-  components: {}, // by default: empty object (OpenAPI 3.x)
+  components: {
+    '@schemas':{
+
+    }
+  }, // by default: empty object (OpenAPI 3.x)
 };
 
 generateSchemas().then(() => {
@@ -32,16 +36,13 @@ generateSchemas().then(() => {
         "./swagger-schemas/" + model.label + ".json",
         "utf-8"
       );
-      doc.definitions = {...doc.definitions, [model.label]: JSON.parse(file) }
+      doc.components['@schemas'] = { ...doc.components['@schemas'], [model.label]: JSON.parse(file) };
     } catch (error) {
-        // console.log(error);
+      // console.log(error);
     }
   });
   const outputFile = "./path/swagger-output.json";
-  const endpointsFiles = [
-    "./app.js",
-    "./routes/*.js"
-    ];
+  const endpointsFiles = ["./app.js"];
 
   swaggerAutogen(outputFile, endpointsFiles, doc).then((data) => {
     require("./app.js");

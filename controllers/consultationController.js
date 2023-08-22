@@ -119,12 +119,7 @@ exports.addServices = catchAsync(async (req, res, next) => {
 
     /*
           #swagger.consumes = ['multipart/form-data']
-          #swagger.parameters['image'] = {
-              in: 'formData',
-              type: 'file',
-              required: 'true',
-              description: 'Some description...',
-        } */
+   */
 
     const { name, description } = JSON.parse(req.body.data);
     const { path } = req.file
