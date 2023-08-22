@@ -1,0 +1,1 @@
+{"title":"Transaction","required":["product","quantity","price"],"properties":{"product":{"type":"string"},"quantity":{"type":"number"},"price":{"type":"number"},"user":{"type":"string"},"_id":{"type":"string"}}}

@@ -1,0 +1,1 @@
+{"title":"businessProfile","properties":{"user":{"type":"string"},"products":{"type":"array","items":{"type":"string"}},"balance":{"type":"number"},"Transactions":{"type":"array","items":{"type":"string"}},"_id":{"type":"string"}}}

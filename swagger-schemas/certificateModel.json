@@ -1,0 +1,1 @@
+{"title":"Certificate","required":["title","issueDate"],"properties":{"title":{"type":"string"},"issueDate":{"type":"string","format":"date-time"},"expireDate":{"type":"string","format":"date-time"},"certificateID":{"type":"string"},"certificateURL":{"type":"string"},"certificatePhoto":{"type":"string"},"cloudinaryId":{"type":"string"},"_id":{"type":"string"}}}

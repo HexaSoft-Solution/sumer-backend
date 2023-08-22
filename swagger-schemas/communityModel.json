@@ -1,0 +1,1 @@
+{"title":"Community","required":["user","post"],"properties":{"user":{"type":"string"},"post":{"type":"string"},"likes":{"type":"array","items":{"type":"string"}},"Comments":{"type":"array","items":{"type":"string"}},"postPhoto":{"type":"string"},"cloudinaryId":{"type":"string"},"created":{"type":"string","format":"date-time"},"_id":{"type":"string"}}}

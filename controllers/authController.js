@@ -41,8 +41,6 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-    // #swagger.tags = ['Users']
-
     const salon = await Salon.create({
         name: req.body.salonName,
         phone: req.body.phone,
@@ -93,14 +91,7 @@ exports.signup = catchAsync(async (req, res, next) => {
             500
         );
     }
-    /* #swagger.responses[200] = {
-            description: 'User successfully obtained.',
-            schema: {
-                name: 'Jhon Doe',
-                age: 29,
-                about: ''
-            }
-    } */
+
     createSendToken(newUser, 201, res);
 });
 

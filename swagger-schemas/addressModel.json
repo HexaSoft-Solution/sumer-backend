@@ -1,0 +1,1 @@
+{"title":"Address","required":["street","city","houseNo","houseType","latitude","longitude"],"properties":{"street":{"type":"string"},"city":{"type":"string"},"houseNo":{"type":"string"},"houseType":{"type":"string","enum":["Apartment","House","Office"]},"latitude":{"type":"number"},"longitude":{"type":"number"},"_id":{"type":"string"}}}

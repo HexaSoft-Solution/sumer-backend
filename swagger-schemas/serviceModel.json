@@ -1,0 +1,1 @@
+{"title":"Service","required":["name","description"],"properties":{"name":{"type":"string"},"description":{"type":"string"},"servicePhoto":{"type":"string"},"cloudinaryId":{"type":"string"},"_id":{"type":"string"}}}
