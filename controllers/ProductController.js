@@ -2,6 +2,7 @@ const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
 const Review = require('../models/reviewModel');
 const User = require('../models/userModel')
+const BusinussProfile = require('../models/businessProfileModel')
 
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
@@ -208,10 +209,15 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         $inc: { "productCreationAvailability": -1 }
     });
 
+    const businussProfile = await BusinussProfile.findOneAndUpdate({ user: userId }, {
+        $push: { "products": product.id },
+    })
+
     res.status(201).json({
         status: "success",
         product,
-        owner
+        owner,
+        businussProfile
     });
 });
 

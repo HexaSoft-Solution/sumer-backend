@@ -18,6 +18,9 @@
   "paths": {
     "/api/v1/users/signup": {
       "post": {
+        "tags": [
+          "Users"
+        ],
         "description": "",
         "parameters": [
           {
@@ -64,8 +67,28 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "User successfully obtained.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Jhon Doe"
+                },
+                "age": {
+                  "type": "number",
+                  "example": 29
+                },
+                "about": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -443,6 +466,50 @@
       },
       "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "firstName": {
+                  "example": "any"
+                },
+                "lastName": {
+                  "example": "any"
+                },
+                "username": {
+                  "example": "any"
+                },
+                "stockName": {
+                  "example": "any"
+                },
+                "salonName": {
+                  "example": "any"
+                },
+                "role": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "phone": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "passwordConfirm": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -1399,11 +1466,6 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "id",
             "in": "query",
             "type": "string"
@@ -1559,11 +1621,6 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "id",
             "in": "query",
             "type": "string"
@@ -1643,11 +1700,6 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "id",
             "in": "query",
             "type": "string"
@@ -1678,6 +1730,9 @@
             "schema": {
               "type": "object",
               "properties": {
+                "title": {
+                  "example": "any"
+                },
                 "consultationId": {
                   "example": "any"
                 },
@@ -1710,7 +1765,7 @@
         }
       }
     },
-    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{user}": {
+    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{user}/{title}": {
       "get": {
         "description": "",
         "parameters": [
@@ -1727,8 +1782,9 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "title",
+            "in": "path",
+            "required": true,
             "type": "string"
           },
           {
@@ -2324,6 +2380,9 @@
     "/api/v1/consultation/service": {
       "post": {
         "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
             "name": "authorization",
@@ -2331,15 +2390,19 @@
             "type": "string"
           },
           {
+            "name": "singleFile",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "Some description..."
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "description": {
+                "data": {
                   "example": "any"
                 }
               }
@@ -2471,19 +2534,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "issueDate": {
-                  "example": "any"
-                },
-                "expireDate": {
-                  "example": "any"
-                },
-                "certificateID": {
-                  "example": "any"
-                },
-                "certificateURL": {
+                "data": {
                   "example": "any"
                 }
               }
@@ -2624,10 +2675,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "courseName": {
-                  "example": "any"
-                },
-                "issueDate": {
+                "data": {
                   "example": "any"
                 }
               }

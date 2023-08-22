@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const ConsultantSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: [true, 'Please add a title'],
+        trim: true,
+        maxlength: [100, 'Title can not be more than 100 characters']
+    },
    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'

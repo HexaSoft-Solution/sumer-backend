@@ -111,6 +111,12 @@ const userSchema = new mongoose.Schema({
             min: 1,
         },
     }],
+
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Community',
+        default: [],
+    }],
     productCreationAvailability: {
         type: Number,
         default: 0,

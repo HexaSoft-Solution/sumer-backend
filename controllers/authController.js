@@ -4,6 +4,7 @@ const crypto = require('crypto');
 
 const User = require('../models/userModel');
 const Salon = require('../models/salonModel');
+const BusinussProfile = require('../models/businessProfileModel')
 
 const sendEmail = require('../utils/emails');
 const catchAsync = require('../utils/catchAsync');
@@ -40,6 +41,7 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Users']
 
     const salon = await Salon.create({
         name: req.body.salonName,
@@ -59,6 +61,12 @@ exports.signup = catchAsync(async (req, res, next) => {
         password: req.body.password,
         passwordConfirm: req.body.passwordConfirm,
     });
+
+    if (req.body.role === 'business') {
+        await BusinussProfile.create({
+            user: newUser.id,
+        })
+    }
 
     newUser.salonCreated.push(salon.id)
 
@@ -85,7 +93,14 @@ exports.signup = catchAsync(async (req, res, next) => {
             500
         );
     }
-
+    /* #swagger.responses[200] = {
+            description: 'User successfully obtained.',
+            schema: {
+                name: 'Jhon Doe',
+                age: 29,
+                about: ''
+            }
+    } */
     createSendToken(newUser, 201, res);
 });
 
