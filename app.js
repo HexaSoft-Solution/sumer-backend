@@ -28,7 +28,7 @@ const app = express();
 
 app.enable('trust proxy');
 app.use(cors({
-    origin: ['*','http://*','http://localhost:3000','http://localhost:5000','http://localhost:8000', 'https://sumer.vercel.app'],
+    origin: ['*','http://*','http://localhost:3000','http://localhost:5000','http://localhost:8000', 'https://sumer.vercel.app', 'https://localhost:4200'],
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
     credentials:true,
     optionSuccessStatus:200
