@@ -47,7 +47,13 @@ router.patch(
 );
 router.patch("/updateMe", authController.protect, userController.updateMe);
 router.delete("/deleteMe", authController.protect, userController.deleteMe);
-
+router
+  .post("/address", authController.protect, userController.addAddress)
+  .delete(
+    "/address/:addressId",
+    authController.protect,
+    userController.deleteAddress
+  );
 router
   .route("/uploadPersonalPhoto")
   .patch(
@@ -55,13 +61,7 @@ router
     authController.protect,
     userController.uploadPersonalPhoto
   );
-  router
-  .post("/address", authController.protect, userController.addAddress)
-  .delete(
-    "/address/:addressId",
-    authController.protect,
-    userController.deleteAddress
-  );
+
 router
   .route("/")
   .get(
@@ -84,7 +84,5 @@ router
     authController.restrictTo("admin"),
     userController.deleteUser
   );
-
-
 
 module.exports = router;
