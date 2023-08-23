@@ -1,5 +1,5 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "version": "1.0.0",
     "title": "REST API",
@@ -13,80 +13,56 @@
       "description": ""
     }
   ],
-  "schemes": [],
   "securityDefinitions": {},
   "paths": {
     "/api/v1/users/signup": {
       "post": {
-        "tags": [
-          "Users"
-        ],
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "salonName": {
-                  "example": "any"
-                },
-                "phone": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "firstName": {
-                  "example": "any"
-                },
-                "lastName": {
-                  "example": "any"
-                },
-                "username": {
-                  "example": "any"
-                },
-                "stockName": {
-                  "example": "any"
-                },
-                "role": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "passwordConfirm": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
-          "200": {
-            "description": "User successfully obtained.",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "Jhon Doe"
-                },
-                "age": {
-                  "type": "number",
-                  "example": 29
-                },
-                "about": {
-                  "type": "string",
-                  "example": ""
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "salonName": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "firstName": {
+                    "example": "any"
+                  },
+                  "lastName": {
+                    "example": "any"
+                  },
+                  "username": {
+                    "example": "any"
+                  },
+                  "stockName": {
+                    "example": "any"
+                  },
+                  "role": {
+                    "example": "any"
+                  },
+                  "email": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  },
+                  "passwordConfirm": {
+                    "example": "any"
+                  }
                 }
-              },
-              "xml": {
-                "name": "main"
               }
             }
           }
@@ -96,26 +72,26 @@
     "/api/v1/users/login": {
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -123,26 +99,26 @@
     "/api/v1/users/loginPhone": {
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "phone": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -150,26 +126,26 @@
     "/api/v1/users/loginUsername": {
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "username": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -191,7 +167,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -204,23 +182,23 @@
     "/api/v1/users/forgotPassword": {
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -233,7 +211,9 @@
             "name": "OTP",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -251,21 +231,8 @@
             "name": "token",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "password": {
-                  "example": "any"
-                },
-                "passwordConfirm": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
@@ -273,29 +240,46 @@
           "default": {
             "description": ""
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "example": "any"
+                  },
+                  "passwordConfirm": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
     "/api/v1/users/sendVerifyEmail": {
       "patch": {
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -308,7 +292,9 @@
             "name": "OTP",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -325,30 +311,34 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "passwordCurrent": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "passwordConfirm": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "default": {
             "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "passwordCurrent": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  },
+                  "passwordConfirm": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -360,7 +350,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -377,39 +369,43 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "firstName": {
-                  "example": "any"
-                },
-                "lastName": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "stockName": {
-                  "example": "any"
-                },
-                "username": {
-                  "example": "any"
-                },
-                "phone": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "example": "any"
+                  },
+                  "lastName": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "stockName": {
+                    "example": "any"
+                  },
+                  "username": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -421,7 +417,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -438,7 +436,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -455,7 +455,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -466,53 +468,53 @@
       },
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "firstName": {
-                  "example": "any"
-                },
-                "lastName": {
-                  "example": "any"
-                },
-                "username": {
-                  "example": "any"
-                },
-                "stockName": {
-                  "example": "any"
-                },
-                "salonName": {
-                  "example": "any"
-                },
-                "role": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "phone": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "passwordConfirm": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "firstName": {
+                    "example": "any"
+                  },
+                  "lastName": {
+                    "example": "any"
+                  },
+                  "username": {
+                    "example": "any"
+                  },
+                  "stockName": {
+                    "example": "any"
+                  },
+                  "salonName": {
+                    "example": "any"
+                  },
+                  "role": {
+                    "example": "any"
+                  },
+                  "email": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  },
+                  "passwordConfirm": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -525,7 +527,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -541,12 +545,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -571,27 +579,31 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "desc": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "desc": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -604,7 +616,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -620,12 +634,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -641,32 +659,38 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "desc": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "desc": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -686,51 +710,55 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "desc": {
-                  "example": "any"
-                },
-                "price": {
-                  "example": "any"
-                },
-                "size": {
-                  "example": "any"
-                },
-                "brand": {
-                  "example": "any"
-                },
-                "category": {
-                  "example": "any"
-                },
-                "availabilityCount": {
-                  "example": "any"
-                },
-                "howToUse": {
-                  "example": "any"
-                },
-                "highlights": {
-                  "example": "any"
-                },
-                "color": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "desc": {
+                    "example": "any"
+                  },
+                  "price": {
+                    "example": "any"
+                  },
+                  "size": {
+                    "example": "any"
+                  },
+                  "brand": {
+                    "example": "any"
+                  },
+                  "category": {
+                    "example": "any"
+                  },
+                  "availabilityCount": {
+                    "example": "any"
+                  },
+                  "howToUse": {
+                    "example": "any"
+                  },
+                  "highlights": {
+                    "example": "any"
+                  },
+                  "color": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -742,24 +770,28 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -769,27 +801,31 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "productId": {
-                  "example": "any"
-                },
-                "quantity": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "example": "any"
+                  },
+                  "quantity": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -802,7 +838,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -818,12 +856,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -839,47 +881,15 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "desc": {
-                  "example": "any"
-                },
-                "price": {
-                  "example": "any"
-                },
-                "size": {
-                  "example": "any"
-                },
-                "brand": {
-                  "example": "any"
-                },
-                "category": {
-                  "example": "any"
-                },
-                "availabilityCount": {
-                  "example": "any"
-                },
-                "howToUse": {
-                  "example": "any"
-                },
-                "highlights": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
@@ -889,6 +899,44 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "desc": {
+                    "example": "any"
+                  },
+                  "price": {
+                    "example": "any"
+                  },
+                  "size": {
+                    "example": "any"
+                  },
+                  "brand": {
+                    "example": "any"
+                  },
+                  "category": {
+                    "example": "any"
+                  },
+                  "availabilityCount": {
+                    "example": "any"
+                  },
+                  "howToUse": {
+                    "example": "any"
+                  },
+                  "highlights": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -901,7 +949,9 @@
             "name": "key",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -919,12 +969,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -942,29 +996,35 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -975,12 +1035,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -998,12 +1062,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1024,12 +1092,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1049,7 +1121,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1064,33 +1138,37 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "product": {
-                  "example": "any"
-                },
-                "user": {
-                  "example": "any"
-                },
-                "review": {
-                  "example": "any"
-                },
-                "rating": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product": {
+                    "example": "any"
+                  },
+                  "user": {
+                    "example": "any"
+                  },
+                  "review": {
+                    "example": "any"
+                  },
+                  "rating": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1103,7 +1181,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1119,12 +1199,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1140,12 +1224,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1170,33 +1258,37 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "example": "any"
-                },
-                "discountPercentage": {
-                  "example": "any"
-                },
-                "maxDiscount": {
-                  "example": "any"
-                },
-                "expireDate": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "example": "any"
+                  },
+                  "discountPercentage": {
+                    "example": "any"
+                  },
+                  "maxDiscount": {
+                    "example": "any"
+                  },
+                  "expireDate": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1209,7 +1301,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1225,12 +1319,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1247,27 +1345,31 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "discount": {
-                  "example": "any"
-                },
-                "productId": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "discount": {
+                    "example": "any"
+                  },
+                  "productId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1280,12 +1382,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1302,24 +1408,28 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1331,7 +1441,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1348,39 +1460,43 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "example": "any"
-                },
-                "number": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "cvc": {
-                  "example": "any"
-                },
-                "month": {
-                  "example": "any"
-                },
-                "year": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "example": "any"
+                  },
+                  "number": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "cvc": {
+                    "example": "any"
+                  },
+                  "month": {
+                    "example": "any"
+                  },
+                  "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1393,12 +1509,16 @@
             "name": "invoice_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "id",
             "in": "query",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1418,39 +1538,43 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "example": "any"
-                },
-                "number": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "cvc": {
-                  "example": "any"
-                },
-                "month": {
-                  "example": "any"
-                },
-                "year": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "example": "any"
+                  },
+                  "number": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "cvc": {
+                    "example": "any"
+                  },
+                  "month": {
+                    "example": "any"
+                  },
+                  "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1463,12 +1587,16 @@
             "name": "user",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "id",
             "in": "query",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1488,54 +1616,58 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "salonId": {
-                  "example": "any"
-                },
-                "startTime": {
-                  "example": "any"
-                },
-                "endTime": {
-                  "example": "any"
-                },
-                "day": {
-                  "example": "any"
-                },
-                "date": {
-                  "example": "any"
-                },
-                "type": {
-                  "example": "any"
-                },
-                "number": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "cvc": {
-                  "example": "any"
-                },
-                "month": {
-                  "example": "any"
-                },
-                "year": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "salonId": {
+                    "example": "any"
+                  },
+                  "startTime": {
+                    "example": "any"
+                  },
+                  "endTime": {
+                    "example": "any"
+                  },
+                  "day": {
+                    "example": "any"
+                  },
+                  "date": {
+                    "example": "any"
+                  },
+                  "type": {
+                    "example": "any"
+                  },
+                  "number": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "cvc": {
+                    "example": "any"
+                  },
+                  "month": {
+                    "example": "any"
+                  },
+                  "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1548,12 +1680,16 @@
             "name": "bookingId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "id",
             "in": "query",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1573,39 +1709,43 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "example": "any"
-                },
-                "number": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "cvc": {
-                  "example": "any"
-                },
-                "month": {
-                  "example": "any"
-                },
-                "year": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "example": "any"
+                  },
+                  "number": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "cvc": {
+                    "example": "any"
+                  },
+                  "month": {
+                    "example": "any"
+                  },
+                  "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1618,12 +1758,16 @@
             "name": "user",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "id",
             "in": "query",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1643,36 +1787,8 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "connections": {
-                  "example": "any"
-                },
-                "type": {
-                  "example": "any"
-                },
-                "number": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "cvc": {
-                  "example": "any"
-                },
-                "month": {
-                  "example": "any"
-                },
-                "year": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
@@ -1680,29 +1796,67 @@
           "200": {
             "description": "OK"
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "connections": {
+                    "example": "any"
+                  },
+                  "type": {
+                    "example": "any"
+                  },
+                  "number": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "cvc": {
+                    "example": "any"
+                  },
+                  "month": {
+                    "example": "any"
+                  },
+                  "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
-    "/api/v1/payment/verifyPaymentConsultationConnection/{id}/{user}": {
+    "/api/v1/payment/verifyPaymentConsultationConnection/{consult}/{user}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "consult",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "user",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "id",
             "in": "query",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1722,39 +1876,8 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "consultationId": {
-                  "example": "any"
-                },
-                "type": {
-                  "example": "any"
-                },
-                "number": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "cvc": {
-                  "example": "any"
-                },
-                "month": {
-                  "example": "any"
-                },
-                "year": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
@@ -1762,43 +1885,167 @@
           "200": {
             "description": "OK"
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "example": "any"
+                  },
+                  "consultationId": {
+                    "example": "any"
+                  },
+                  "type": {
+                    "example": "any"
+                  },
+                  "number": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "cvc": {
+                    "example": "any"
+                  },
+                  "month": {
+                    "example": "any"
+                  },
+                  "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
-    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{user}/{title}": {
+    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{consult}/{title}": {
       "get": {
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "query",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the payment"
           },
           {
-            "name": "user",
+            "name": "consult",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the consultation"
           },
           {
             "name": "title",
-            "in": "path",
+            "in": "query",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            },
+            "description": "Title of the consultant"
           },
           {
-            "name": "id",
+            "name": "user",
             "in": "query",
-            "type": "string"
+            "required": true,
+            "description": "ID of the user",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Payment processed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Payment processed successfully."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Payment processed successfully."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Payment failed or not yet paid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Payment failed or not yet paid."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Payment failed or not yet paid."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1818,39 +2065,43 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "service": {
-                  "example": "any"
-                },
-                "desc": {
-                  "example": "any"
-                },
-                "pricePerHour": {
-                  "example": "any"
-                },
-                "address": {
-                  "example": "any"
-                },
-                "phone": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "service": {
+                    "example": "any"
+                  },
+                  "desc": {
+                    "example": "any"
+                  },
+                  "pricePerHour": {
+                    "example": "any"
+                  },
+                  "address": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1863,7 +2114,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1879,12 +2132,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1900,35 +2157,15 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "service": {
-                  "example": "any"
-                },
-                "desc": {
-                  "example": "any"
-                },
-                "address": {
-                  "example": "any"
-                },
-                "phone": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
@@ -1938,6 +2175,32 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "service": {
+                    "example": "any"
+                  },
+                  "desc": {
+                    "example": "any"
+                  },
+                  "address": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1950,7 +2213,9 @@
             "name": "key",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1968,12 +2233,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1991,29 +2260,35 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2026,12 +2301,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2052,12 +2331,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2077,7 +2360,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2092,33 +2377,37 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "salon": {
-                  "example": "any"
-                },
-                "user": {
-                  "example": "any"
-                },
-                "review": {
-                  "example": "any"
-                },
-                "rating": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "salon": {
+                    "example": "any"
+                  },
+                  "user": {
+                    "example": "any"
+                  },
+                  "review": {
+                    "example": "any"
+                  },
+                  "rating": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2131,7 +2420,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2147,12 +2438,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2168,12 +2463,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2190,7 +2489,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2215,30 +2516,34 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "Specialization": {
-                  "example": "any"
-                },
-                "about": {
-                  "example": "any"
-                },
-                "price": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Specialization": {
+                    "example": "any"
+                  },
+                  "about": {
+                    "example": "any"
+                  },
+                  "price": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2251,7 +2556,9 @@
             "name": "key",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2268,7 +2575,9 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2286,7 +2595,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2302,12 +2613,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2323,12 +2638,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2344,35 +2663,41 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "Specialization": {
-                  "example": "any"
-                },
-                "about": {
-                  "example": "any"
-                },
-                "price": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Specialization": {
+                    "example": "any"
+                  },
+                  "about": {
+                    "example": "any"
+                  },
+                  "price": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2380,38 +2705,32 @@
     "/api/v1/consultation/service": {
       "post": {
         "description": "",
-        "consumes": [
-          "multipart/form-data"
-        ],
         "parameters": [
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "singleFile",
-            "in": "formData",
-            "type": "file",
-            "required": true,
-            "description": "Some description..."
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2424,12 +2743,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2445,32 +2768,38 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "description": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2483,12 +2812,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2504,12 +2837,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2526,24 +2863,28 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2556,12 +2897,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2577,41 +2922,47 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "issueDate": {
-                  "example": "any"
-                },
-                "expireDate": {
-                  "example": "any"
-                },
-                "certificateID": {
-                  "example": "any"
-                },
-                "certificateURL": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "example": "any"
+                  },
+                  "issueDate": {
+                    "example": "any"
+                  },
+                  "expireDate": {
+                    "example": "any"
+                  },
+                  "certificateID": {
+                    "example": "any"
+                  },
+                  "certificateURL": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2624,12 +2975,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2645,12 +3000,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2667,24 +3026,28 @@
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2697,12 +3060,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2718,32 +3085,38 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "courseName": {
-                  "example": "any"
-                },
-                "issueDate": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "courseName": {
+                    "example": "any"
+                  },
+                  "issueDate": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2756,12 +3129,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2777,12 +3154,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2800,12 +3181,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2823,12 +3208,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2846,12 +3235,16 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2867,32 +3260,38 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "example": "any"
-                },
-                "reply": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "example": "any"
+                  },
+                  "reply": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2905,32 +3304,38 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "messageChat": {
-                  "example": "any"
-                },
-                "reply": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "messageChat": {
+                    "example": "any"
+                  },
+                  "reply": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2943,32 +3348,1065 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "messageChat": {
-                  "example": "any"
-                },
-                "reply": {
-                  "example": "any"
-                }
-              }
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "messageChat": {
+                    "example": "any"
+                  },
+                  "reply": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "addressModel": {
+        "title": "Address",
+        "required": [
+          "street",
+          "city",
+          "houseNo",
+          "houseType",
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "street": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "houseNo": {
+            "type": "string"
+          },
+          "houseType": {
+            "type": "string",
+            "enum": [
+              "Apartment",
+              "House",
+              "Office"
+            ]
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "businessProfileModel": {
+        "title": "businessProfile",
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "balance": {
+            "type": "number"
+          },
+          "Transactions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "categoryModel": {
+        "title": "Category",
+        "required": [
+          "name",
+          "desc"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "ProductsIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "CategoryPhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "certificateModel": {
+        "title": "Certificate",
+        "required": [
+          "title",
+          "issueDate"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "issueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expireDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "certificateID": {
+            "type": "string"
+          },
+          "certificateURL": {
+            "type": "string"
+          },
+          "certificatePhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "commentModel": {
+        "title": "Comments",
+        "required": [
+          "user",
+          "comment"
+        ],
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "likes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "commentPhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "communityModel": {
+        "title": "Community",
+        "required": [
+          "user",
+          "post"
+        ],
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "post": {
+            "type": "string"
+          },
+          "likes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Comments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "postPhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "consultantModel": {
+        "title": "Consultant",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "consultant": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Active",
+              "Ended"
+            ]
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "consultationModel": {
+        "title": "Consultation",
+        "required": [
+          "owner",
+          "Specialization",
+          "about",
+          "price"
+        ],
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "Specialization": {
+            "type": "string"
+          },
+          "about": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "service": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "certificates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "courses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Pending",
+              "Confirmed",
+              "Cancelled"
+            ]
+          },
+          "consultants": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "balance": {
+            "type": "number"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "courseModel": {
+        "title": "Course",
+        "required": [
+          "courseName"
+        ],
+        "properties": {
+          "courseName": {
+            "type": "string"
+          },
+          "issueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "coursePhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "invoiceModel": {
+        "title": "Invoice",
+        "required": [
+          "invoiceId",
+          "totalAmount"
+        ],
+        "properties": {
+          "invoiceId": {
+            "type": "string"
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paymentId": {
+            "type": "string"
+          },
+          "totalAmount": {
+            "type": "number"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "messageModel": {
+        "title": "Message",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "string"
+          },
+          "receiver": {
+            "type": "string"
+          },
+          "reply": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "productModel": {
+        "title": "Product",
+        "required": [
+          "name",
+          "price",
+          "desc",
+          "color",
+          "howToUse",
+          "size",
+          "category"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "discountPercentage": {
+            "type": "number"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "discountedPrice": {
+            "type": "number"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "ProductPhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "imageArray": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ProductPhotoPerview": {
+                  "type": "string"
+                },
+                "cloudinaryId": {
+                  "type": "string"
+                }
+              },
+              "required": []
+            }
+          },
+          "availabilityCount": {
+            "type": "number"
+          },
+          "color": {
+            "type": "string"
+          },
+          "howToUse": {
+            "type": "string"
+          },
+          "highlights": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "High Shine Finish",
+                "Hydrating"
+              ],
+              "required": [
+                true,
+                "Must be not Empty !"
+              ]
+            }
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "Gift Set",
+              "Mini",
+              "Refill",
+              "Value"
+            ]
+          },
+          "trending": {
+            "type": "boolean"
+          },
+          "favouriteCount": {
+            "type": "number"
+          },
+          "ratingsAverage": {
+            "type": "number"
+          },
+          "ratingsQuantity": {
+            "type": "number"
+          },
+          "Reviews": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "category": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "voucher": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "reviewModel": {
+        "title": "Review",
+        "required": [
+          "review",
+          "product",
+          "user"
+        ],
+        "properties": {
+          "fullName": {
+            "type": "string"
+          },
+          "userPhoto": {
+            "type": "string"
+          },
+          "review": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "product": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "salonBookingModel": {
+        "title": "SalonBooking",
+        "required": [
+          "startTime",
+          "endTime",
+          "day",
+          "date",
+          "salon"
+        ],
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "enum": [
+              "8:00",
+              "9:00",
+              "10:00",
+              "11:00",
+              "12:00",
+              "13:00",
+              "14:00",
+              "15:00",
+              "16:00"
+            ]
+          },
+          "endTime": {
+            "type": "string",
+            "enum": [
+              "9:00",
+              "10:00",
+              "11:00",
+              "12:00",
+              "13:00",
+              "14:00",
+              "15:00",
+              "16:00",
+              "17:00"
+            ]
+          },
+          "day": {
+            "type": "string",
+            "enum": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paymentStatus": {
+            "type": "string",
+            "enum": [
+              "Paid",
+              "Unpaid"
+            ]
+          },
+          "salon": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "salonModel": {
+        "title": "Salon",
+        "required": [
+          "name",
+          "phone"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "service": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "ServicePhoto": {
+                  "type": "string"
+                },
+                "cloudinaryId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          },
+          "desc": {
+            "type": "string"
+          },
+          "address": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pricePerHour": {
+            "type": "number"
+          },
+          "booking": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "salonPhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "salonReviews": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "favouriteCount": {
+            "type": "number"
+          },
+          "ratingsAverage": {
+            "type": "number"
+          },
+          "ratingsQuantity": {
+            "type": "number"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "salonReviewModel": {
+        "title": "Salon-Review",
+        "required": [
+          "review",
+          "salon",
+          "user"
+        ],
+        "properties": {
+          "fullName": {
+            "type": "string"
+          },
+          "userPhoto": {
+            "type": "string"
+          },
+          "review": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "salon": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "serviceModel": {
+        "title": "Service",
+        "required": [
+          "name",
+          "description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "servicePhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "transactionModel": {
+        "title": "Transaction",
+        "required": [
+          "product",
+          "quantity",
+          "price"
+        ],
+        "properties": {
+          "product": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "userModel": {
+        "title": "User",
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "username",
+          "phone",
+          "password",
+          "passwordConfirm"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "stockName": {
+            "type": "string"
+          },
+          "salonName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "individual",
+              "consultant",
+              "business",
+              "admin",
+              "deliver",
+              "salon service"
+            ]
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "image": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "addresses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "passwordConfirm": {
+            "type": "string"
+          },
+          "passwordChangedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lovedProducts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lovedSalons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productsCreated": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "salonCreated": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cart": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "number"
+                }
+              },
+              "required": []
+            }
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productCreationAvailability": {
+            "type": "number"
+          },
+          "productAds": {
+            "type": "number"
+          },
+          "vouchers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "consultantConnection": {
+            "type": "number"
+          },
+          "createConsultation": {
+            "type": "boolean"
+          },
+          "consultation": {
+            "type": "string"
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "emailActive": {
+            "type": "boolean"
+          },
+          "userPhoto": {
+            "type": "string"
+          },
+          "cloudinaryId": {
+            "type": "string"
+          },
+          "forgetPasswordOTP": {
+            "type": "string"
+          },
+          "passwordResetToken": {
+            "type": "string"
+          },
+          "passwordResetTokenOTP": {
+            "type": "string"
+          },
+          "passwordResetExpires": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "verifyEmailOTPToken": {
+            "type": "string"
+          },
+          "verifyEmailExpires": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "voucherModel": {
+        "title": "Voucher",
+        "required": [
+          "code",
+          "discountPercentage",
+          "maxDiscount",
+          "expireDate"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "discountPercentage": {
+            "type": "number"
+          },
+          "maxDiscount": {
+            "type": "number"
+          },
+          "expireDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "used": {
+            "type": "boolean"
+          },
+          "owned": {
+            "type": "boolean"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }

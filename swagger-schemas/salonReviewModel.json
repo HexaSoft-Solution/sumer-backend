@@ -1,0 +1,1 @@
+{"title":"Salon-Review","required":["review","salon","user"],"properties":{"fullName":{"type":"string"},"userPhoto":{"type":"string"},"review":{"type":"string"},"rating":{"type":"number"},"createdAt":{"type":"string","format":"date-time"},"salon":{"type":"string"},"user":{"type":"string"},"_id":{"type":"string"},"updatedAt":{"type":"string","format":"date-time"}}}

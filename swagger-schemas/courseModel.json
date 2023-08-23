@@ -1,0 +1,1 @@
+{"title":"Course","required":["courseName"],"properties":{"courseName":{"type":"string"},"issueDate":{"type":"string","format":"date-time"},"coursePhoto":{"type":"string"},"cloudinaryId":{"type":"string"},"_id":{"type":"string"}}}

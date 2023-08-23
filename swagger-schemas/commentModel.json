@@ -1,0 +1,1 @@
+{"title":"Comments","required":["user","comment"],"properties":{"user":{"type":"string"},"comment":{"type":"string"},"likes":{"type":"array","items":{"type":"string"}},"commentPhoto":{"type":"string"},"cloudinaryId":{"type":"string"},"created":{"type":"string","format":"date-time"},"_id":{"type":"string"}}}
