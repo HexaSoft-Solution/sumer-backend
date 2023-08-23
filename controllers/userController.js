@@ -112,6 +112,24 @@ exports.createUser = catchAsync(async (req, res, next) => {
 });
 
 exports.uploadPersonalPhoto = catchAsync(async (req, res, next) => {
+    /*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            image: {
+                                type: "string",
+                                format: "binary"
+                            }
+                        },
+                        required: ["image"]
+                    }
+                }
+            } 
+        }
+    */ 
     const user = await User.findById(req.user.id)
     const result = await cloudinary.uploader.upload(req.file.path, {
         public_id: `/${user.username}/${user.username}PersonalPhoto`,
