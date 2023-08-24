@@ -54,7 +54,6 @@ app.use(
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH", "OPTIONS"],
     credentials: true,
     optionSuccessStatus: 200,
-    allowedHeaders: ['access-control-allow-origin']
   })
 );
 
