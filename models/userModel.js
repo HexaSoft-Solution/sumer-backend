@@ -11,11 +11,11 @@ const userSchema = new mongoose.Schema({
     },
     firstName: {
         type: String,
-        required: [true, 'Please tell us your first name'],
+        required: [true, 'firstName-required'],
     },
     lastName: {
         type: String,
-        required: [true, 'Please tell us your last name'],
+        required: [true, 'lastName-required'],
     },
     stockName: {
         type: String,
@@ -25,27 +25,27 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, 'Please provide your email'],
+        required: [true, 'email-required'],
         unique: true,
         lowercase: true,
-        validate: [validator.isEmail, 'Please provide a valid email']
+        validate: [validator.isEmail, 'email-invalid']
     },
     username: {
         type: String,
-        required: [true, 'Please provide your username'],
+        required: [true, 'username-required'],
         unique: true,
     },
 
     phone: {
         type: String,
-        required: [true, 'Please provide your telephone'],
+        required: [true, 'telephone-required'],
         unique: true,
         validate: {
             validator: function(v) {
-                const re = /^01[0125][0-9]{8}$/;
+                const re = /^(\+?\d{1,3}[- ]?)?\d{10}$/;
                 return (!v || !v.trim().length) || re.test(v)
             },
-            message: 'Provided phone number is invalid.'
+            message: 'phone-invalid'
         },
     },
     role:{
@@ -55,14 +55,14 @@ const userSchema = new mongoose.Schema({
     },
     birthDate: {
         type: Date,
-        validate: [validator.isDate, 'Please provide a valid date']
+        validate: [validator.isDate, 'date-invalid']
     },
     image: {
         type: String
     },
     password: {
         type: String,
-        required: [true, ' Please provide a password'],
+        required: [true, 'password-required'],
         minlength: 8,
         maxLength: 32,
         select: false,
@@ -73,12 +73,12 @@ const userSchema = new mongoose.Schema({
     },],
     passwordConfirm: {
         type: String,
-        required: [true, 'Please confirm your password'],
+        required: [true, 'password-confirm'],
         validate: {
             validator: function (el) {
                 return el === this.password;
             },
-            message: 'Password are not the same',
+            message: 'password-not-same',
         },
     },
     passwordChangedAt: {
