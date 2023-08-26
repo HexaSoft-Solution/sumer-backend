@@ -45,11 +45,8 @@ app.use(
     origin: [
       "*",
       "http://*",
-      "http://localhost:3000",
-      "http://localhost:5000",
-      "http://localhost:8000",
-      "https://sumer.vercel.app",
-      "http://localhost:4200",
+      "http://localhost:*",
+      "https://sumer.vercel.app/*",
     ],
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH", "OPTIONS"],
     credentials: true,
