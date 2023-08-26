@@ -31,7 +31,7 @@ router
     )
 
 router
-    .route('/search/:key')
+    .route('/search')
     .get(salonController.searchSalon);
 
 router

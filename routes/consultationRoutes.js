@@ -17,7 +17,7 @@ router
     );
 
 router
-    .route('search/:key')
+    .route('/search')
     .get(consultationController.searchConsultations)
 
 router

@@ -67,7 +67,7 @@ exports.search = (Model) =>
     catchAsync(async (req, res, next) => {
         let filter = {};
         if (req.params.id) filter = { model: req.params.id };
-        const key = req.params.key
+        const key = req.body.key
 
         const features = new APIFeatures(Model.find({name:{ $regex:'.*'+key+'.*'} }), req.query)
             .filter()

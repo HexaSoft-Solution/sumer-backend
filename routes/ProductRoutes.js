@@ -40,7 +40,7 @@ router
     )
 
 router
-    .route('/search/:key')
+    .route('/search')
     .get(ProductController.searchProduct);
 
 router
