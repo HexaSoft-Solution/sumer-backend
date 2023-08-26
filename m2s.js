@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('node:fs');
 const m2s = require('mongoose-to-swagger');
-const directoryPath = path.resolve(__dirname, 'models'); // Adjust the path as needed
+const directoryPath = path.resolve(__dirname, 'models');
 
 const models = [];
 

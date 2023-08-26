@@ -29,12 +29,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "salonName": {
-                    "example": "any"
-                  },
-                  "phone": {
-                    "example": "any"
-                  },
                   "name": {
                     "example": "any"
                   },
@@ -50,10 +44,16 @@
                   "stockName": {
                     "example": "any"
                   },
+                  "salonName": {
+                    "example": "any"
+                  },
                   "role": {
                     "example": "any"
                   },
                   "email": {
+                    "example": "any"
+                  },
+                  "phone": {
                     "example": "any"
                   },
                   "password": {
@@ -2831,6 +2831,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "required": true,
+            "description": "Some description...",
+            "schema": {
+              "type": "file"
+            }
           }
         ],
         "responses": {
@@ -2984,6 +2993,15 @@
             "in": "header",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "required": true,
+            "description": "Some description...",
+            "schema": {
+              "type": "file"
             }
           }
         ],
@@ -3147,6 +3165,15 @@
             "in": "header",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "required": true,
+            "description": "Some description...",
+            "schema": {
+              "type": "file"
             }
           }
         ],

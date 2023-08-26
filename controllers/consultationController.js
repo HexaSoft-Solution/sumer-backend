@@ -119,6 +119,12 @@ exports.addServices = catchAsync(async (req, res, next) => {
 
     /*
           #swagger.consumes = ['multipart/form-data']
+          #swagger.parameters['image'] = {
+              in: 'formData',
+              type: 'file',
+              required: 'true',
+              description: 'Some description...',
+        }
    */
 
     const { name, description } = JSON.parse(req.body.data);
@@ -277,6 +283,16 @@ exports.deleteService = catchAsync(async (req, res, next) => {
 
 exports.addCertificate = catchAsync(async (req, res, next) => {
     const consultationId = req.user.consultation
+
+    /*
+          #swagger.consumes = ['multipart/form-data']
+          #swagger.parameters['image'] = {
+              in: 'formData',
+              type: 'file',
+              required: 'true',
+              description: 'Some description...',
+        } */
+
 
     if (!consultationId) {
         return next(new AppError("You don't have a consultation profile", 400));
@@ -437,6 +453,17 @@ exports.deleteCertificatePhoto = catchAsync(async (req, res, next) => {
 
 exports.addCourse = catchAsync(async (req, res, next) => {
     const consultationId = req.user.consultation
+
+
+    /*
+          #swagger.consumes = ['multipart/form-data']
+          #swagger.parameters['image'] = {
+              in: 'formData',
+              type: 'file',
+              required: 'true',
+              description: 'Some description...',
+        }
+   */
 
     if (!consultationId) {
         return next(new AppError("You don't have a consultation profile", 400));
