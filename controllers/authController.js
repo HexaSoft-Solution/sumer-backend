@@ -41,11 +41,6 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-    const salon = await Salon.create({
-        name: req.body.salonName,
-        phone: req.body.phone,
-    });
-
     const newUser = await User.create({
         name: req.body.name,
         firstName: req.body.firstName,
@@ -64,6 +59,13 @@ exports.signup = catchAsync(async (req, res, next) => {
         await BusinussProfile.create({
             user: newUser.id,
         })
+    }
+
+    if (req.body.role === 'salon') {
+        await Salon.create({
+            name: req.body.salonName,
+            phone: req.body.phone,
+        });
     }
 
     newUser.salonCreated.push(salon.id)
