@@ -52,7 +52,6 @@ const ConsultationSchema = new mongoose.Schema({
 ConsultationSchema.pre(/^find/, function (next) {
     this.populate('service').populate('certificates').populate('courses').populate({
         path: 'owner',
-        select: 'firstName lastName userPhoto',
     })
     .populate({
         path: 'consultants',

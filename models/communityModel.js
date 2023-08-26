@@ -26,6 +26,19 @@ const CommunitySchema = new mongoose.Schema({
     }
 });
 
+CommunitySchema.pre(/^find/, function (next) {
+
+    this.populate({
+        path: 'user',
+        select: 'firstName lastName userPhoto',
+    }).populate({
+        path: 'likes',
+        select: 'firstName lastName userPhoto'
+    }).populate('Comments');
+
+    next();
+});
+
 const Community = mongoose.model('Community', CommunitySchema);
 
 module.exports = Community;

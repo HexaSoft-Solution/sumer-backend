@@ -22,6 +22,19 @@ const Commentschema = new mongoose.Schema({
     }
 });
 
+Commentschema.pre(/^find/, function (next) {
+
+    this.populate({
+        path: 'user',
+        select: 'firstName lastName userPhoto',
+    }).populate({
+        path: 'likes',
+        select: 'firstName lastName userPhoto'
+    })
+
+    next();
+});
+
 const Comments = mongoose.model('Comments', Commentschema);
 
 module.exports = Comments;
