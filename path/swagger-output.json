@@ -2791,15 +2791,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "image",
-            "in": "formData",
-            "required": true,
-            "description": "Some description...",
-            "schema": {
-              "type": "file"
-            }
           }
         ],
         "responses": {
@@ -2808,15 +2799,20 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "data": {
-                    "example": "any"
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
                   }
-                }
+                },
+                "required": [
+                  "image"
+                ]
               }
             }
           }
@@ -2910,20 +2906,30 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "image",
-            "in": "formData",
-            "required": true,
-            "description": "Some description...",
-            "schema": {
-              "type": "file"
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
           }
         }
       },
@@ -2963,15 +2969,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "image",
-            "in": "formData",
-            "required": true,
-            "description": "Some description...",
-            "schema": {
-              "type": "file"
-            }
           }
         ],
         "responses": {
@@ -2980,15 +2977,20 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "data": {
-                    "example": "any"
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
                   }
-                }
+                },
+                "required": [
+                  "image"
+                ]
               }
             }
           }
@@ -3116,20 +3118,30 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "image",
-            "in": "formData",
-            "required": true,
-            "description": "Some description...",
-            "schema": {
-              "type": "file"
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
           }
         }
       }
@@ -3144,15 +3156,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "image",
-            "in": "formData",
-            "required": true,
-            "description": "Some description...",
-            "schema": {
-              "type": "file"
-            }
           }
         ],
         "responses": {
@@ -3161,15 +3164,20 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "data": {
-                    "example": "any"
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
                   }
-                }
+                },
+                "required": [
+                  "image"
+                ]
               }
             }
           }
@@ -3288,20 +3296,30 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "image",
-            "in": "formData",
-            "required": true,
-            "description": "Some description...",
-            "schema": {
-              "type": "file"
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
           }
         }
       }

@@ -16,7 +16,7 @@ module.exports = fn => {
                     errors
                 });
             } else {
-                return next
+                return next()
             }
         });
     };

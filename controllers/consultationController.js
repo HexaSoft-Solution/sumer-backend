@@ -110,22 +110,31 @@ exports.updateConsultationProfile = catchAsync(async (req, res, next) => {
 });
 
 exports.addServices = catchAsync(async (req, res, next) => {
-
+/*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            image: {
+                                type: "string",
+                                format: "binary"
+                            }
+                        },
+                        required: ["image"]
+                    }
+                }
+            } 
+        }
+    */ 
     const consultationId = req.user.consultation
 
     if (!consultationId) {
         return next(new AppError("You don't have a consultation profile", 400));
     }
 
-    /*
-          #swagger.consumes = ['multipart/form-data']
-          #swagger.parameters['image'] = {
-              in: 'formData',
-              type: 'file',
-              required: 'true',
-              description: 'Some description...',
-        }
-   */
+
 
     const { name, description } = JSON.parse(req.body.data);
     const { path } = req.file
@@ -234,14 +243,24 @@ exports.deleteservicePhoto = catchAsync(async (req, res, next) => {
 
     const consultationId = req.user.consultation
 
-    /*
-          #swagger.consumes = ['multipart/form-data']
-          #swagger.parameters['image'] = {
-              in: 'formData',
-              type: 'file',
-              required: 'true',
-              description: 'Some description...',
-        } */
+   /*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            image: {
+                                type: "string",
+                                format: "binary"
+                            }
+                        },
+                        required: ["image"]
+                    }
+                }
+            } 
+        }
+    */ 
 
     if (!consultationId) {
         return next(new AppError("You don't have a consultation profile", 400));
@@ -293,14 +312,24 @@ exports.deleteService = catchAsync(async (req, res, next) => {
 exports.addCertificate = catchAsync(async (req, res, next) => {
     const consultationId = req.user.consultation
 
-    /*
-          #swagger.consumes = ['multipart/form-data']
-          #swagger.parameters['image'] = {
-              in: 'formData',
-              type: 'file',
-              required: 'true',
-              description: 'Some description...',
-        } */
+   /*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            image: {
+                                type: "string",
+                                format: "binary"
+                            }
+                        },
+                        required: ["image"]
+                    }
+                }
+            } 
+        }
+    */ 
 
 
     if (!consultationId) {
@@ -373,18 +402,29 @@ exports.editCertificate = catchAsync(async (req, res, next) => {
 })
 
 exports.addCertificatePhoto = catchAsync(async (req, res, next) => {
+
     const certificateId = req.params.id
 
     const consultationId = req.user.consultation
-
-    /*
-          #swagger.consumes = ['multipart/form-data']
-          #swagger.parameters['image'] = {
-              in: 'formData',
-              type: 'file',
-              required: 'true',
-              description: 'Some description...',
-        } */
+/*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            image: {
+                                type: "string",
+                                format: "binary"
+                            }
+                        },
+                        required: ["image"]
+                    }
+                }
+            } 
+        }
+    */ 
+    
 
     if (!consultationId) {
         return next(new AppError("You don't have a consultation profile", 400));
@@ -470,18 +510,27 @@ exports.deleteCertificatePhoto = catchAsync(async (req, res, next) => {
 
 
 exports.addCourse = catchAsync(async (req, res, next) => {
+    /*	#swagger.requestBody = {
+                required: true,
+                "@content": {
+                    "multipart/form-data": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                image: {
+                                    type: "string",
+                                    format: "binary"
+                                }
+                            },
+                            required: ["image"]
+                        }
+                    }
+                } 
+            }
+        */ 
     const consultationId = req.user.consultation
 
 
-    /*
-          #swagger.consumes = ['multipart/form-data']
-          #swagger.parameters['image'] = {
-              in: 'formData',
-              type: 'file',
-              required: 'true',
-              description: 'Some description...',
-        }
-   */
 
     if (!consultationId) {
         return next(new AppError("You don't have a consultation profile", 400));
@@ -550,14 +599,24 @@ exports.addCoursePhoto = catchAsync(async (req, res, next) => {
 
     const consultationId = req.user.consultation
 
-    /*
-          #swagger.consumes = ['multipart/form-data']
-          #swagger.parameters['image'] = {
-              in: 'formData',
-              type: 'file',
-              required: 'true',
-              description: 'Some description...',
-        } */
+  /*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            image: {
+                                type: "string",
+                                format: "binary"
+                            }
+                        },
+                        required: ["image"]
+                    }
+                }
+            } 
+        }
+    */ 
 
     if (!consultationId) {
         return next(new AppError("You don't have a consultation profile", 400));
