@@ -55,7 +55,7 @@ ConsultationSchema.pre(/^find/, function (next) {
     })
     .populate({
         path: 'consultants',
-        select: 'user messages',
+        select: 'user messages title',
     });
     next();
 });

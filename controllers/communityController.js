@@ -23,7 +23,7 @@ exports.addPost = catchAsync(async (req, res, next) => {
     })
 });
 
-const addPostPhoto = catchAsync(async (req, res, next) => {
+exports.addPostPhoto = catchAsync(async (req, res, next) => {
     const postId = req.params.id
 
     const userPost = await Community.findById(postId)
@@ -42,16 +42,23 @@ const addPostPhoto = catchAsync(async (req, res, next) => {
         postPhoto: result.secure_url,
         cloudinaryId: result.public_id,
     });
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            updatedPost
+        }
+    })
 });
 
-const deletePostPhoto = catchAsync(async (req, res, next) => {
+exports.deletePostPhoto = catchAsync(async (req, res, next) => {
     const postId = req.params.id
 
     const userPost = await Community.findById(postId)
 
     await cloudinary.uploader.destroy(userPost.cloudinaryId);
 
-    const updatedUserPost = await Com.findByIdAndUpdate(postId, {
+    const updatedUserPost = await Community.findByIdAndUpdate(postId, {
         postPhoto: null,
         cloudinaryId: null,
     });
@@ -69,11 +76,6 @@ exports.editPost = catchAsync(async (req, res, next) => {
     const postId = req.params.id
 
     const userPost = await Community.findById(postId)
-
-    if (req.file) {
-        await deletePostPhoto(req, res, next);
-        await addPostPhoto(req, res, next);
-    }
 
     const updatedUserPost = await Community.findByIdAndUpdate(postId, {
         post: req.body.post
@@ -144,4 +146,75 @@ exports.addComment = catchAsync(async (req, res, next) => {
     await Community.findByIdAndUpdate(postId, {
         $push: { Comments: comment._id }
     })
+})
+
+exports.addCommentPhoto = catchAsync(async (req, res, next) => {
+    const commentId = req.params.id
+    const userId = req.user.id;
+
+    const comment = await Comment.findById(commentId);
+
+    if (cooment.user.Id !== userId) {
+        return next(new AppError('You are not authorized to perform this action', 401));
+    }
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `/${comment.user._id}-${Math.random() * 10000000000}/${comment.user._id}Photo`,
+        folder: 'comments',
+        resource_type: 'image',
+    });
+
+    await Comment.findByIdAndUpdate(commentId, {
+        commentPhoto: result.secure_url,
+        cloudinaryId: result.public_id,
+    });
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            comment
+        }
+    })
+})
+
+exports.deleteCommentPhoto = catchAsync(async (req, res, next) => {
+    const commentId = req.user.id
+    const userId = req.user.id;
+
+    const comment = await Comment.findById(commentId);
+
+    if (comment.user.Id !== userId) {
+        return next(new AppError('You are not authorized to perform this action', 401));
+    }
+
+    await cloudinary.uploader.destroy(comment.cloudinaryId);
+
+    await Comment.findByIdAndUpdate(commentId, {
+        commentPhoto: null,
+        cloudinaryId: null,
+    });
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            comment
+        }
+    })
+})
+
+exports.editComment = catchAsync(async (req, res, next) => {
+    const commentId = req.params.id
+    const userId = req.user.id;
+
+    const comment = await Comment.findById(commentId);
+
+    if (comment.user._id !== userId) {
+        return next(new AppError('You are not authorized to perform this action', 401));
+    }
+
+
+    const updatedComment = await Community.findByIdAndUpdate(commentId, {
+        post: req.body.post
+    });
+
 })
