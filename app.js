@@ -25,7 +25,7 @@ const consultationRoutes = require("./routes/consultationRoutes");
 
 const app = express();
 
-app.enable("trust proxy");
+// app.enable("trust proxy");
 app.use(
   helmet({
     crossOriginEmbedderPolicy: false,
@@ -51,7 +51,7 @@ app.use(
       "https://sumer.vercel.app",
       "http://localhost:4200",
     ],
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH", "OPTIONS"],
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     credentials: true,
     optionSuccessStatus: 200,
   })

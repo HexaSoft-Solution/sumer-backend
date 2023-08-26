@@ -10,6 +10,7 @@ router.param("id", (req, res, next, val) => {
   next();
 });
 
+
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.post("/loginPhone", authController.loginMobile);
@@ -35,12 +36,8 @@ router.patch(
 );
 
 router
-    .route('/me')
-    .get(
-  authController.protect,
-  userController.getMe,
-  userController.getUser
-);
+  .route("/me")
+  .get(authController.protect, userController.getMe, userController.getUser);
 router.patch(
   "/updateMyPassword",
   authController.protect,
@@ -49,12 +46,11 @@ router.patch(
 router.patch("/updateMe", authController.protect, userController.updateMe);
 router.delete("/deleteMe", authController.protect, userController.deleteMe);
 router
-  .post("/address", authController.protect, userController.addAddress)
-  .delete(
-    "/address/:addressId",
-    authController.protect,
-    userController.deleteAddress
-  );
+  .route("/address")
+  .post(authController.protect, userController.addAddress);
+router
+  .route("/address/:addressId")
+  .delete(authController.protect, userController.deleteAddress);
 router
   .route("/uploadPersonalPhoto")
   .patch(
