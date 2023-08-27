@@ -1160,6 +1160,28 @@
           "200": {
             "description": "OK"
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "imageArray": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "imageArray"
+                ]
+              }
+            }
+          }
         }
       }
     },
@@ -4015,10 +4037,6 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": [
-                "High Shine Finish",
-                "Hydrating"
-              ],
               "required": [
                 true,
                 "Must be not Empty !"
