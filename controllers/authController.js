@@ -129,7 +129,7 @@ exports.login = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError('Incorrect email or password', 401));
+        return next(new AppError('invalid-credentials', 401));
     }
 
     createSendToken(user, 200, res);
@@ -145,7 +145,7 @@ exports.loginMobile = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ phone }).select('+password');
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError('Incorrect email or password', 401));
+        return next(new AppError('invalid-credentials', 401));
     }
 
     createSendToken(user, 200, res);
@@ -161,7 +161,7 @@ exports.loginUsername = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ username }).select('+password');
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError('Incorrect email or password', 401));
+        return next(new AppError('invalid-credentials', 401));
     }
 
     createSendToken(user, 200, res);
