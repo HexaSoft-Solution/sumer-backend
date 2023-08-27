@@ -1,11 +1,17 @@
 const Community = require('../models/communityModel');
 const Comment = require('../models/commentModel');
 
+const factory = require('./handlerFactory');
+
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const cloudinary = require("../utils/cloudinary");
 
+exports.getAllPosts = factory.getAll(Community);
+exports.getPost = factory.getOne(Community);
+
 exports.addPost = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const userId = req.user.id
 
     const  { post } = req.body;
@@ -24,6 +30,7 @@ exports.addPost = catchAsync(async (req, res, next) => {
 });
 
 exports.addPostPhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const postId = req.params.id
 
     const userPost = await Community.findById(postId)
@@ -52,6 +59,7 @@ exports.addPostPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.deletePostPhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const postId = req.params.id
 
     const userPost = await Community.findById(postId)
@@ -73,6 +81,7 @@ exports.deletePostPhoto = catchAsync(async (req, res, next) => {
 
 
 exports.editPost = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const postId = req.params.id
 
     const userPost = await Community.findById(postId)
@@ -90,13 +99,12 @@ exports.editPost = catchAsync(async (req, res, next) => {
 });
 
 exports.deletePost = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const postId = req.params.id
 
     const userPost = await Community.findById(postId)
 
-    if (userPost.cloudinaryId) {
-        await deletePostPhoto(req, res, next);
-    }
+    await cloudinary.uploader.destroy(userPost.cloudinaryId);
 
     await Community.findByIdAndDelete(postId);
 
@@ -107,6 +115,7 @@ exports.deletePost = catchAsync(async (req, res, next) => {
 });
 
 exports.likePost = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const userId = req.user.id;
     const postId = req.params.id;
 
@@ -129,6 +138,7 @@ exports.likePost = catchAsync(async (req, res, next) => {
 
 
 exports.addComment = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const userId = req.user.id;
     const postId = req.params.id;
 
@@ -149,12 +159,13 @@ exports.addComment = catchAsync(async (req, res, next) => {
 })
 
 exports.addCommentPhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const commentId = req.params.id
     const userId = req.user.id;
 
     const comment = await Comment.findById(commentId);
 
-    if (cooment.user.Id !== userId) {
+    if (comment.user.Id !== userId) {
         return next(new AppError('You are not authorized to perform this action', 401));
     }
 
@@ -178,6 +189,7 @@ exports.addCommentPhoto = catchAsync(async (req, res, next) => {
 })
 
 exports.deleteCommentPhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const commentId = req.user.id
     const userId = req.user.id;
 
@@ -203,6 +215,7 @@ exports.deleteCommentPhoto = catchAsync(async (req, res, next) => {
 })
 
 exports.editComment = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
     const commentId = req.params.id
     const userId = req.user.id;
 
@@ -212,9 +225,57 @@ exports.editComment = catchAsync(async (req, res, next) => {
         return next(new AppError('You are not authorized to perform this action', 401));
     }
 
-
     const updatedComment = await Community.findByIdAndUpdate(commentId, {
         post: req.body.post
     });
 
+    res.status(200).json({
+        status: 'success',
+        data: {
+            updatedComment
+        }
+    })
+})
+
+exports.deleteComment = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
+    const userId = req.user.id;
+    const commentId = req.params.id
+
+    const comment = await Comment.findById(commentId);
+
+    if(comment.user._id !== userId) {
+        return next(new AppError('You are not authorized to perform this action', 401));
+    }
+
+    await cloudinary.uploader.destroy(comment.cloudinaryId);
+
+    await Comment.findByIdAndDelete(commentId);
+
+    res.staus(200).json({
+        status: 'success',
+        data: null
+    })
+})
+
+exports.likeComment = catchAsync(async (req, res, next) => {
+    const commentId = req.params.id;
+    const userId = req.user.id;
+
+    const comment = await Comment.findById(commentId);
+
+    if (comment.likes.find(r => e._id !== userId)) {
+        await Comment.findByIdAndUpdate(commentId, {
+            $push: { likes: userId }
+        })
+    } else {
+        await Comment.findByIdAndUpdate(commentId, {
+            $pull: { likes: userId }
+        })
+    }
+
+
+    res.status(200).json({
+        status: 'success',
+    })
 })
