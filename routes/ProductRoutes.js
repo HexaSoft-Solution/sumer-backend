@@ -60,7 +60,7 @@ router
 router
     .route('/uploadMultipleProductPhoto/:id')
     .patch(
-        upload.single('image'),
+        upload.array('imageArray', 5),
         authController.protect,
         authController.restrictTo('admin', 'business'),
         ProductController.uploadMultiplePhoto

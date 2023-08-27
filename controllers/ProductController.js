@@ -145,7 +145,6 @@ exports.uploadPhoto = catchAsync(async (req, res, next) => {
 
 exports.uploadMultiplePhoto = catchAsync(async (req, res, next) => {
   const productId = req.params.id;
-
   const product = await Product.findById(productId);
   /*
 #swagger.requestBody = {
@@ -170,27 +169,45 @@ exports.uploadMultiplePhoto = catchAsync(async (req, res, next) => {
 }
 */
 
-  const imageLength = product.imageArray.length;
+try {
+    const productId = req.params.id; // Assuming you have the product ID available
 
-  const result = await cloudinary.uploader.upload(req.file.path, {
-    public_id: `/${product._id}-Multiple/${product._id}Photo-${imageLength}`,
-    folder: "products",
-    resource_type: "image",
-  });
-
-  const updatedProduct = await Product.findByIdAndUpdate(productId, {
-    $push: {
-      imageArray: {
+    const product = await Product.findById(productId); // Assuming you have a Product model
+  
+    const imageArray = product.imageArray || [];
+  
+    const uploadPromises = req.files.map(async (file, index) => {
+      const result = await cloudinary.uploader.upload(file.path, {
+        public_id: `/${product._id}-Multiple/${product._id}Photo-${imageArray.length + index}`,
+        folder: 'products',
+        resource_type: 'image',
+      });
+  
+      return {
         ProductPhotoPerview: result.secure_url,
         cloudinaryId: result.public_id,
+      };
+    });
+  
+    const uploadedImages = await Promise.all(uploadPromises);
+  
+    const updatedProduct = await Product.findByIdAndUpdate(productId, {
+      $push: {
+        imageArray: { $each: uploadedImages },
       },
-    },
-  });
+    });
+  
+    res.status(200).json({
+      status: 'success',
+      product: updatedProduct,
+    });
+} catch (error) {
+    return  res.status(500).json({
+        status: "fail",
+        message: error,
+      });
+}
 
-  res.status(200).json({
-    status: "success",
-    product: updatedProduct,
-  });
 });
 
 exports.deleteMultiplePhoto = catchAsync(async (req, res, next) => {
