@@ -1,162 +1,184 @@
-const mongoose = require('mongoose')
-const validator = require('validator')
-const crypto = require('crypto');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+const validator = require("validator");
+const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 
-
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-
+      type: String,
     },
     firstName: {
-        type: String,
-        required: [true, 'firstName-required'],
+      type: String,
+      required: [true, "firstName-required"],
     },
     lastName: {
-        type: String,
-        required: [true, 'lastName-required'],
+      type: String,
+      required: [true, "lastName-required"],
     },
     stockName: {
-        type: String,
+      type: String,
     },
     salonName: {
-        type: String,
+      type: String,
     },
     email: {
-        type: String,
-        required: [true, 'email-required'],
-        unique: true,
-        lowercase: true,
-        validate: [validator.isEmail, 'email-invalid']
+      type: String,
+      required: [true, "email-required"],
+      unique: true,
+      lowercase: true,
+      validate: [validator.isEmail, "email-invalid"],
     },
     username: {
-        type: String,
-        required: [true, 'username-required'],
-        unique: true,
+      type: String,
+      required: [true, "username-required"],
+      unique: true,
     },
 
     phone: {
-        type: String,
-        required: [true, 'telephone-required'],
-        unique: true,
-        validate: {
-            validator: function(v) {
-                const re = /^(\+?\d{1,3}[- ]?)?\d{10}$/;
-                return (!v || !v.trim().length) || re.test(v)
-            },
-            message: 'phone-invalid'
+      type: String,
+      required: [true, "telephone-required"],
+      unique: true,
+      validate: {
+        validator: function (v) {
+          const re = /^(\+?\d{1,3}[- ]?)?\d{10}$/;
+          return !v || !v.trim().length || re.test(v);
         },
+        message: "phone-invalid",
+      },
     },
-    role:{
-        type: String,
-        enum: ['individual', 'consultant', 'business', 'admin', 'deliver', 'salon service'],
-        default: 'individual',
+    role: {
+      type: String,
+      enum: [
+        "individual",
+        "consultant",
+        "business",
+        "admin",
+        "deliver",
+        "salon service",
+      ],
+      default: "individual",
     },
     birthDate: {
-        type: Date,
-        validate: [validator.isDate, 'date-invalid']
+      type: Date,
+      validate: [validator.isDate, "date-invalid"],
     },
     image: {
-        type: String
+      type: String,
     },
     password: {
-        type: String,
-        required: [true, 'password-required'],
-        minlength: 8,
-        maxLength: 32,
-        select: false,
+      type: String,
+      required: [true, "password-required"],
+      minlength: 8,
+      maxLength: 32,
+      select: false,
     },
-    addresses: [{
+    addresses: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Address',
-    },],
+        ref: "Address",
+      },
+    ],
     passwordConfirm: {
-        type: String,
-        required: [true, 'password-confirm'],
-        validate: {
-            validator: function (el) {
-                return el === this.password;
-            },
-            message: 'password-not-same',
+      type: String,
+      required: [true, "password-confirm"],
+      validate: {
+        validator: function (el) {
+          return el === this.password;
         },
+        message: "password-not-same",
+      },
     },
     passwordChangedAt: {
-        type: Date,
+      type: Date,
     },
-    lovedProducts: [{
+    lovedProducts: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-    }],
-    lovedSalons: [{
+        ref: "Product",
+      },
+    ],
+    lovedSalons: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Salon',
-    }],
-    productsCreated: [{
+        ref: "Salon",
+      },
+    ],
+    productsCreated: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-    }],
-    salonCreated: [{
+        ref: "Product",
+      },
+    ],
+    salonCreated: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Salon',
-    }],
-    cart: [{
+        ref: "Salon",
+      },
+    ],
+    cart: [
+      {
         product: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
         },
         quantity: {
-            type: Number,
-            default: 1,
-            min: 1,
+          type: Number,
+          default: 1,
+          min: 1,
         },
-    }],
+      },
+    ],
 
-    posts: [{
+    posts: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Community',
+        ref: "Community",
         default: [],
-    }],
+      },
+    ],
     productCreationAvailability: {
-        type: Number,
-        default: 0,
+      type: Number,
+      default: 0,
     },
     productAds: {
-        type: Number,
-        default: 0,
+      type: Number,
+      default: 0,
     },
-    vouchers: [{
+    vouchers: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Voucher',
-    }],
+        ref: "Voucher",
+      },
+    ],
     createdAt: {
-        type: Date,
-        default: Date.now()
+      type: Date,
+      default: Date.now(),
     },
     consultantConnection: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     createConsultation: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     consultation: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Consultation",
-        default: null,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Consultation",
+      default: null,
     },
-    modifiedAt:{
-        type: Date
+    modifiedAt: {
+      type: Date,
     },
     active: {
-        type: Boolean,
-        default: true,
-        select: false,
+      type: Boolean,
+      default: true,
+      select: false,
     },
     emailActive: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
     userPhoto: String,
     cloudinaryId: String,
@@ -166,106 +188,106 @@ const userSchema = new mongoose.Schema({
     passwordResetExpires: Date,
     verifyEmailOTPToken: String,
     verifyEmailExpires: Date,
-},{
+  },
+  {
     timestamps: true,
+  }
+);
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+
+  this.passwordConfirm = undefined;
+  next();
 });
 
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-
-    this.password = await bcrypt.hash(this.password, 12);
-
-    this.passwordConfirm = undefined;
-    next();
-});
-
-userSchema.pre('save', function (next) {
-    if (!this.isModified('password') || this.isNew) {
-        return next();
-    }
-    this.passwordChangedAt = Date.now() - 1000;
-    next();
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password") || this.isNew) {
+    return next();
+  }
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
 });
 
 userSchema.pre(/^find/, function (next) {
-    this.find({ active: { $ne: false } });
-    next();
+  this.find({ active: { $ne: false } });
+  next();
 });
 
 userSchema.methods.correctPassword = async function (
-    candidatePassword,
-    userPassword
+  candidatePassword,
+  userPassword
 ) {
-    return await bcrypt.compare(candidatePassword, userPassword);
+  return await bcrypt.compare(candidatePassword, userPassword);
 };
 
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
-    if (this.passwordChangedAt) {
-        const changedTimestamp = parseInt(
-            this.passwordChangedAt.getTime() / 1000,
-            10
-        );
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
 
-        return JWTTimestamp < changedTimestamp;
-    }
-    return false;
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
 };
 
-
 userSchema.methods.createPasswordResetToken = function () {
-    const resetToken = crypto.randomBytes(32).toString('hex');
+  const resetToken = crypto.randomBytes(32).toString("hex");
 
-    this.passwordResetToken = crypto
-        .createHash('sha256')
-        .update(resetToken)
-        .digest('hex');
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
-    console.log({ resetToken }, this.passwordResetToken);
+  console.log({ resetToken }, this.passwordResetToken);
 
-    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-    return resetToken;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  return resetToken;
 };
 
 userSchema.methods.createVerifyEmailOTP = function (OTP) {
-    this.verifyEmailOTPToken = crypto
-        .createHash('sha256')
-        .update(OTP)
-        .digest('hex');
+  this.verifyEmailOTPToken = crypto
+    .createHash("sha256")
+    .update(OTP)
+    .digest("hex");
 
-    console.log({ OTP }, this.verifyEmailOTPToken);
+  console.log({ OTP }, this.verifyEmailOTPToken);
 
-    this.verifyEmailExpires = Date.now() + 10 * 60 * 1000;
-    return OTP;
+  this.verifyEmailExpires = Date.now() + 10 * 60 * 1000;
+  return OTP;
 };
 
 userSchema.methods.createForgetPasswordOTP = function (OTP) {
-    this.forgetPasswordOTP = crypto
-        .createHash('sha256')
-        .update(OTP)
-        .digest('hex');
+  this.forgetPasswordOTP = crypto
+    .createHash("sha256")
+    .update(OTP)
+    .digest("hex");
 
-    console.log({ OTP }, this.forgetPasswordOTP);
+  console.log({ OTP }, this.forgetPasswordOTP);
 
-    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-    return OTP;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  return OTP;
 };
 
-userSchema.methods.createPasswordResetTokenOTP = function() {
-    const resetToken = crypto.randomBytes(32).toString('hex');
+userSchema.methods.createPasswordResetTokenOTP = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
 
-    this.passwordResetTokenOTP = crypto
-        .createHash('sha256')
-        .update(resetToken)
-        .digest('hex');
+  this.passwordResetTokenOTP = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
-    console.log({ resetToken }, this.passwordResetTokenOTP);
+  console.log({ resetToken }, this.passwordResetTokenOTP);
 
-    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
-    return resetToken;
+  return resetToken;
 };
 
-
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

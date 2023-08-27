@@ -83,7 +83,7 @@ exports.signup = catchAsync(async (req, res, next) => {
         })
     }
 
-    if (req?.body?.role === 'salon') {
+    if (req?.body?.role === 'salon service') {
         await Salon.create({
             name: req.body.salonName,
             phone: req.body.phone,
