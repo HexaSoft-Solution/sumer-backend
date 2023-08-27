@@ -35,8 +35,22 @@ exports.getProduct = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "Success",
-    product,
-    Reviews,
+    data: {
+      product,
+      Reviews,
+    },
+  });
+});
+exports.getMyProduct = catchAsync(async (req, res, next) => {
+  // Assuming user ID is available in the request (e.g., req.user.id)
+  const userId = req.user.id;
+  console.log(userId);
+
+  // Fetch products associated with the user
+  const products = await Product.find({ owner: userId });
+  res.status(200).json({
+    status: "Success",
+    data: products,
   });
 });
 
@@ -133,7 +147,7 @@ exports.uploadMultiplePhoto = catchAsync(async (req, res, next) => {
   const productId = req.params.id;
 
   const product = await Product.findById(productId);
-/*
+  /*
 #swagger.requestBody = {
     required: true,
     content: {
@@ -331,8 +345,8 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     status: "success",
     message: "Product updated successfully",
     data: {
-        product
-    }
+      product,
+    },
   });
 });
 

@@ -1060,6 +1060,16 @@
         }
       }
     },
+    "/api/v1/products/my-products": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/products/search": {
       "get": {
         "description": "",

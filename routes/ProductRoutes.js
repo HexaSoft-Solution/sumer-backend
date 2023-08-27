@@ -38,6 +38,11 @@ router
         authController.restrictTo('admin', 'business'),
         ProductController.deleteProduct
     )
+router
+    .route('/my-products')
+    .get(authController.protect,
+        authController.restrictTo('business'),
+        ProductController.getMyProduct);
 
 router
     .route('/search')
