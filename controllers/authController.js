@@ -43,39 +43,35 @@ const createSendToken = (user, statusCode, res) => {
 exports.signup = catchAsync(async (req, res, next) => {
     let newUser = null;
       // Check for duplicate email
-      const existingEmailUser = await User.findOne({ email: req.body.email });
+      const existingEmailUser = await User.findOne({ email: req.body?.email });
       if (existingEmailUser) {
           return next(new AppError('email-duplicated', 400));
       }
   
       // Check for duplicate phone number
-      const existingPhoneUser = await User.findOne({ phone: req.body.phone });
+      const existingPhoneUser = await User.findOne({ phone: req.body?.phone });
       if (existingPhoneUser) {
           return next(new AppError('phone-duplicated', 400));
       }
       // Check for duplicate username
-      const existingUsername = await User.findOne({ username: req.body.username });
+      const existingUsername = await User.findOne({ username: req.body?.username });
       if (existingUsername) {
           return next(new AppError('username-duplicated', 400));
       }
-    try {
-       newUser = await User.create({
-            name: req.body.name,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            username: req.body.username,
-            stockName: req.body.stockName,
-            salonName: req.body.salonName,
-            role: req.body.role,
-            email: req.body.email,
-            phone: req.body.phone,
-            password: req.body.password,
-            passwordConfirm: req.body.passwordConfirm,
-        });
-        
-    } catch (error) {
-        return next(error);
-    }
+      newUser = await User.create({
+           name: req.body.name,
+           firstName: req.body.firstName,
+           lastName: req.body.lastName,
+           username: req.body.username,
+           stockName: req.body.stockName,
+           salonName: req.body.salonName,
+           role: req.body.role,
+           email: req.body.email,
+           phone: req.body.phone,
+           password: req.body.password,
+           passwordConfirm: req.body.passwordConfirm,
+       });
+  
 
     if (req?.body?.role === 'business') {
         await BusinussProfile.create({
@@ -90,7 +86,7 @@ exports.signup = catchAsync(async (req, res, next) => {
         });
     }
 
-    newUser.salonCreated.push(salon.id)
+    newUser.salonCreated.push(salon.id);
 
     const OTP = Math.floor(100000 + Math.random() * 900000).toString()
     const verifyEmailToken = newUser.createVerifyEmailOTP(OTP);
