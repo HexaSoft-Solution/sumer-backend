@@ -54,7 +54,6 @@ const productSchema = new mongoose.Schema({
     highlights: [{
         type: String,
         required: [true, 'Must be not Empty !'],
-        enum: ["High Shine Finish", "Hydrating"],
         trim: true,
     }],
     size: {
