@@ -2885,6 +2885,12 @@
                   "image": {
                     "type": "string",
                     "format": "binary"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -2989,25 +2995,6 @@
           "200": {
             "description": "OK"
           }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "image": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                },
-                "required": [
-                  "image"
-                ]
-              }
-            }
-          }
         }
       },
       "patch": {
@@ -3032,6 +3019,25 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
           }
         }
       }
@@ -3063,10 +3069,26 @@
                   "image": {
                     "type": "string",
                     "format": "binary"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "issueDate": {
+                    "type": "string"
+                  },
+                  "expireDate": {
+                    "type": "string"
+                  },
+                  "certificateID": {
+                    "type": "string"
+                  },
+                  "certificateURL": {
+                    "type": "string"
                   }
                 },
                 "required": [
-                  "image"
+                  "image",
+                  "title"
                 ]
               }
             }
@@ -3241,20 +3263,18 @@
           }
         },
         "requestBody": {
-          "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "image": {
-                    "type": "string",
-                    "format": "binary"
+                  "courseName": {
+                    "example": "any"
+                  },
+                  "issueDate": {
+                    "example": "any"
                   }
-                },
-                "required": [
-                  "image"
-                ]
+                }
               }
             }
           }
