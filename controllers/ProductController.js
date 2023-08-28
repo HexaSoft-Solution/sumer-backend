@@ -169,63 +169,71 @@ exports.uploadMultiplePhoto = catchAsync(async (req, res, next) => {
 }
 */
 
-try {
+  try {
     const productId = req.params.id; // Assuming you have the product ID available
 
     const product = await Product.findById(productId); // Assuming you have a Product model
-  
+
     const imageArray = product.imageArray || [];
-  
+
     const uploadPromises = req.files.map(async (file, index) => {
       const result = await cloudinary.uploader.upload(file.path, {
-        public_id: `/${product._id}-Multiple/${product._id}Photo-${imageArray.length + index}`,
-        folder: 'products',
-        resource_type: 'image',
+        public_id: `/${product._id}-Multiple/${product._id}Photo-${
+          imageArray.length + index
+        }`,
+        folder: "products",
+        resource_type: "image",
       });
-  
+
       return {
         ProductPhotoPerview: result.secure_url,
         cloudinaryId: result.public_id,
       };
     });
-  
+
     const uploadedImages = await Promise.all(uploadPromises);
-  
+
     const updatedProduct = await Product.findByIdAndUpdate(productId, {
       $push: {
         imageArray: { $each: uploadedImages },
       },
     });
-  
+
     res.status(200).json({
-      status: 'success',
+      status: "success",
       product: updatedProduct,
     });
-} catch (error) {
-    return  res.status(500).json({
-        status: "fail",
-        message: error,
-      });
-}
-
+  } catch (error) {
+    return res.status(500).json({
+      status: "fail",
+      message: error,
+    });
+  }
 });
 
 exports.deleteMultiplePhoto = catchAsync(async (req, res, next) => {
-  const productId = req.params.id;
-  const { _id } = req.body;
+  try {
+    const productId = req.params.id;
+    const imageId = req.params.imageId;
 
-  await Product.findByIdAndUpdate(productId, {
-    $pull: {
-      imageArray: {
-        _id,
+    await Product.findByIdAndUpdate(productId, {
+      $pull: {
+        imageArray: {
+          _id : imageId,
+        },
       },
-    },
-  });
+    });
 
-  res.status(200).json({
-    status: "success",
-    message: "Product deleted successfully",
-  });
+    res.status(200).json({
+      status: "success",
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "fail",
+      message: "deleting-failed",
+    });
+  }
 });
 
 exports.createProduct = catchAsync(async (req, res, next) => {
