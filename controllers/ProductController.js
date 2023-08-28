@@ -43,8 +43,8 @@ exports.getProduct = catchAsync(async (req, res, next) => {
 });
 exports.getMyProduct = catchAsync(async (req, res, next) => {
   // Assuming user ID is available in the request (e.g., req.user.id)
+  console.log(req);
   const userId = req.user.id;
-  console.log(userId);
 
   // Fetch products associated with the user
   const products = await Product.find({ owner: userId });

@@ -19,6 +19,13 @@ router
   .patch(authController.protect, ProductController.addToCart)
   .delete(authController.protect, ProductController.removeFromCart);
 
+  router
+  .route("/my-products")
+  .get(
+    authController.protect,
+    authController.restrictTo("business"),
+    ProductController.getMyProduct
+  );
 router
   .route("/:id")
   .get(ProductController.getProduct)
@@ -32,13 +39,7 @@ router
     authController.restrictTo("admin", "business"),
     ProductController.deleteProduct
   );
-router
-  .route("/my-products")
-  .get(
-    authController.protect,
-    authController.restrictTo("business"),
-    ProductController.getMyProduct
-  );
+
 
 router.route("/search").get(ProductController.searchProduct);
 
