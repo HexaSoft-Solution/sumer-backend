@@ -35,6 +35,12 @@ router.patch(
   authController.updatePassword
 );
 
+router.get(
+    '/my-profile',
+    authController.protect,
+    userController.myProfile
+)
+
 router
   .route("/me")
   .get(authController.protect, userController.getMe, userController.getUser);
