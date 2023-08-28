@@ -89,7 +89,7 @@ router
 
 
 router
-    .route('/verify-buying-consultation-ticket/:id/')
+    .route('/verify-buying-consultation-ticket/:id/:consult')
     .get(
         paymentController.verifyBuyingConsultationsTicket
     );

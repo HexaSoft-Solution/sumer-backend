@@ -1,1 +1,1 @@
-{"title":"Consultant","required":["title"],"properties":{"title":{"type":"string"},"user":{"type":"string"},"consultant":{"type":"string"},"messages":{"type":"array","items":{"type":"string"}},"status":{"type":"string","enum":["Active","Ended"]},"_id":{"type":"string"}}}
+{"title":"Consultant","required":["title"],"properties":{"title":{"type":"string"},"user":{"type":"string"},"consultant":{"type":"string"},"numOfMessages":{"type":"number"},"messages":{"type":"array","items":{"type":"string"}},"status":{"type":"string","enum":["Active","Ended"]},"_id":{"type":"string"}}}

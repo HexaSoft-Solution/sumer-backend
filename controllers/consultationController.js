@@ -750,9 +750,17 @@ exports.deleteCoursePhoto = catchAsync(async (req, res, next) => {
 exports.createConsultantTicket = catchAsync(async (req, res, next) => {
     const userId = req.user.id
 
-    const { title, consultantationId } = req.body;
+    const { title, consultatonId } = req.body;
 
+    if (!req.user.createConsultant.find(e => e === consultatonId)) {
+        return next(new AppError("You can not contant with this consultant", 401));
+    }
 
+    const consultant = await Consultant.create({
+        title,
+        user: userId,
+        consultant: consultatonId
+    })
 
 });
 

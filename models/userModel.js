@@ -180,10 +180,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    createConsultant: {
-      type: Boolean,
-      default: false,
-    },
+    createConsultant: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Consultant"
+    }],
     userPhoto: String,
     cloudinaryId: String,
     forgetPasswordOTP: String,

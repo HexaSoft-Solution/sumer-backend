@@ -458,7 +458,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
     "Buy Consultation Ticket",
     source,
     [],
-    consultation.owner._id,
+    consultation.id,
     req.user.id,
     req.protocol,
     req.get("host"),
@@ -505,12 +505,13 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
 */
   const paymentId = req.query.id;
   const userId = req.params.user;
+  const consult = req.params.consult;
 
   let payment = await moyasar.fetchPayment(paymentId);
 
   if (payment.status === "paid") {
     await User.findByIdAndUpdate(userId, {
-      createConsultant: true
+      $push: { createConsultant: consult }
     });
 
     res

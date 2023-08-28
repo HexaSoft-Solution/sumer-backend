@@ -1203,20 +1203,6 @@
           "500": {
             "description": "Internal Server Error"
           }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "imageId": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
         }
       }
     },
@@ -2058,9 +2044,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "title": {
-                    "example": "any"
-                  },
                   "consultationId": {
                     "example": "any"
                   },
@@ -2089,7 +2072,7 @@
         }
       }
     },
-    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{consult}/{title}": {
+    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{consult}": {
       "get": {
         "description": "",
         "parameters": [
@@ -2108,17 +2091,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "ID of the consultation"
-          },
-          {
-            "name": "title",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Title of the consultant"
+            }
           },
           {
             "name": "user",
@@ -2752,31 +2725,6 @@
           }
         }
       },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
       "delete": {
         "description": "",
         "parameters": [
@@ -2844,6 +2792,33 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/consultation/end-consultant/{id}": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -3445,6 +3420,74 @@
         }
       }
     },
+    "/api/v1/consultation/edit-question/{id}": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/consultation/delete-consultant/{id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/consultation/message/{id}": {
       "delete": {
         "description": "",
@@ -3501,7 +3544,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "message": {
+                  "messageChat": {
                     "example": "any"
                   },
                   "reply": {
@@ -3839,6 +3882,9 @@
           },
           "consultant": {
             "type": "string"
+          },
+          "numOfMessages": {
+            "type": "number"
           },
           "messages": {
             "type": "array",
@@ -4544,6 +4590,12 @@
           },
           "emailActive": {
             "type": "boolean"
+          },
+          "createConsultant": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "userPhoto": {
             "type": "string"
