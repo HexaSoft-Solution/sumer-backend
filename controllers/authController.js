@@ -87,7 +87,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
 
   const OTP = Math.floor(100000 + Math.random() * 900000).toString();
-  const verifyEmailToken = newUser.createVerifyEmailOTP(OTP);
+  newUser.createVerifyEmailOTP(OTP);
   await newUser.save({ validateBeforeSave: false });
   const message = `Verify Your email ? \n Your OTP Code is ${OTP}.\nIf you didn't forget your password, please ignore this email!`;
   try {
