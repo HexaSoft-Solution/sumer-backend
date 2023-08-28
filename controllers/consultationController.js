@@ -40,6 +40,10 @@ exports.endConsultant = catchAsync(async (req, res, next) => {
 
     const consultant = await Consultant.findById(consultantId)
 
+    if (!consultant) {
+       return next(new AppError("You don't have access to this chat", 400));
+    }
+
     if (userId !== consultant.consultant._id.toString()) {
         return next(new AppError("You don't have access to this chat", 400));
     }
@@ -584,23 +588,23 @@ exports.addCourse = catchAsync(async (req, res, next) => {
         return next(new AppError("You don't have a consultation profile", 400));
     }
 
-    const { courseName, issueDate } = JSON.parse(req.body.data)
+    const { courseName, issueDate } = req.body
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
-        public_id: `/${courseName}-${Math.random() * 100000000}/${courseName}Photo`,
-        folder: 'courses',
-        resource_type: 'image',
-    });
-
-    if (!result.secure_url) {
-        return next(new AppError('Something went wrong with the image upload', 400));
-    }
+    // const result = await cloudinary.uploader.upload(req.file.path, {
+    //     public_id: `/${courseName}-${Math.random() * 100000000}/${courseName}Photo`,
+    //     folder: 'courses',
+    //     resource_type: 'image',
+    // });
+    //
+    // if (!result.secure_url) {
+    //     return next(new AppError('Something went wrong with the image upload', 400));
+    // }
 
     const course = await Course.create({
         courseName,
         issueDate,
-        coursePhoto: result.secure_url,
-        cloudinaryId: result.public_id,
+        // coursePhoto: result.secure_url,
+        // cloudinaryId: result.public_id,
     })
 
     const updatedConsultation = await Consultation.findByIdAndUpdate(consultationId, {
@@ -869,10 +873,6 @@ exports.viewConsultation = catchAsync(async (req, res, next) => {
 
     if (userId !== consultant.user._id.toString() && userId !== consultant.consultant._id.toString()) {
         return next(new AppError("You don't have access to this chat", 400));
-    }
-
-    if (consultant.status === "Ended") {
-        return next(new AppError("This chat has ended", 400));
     }
 
     res.status(200).json({

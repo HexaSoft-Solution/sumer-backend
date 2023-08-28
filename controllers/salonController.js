@@ -172,7 +172,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
     });
 
     await User.findByIdAndUpdate(userId, {
-        $push: { "salonCreated": salon._id }
+        salonCreated: salon._id
     });
 
     res.status(201).json({

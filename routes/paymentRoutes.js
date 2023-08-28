@@ -49,7 +49,7 @@ router
     );
 
 router
-    .route('/verifyPaymentSalon/:bookingId')
+    .route('/verifyPaymentSalon/:bookingId/:amount/:salonId')
     .get(
         paymentController.verifyBookingSalon
     );

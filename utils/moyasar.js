@@ -7,7 +7,7 @@ const createPayment = async (amount, description, source, metadata, invoiceId, u
         } else if (type === "buyProductConnections"){
             callback = `${http}://${url}/api/v1/payment/paymentConnection/${user}`
         } else if (type === "bookSalon") {
-            callback = `${http}://${url}/api/v1/payment/verifyPaymentSalon/${invoiceId}`
+            callback = `${http}://${url}/api/v1/payment/verifyPaymentSalon/${invoiceId}/${amount}/${metadata[0].salon}`
         } else if (type === "createSalonProfile"){
             callback = `${http}://${url}/api/v1/payment/verifyPaymentCreateConsultation/${user}`
         } else if (type === "buyConsultationConnection") {

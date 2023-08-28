@@ -110,12 +110,10 @@ const userSchema = new mongoose.Schema(
         ref: "Product",
       },
     ],
-    salonCreated: [
-      {
+    salonCreated: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Salon",
-      },
-    ],
+    },
     cart: [
       {
         product: [{

@@ -9,6 +9,7 @@ const factory = require('./handlerFactory');
 const cloudinary = require("../utils/cloudinary");
 
 const jwt = require("jsonwebtoken");
+const Consultation = require("../models/consultationModel");
 
 const signToken = (id) =>
     jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -92,6 +93,25 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
         data: null,
     });
 });
+
+exports.myProfile = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+
+    if (req.user.role === 'consultant') {
+        const consultation = await Consultation.findOne({ owner: userId })
+
+        if (!consultation) {
+            return next(new AppError("You don't have a consultation profile", 400));
+        }
+
+        res.status(200).json({
+            status: 'success',
+            consultation
+        })
+    } else if (req.user.role === 'salon service') {
+
+    }
+})
 
 exports.createUser = catchAsync(async (req, res, next) => {
 

@@ -300,7 +300,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
     (endHours - startHours) * salon.pricePerHour,
     "Book Salon",
     source,
-    [],
+    [{salon: salon.id}],
     newBooking.id,
     req.user.id,
     req.protocol,
@@ -327,11 +327,18 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
 exports.verifyBookingSalon = catchAsync(async (req, res, next) => {
   const paymentId = req.query.id;
   const bookingId = req.params.bookingId;
+  const amount = req.params.amount;
+  const salonId = req.params.salonId;
 
   let payment = await moyasar.fetchPayment(paymentId);
 
   if (payment.status === "paid") {
-    await SalonBooking.findByIdAndUpdate(bookingId, { paymentStatus: "Paid" });
+    const salonBook = await SalonBooking.findByIdAndUpdate(bookingId, { paymentStatus: "Paid" });
+
+    await Salon.findByIdAndUpdate(salonId, {
+      $inc: { balance: amount },
+      $push: { booking: salonBook.id }
+    });
 
     res
       .status(200)

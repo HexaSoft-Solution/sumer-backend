@@ -24,6 +24,10 @@ const salonSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    balance: {
+        type: Number,
+        default: 0
+    },
     booking: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SalonBooking'
@@ -66,6 +70,11 @@ const salonSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }
+});
+
+salonSchema.pre(/^find/, function (next) {
+    this.populate('booking');
+    next();
 });
 
 const Salon = mongoose.model('Salon', salonSchema);

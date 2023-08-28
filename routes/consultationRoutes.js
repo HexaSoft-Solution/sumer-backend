@@ -190,6 +190,13 @@ router
     )
 
 router
+    .route('/create-consultant/:id')
+    .post(
+        authController.protect,
+        consultationController.createConsultantTicket
+    )
+
+router
     .route('/message/:id')
     .patch(
         authController.protect,
