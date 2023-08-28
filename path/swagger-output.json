@@ -343,6 +343,25 @@
         }
       }
     },
+    "/api/v1/users/my-profile": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/users/me": {
       "get": {
         "description": "",
@@ -949,6 +968,25 @@
         }
       }
     },
+    "/api/v1/products/my-products": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/products/{id}": {
       "get": {
         "description": "",
@@ -1056,25 +1094,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/api/v1/products/my-products": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -1824,12 +1843,28 @@
         }
       }
     },
-    "/api/v1/payment/verifyPaymentSalon/{bookingId}": {
+    "/api/v1/payment/verifyPaymentSalon/{bookingId}/{amount}/{salonId}": {
       "get": {
         "description": "",
         "parameters": [
           {
             "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "salonId",
             "in": "path",
             "required": true,
             "schema": {
@@ -4359,6 +4394,9 @@
           "pricePerHour": {
             "type": "number"
           },
+          "balance": {
+            "type": "number"
+          },
           "booking": {
             "type": "array",
             "items": {
@@ -4574,10 +4612,7 @@
             }
           },
           "salonCreated": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "type": "string"
           },
           "cart": {
             "type": "array",
@@ -4585,10 +4620,21 @@
               "type": "object",
               "properties": {
                 "product": {
-                  "type": "string"
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 },
                 "quantity": {
                   "type": "number"
+                },
+                "default": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                  }
                 }
               },
               "required": []
