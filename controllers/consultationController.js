@@ -72,9 +72,9 @@ exports.createConsultationProfile = catchAsync(async (req, res, next) => {
         return next(new AppError('You already have a consultation profile', 400));
     }
 
-    if (!req.user.createConsultation){
-        return next(new AppError('You need to create a payment profile first', 400));
-    }
+    // if (!req.user.createConsultation){
+    //     return next(new AppError('You need to create a payment profile first', 400));
+    // }
 
     const consultationProfile = await Consultation.create({
         Specialization,
