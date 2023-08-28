@@ -183,12 +183,9 @@ exports.createSalon = catchAsync(async (req, res, next) => {
 });
 
 exports.updateSalon = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
     const salonId = req.params.id;
 
-    const user = await User.findById(userId);
-
-    if (!user.salonCreated.include(salonId)) {
+    if (req.user.salonCreated !== salonId) {
         return res.status(400).json({
             status: 'fail',
             message: "You are not the owner of this salon"

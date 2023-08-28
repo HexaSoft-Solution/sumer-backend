@@ -2,6 +2,8 @@ const User = require('../models/userModel');
 const Address = require('../models/addressModel')
 const Voucher = require('../models/voucherModel');
 const Product = require('../models/productModel');
+const Salon = require('../models/salonModel');
+const BusinessProfile = require('../models/businessProfileModel');
 
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
@@ -109,7 +111,30 @@ exports.myProfile = catchAsync(async (req, res, next) => {
             consultation
         })
     } else if (req.user.role === 'salon service') {
+        if (!req.user.salonCreated) {
+            return next(new AppError("You don't have a salon profile", 400));
+        }
+        const salon = await Salon.findById(req.user.salonCreated)
 
+        if (!salon) {
+            return next(new AppError("You don't have a salon profile", 400));
+        }
+
+        res.status(200).json({
+            status: 'success',
+            salon
+        })
+    } else if (req.user.role === 'business') {
+        const businessProfile = await BusinessProfile.findOne({ user: userId })
+
+        if (!businessProfile) {
+            return next(new AppError("You don't have a business profile", 400));
+        }
+
+        res.status(200).json({
+            status: 'success',
+            businessProfile
+        })
     }
 })
 
