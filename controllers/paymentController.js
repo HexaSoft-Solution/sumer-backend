@@ -530,3 +530,7 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
       .json({ status: "error", message: "Payment failed or not yet paid." });
   }
 });
+
+exports.paypal = catchAsync(async (req, res, next) => {
+  const { PAYPAL_ENVIROMENT, PAYPAL_CLIENT_ID, PAYPAL_SECRET_KEY } = process.env;
+})

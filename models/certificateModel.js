@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const CertificateSchema = new mongoose.Schema({
     title: {
@@ -19,6 +20,7 @@ const CertificateSchema = new mongoose.Schema({
     },
     certificateURL: {
         type: String,
+        validate: [validator.isURL, 'Please provide a valid URL'],
         trim: true
     },
     certificatePhoto: String,
