@@ -15,6 +15,10 @@ const ConsultantSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
    },
+    numOfMessages: {
+        type: Number,
+        default: 50
+    },
    messages: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Message',

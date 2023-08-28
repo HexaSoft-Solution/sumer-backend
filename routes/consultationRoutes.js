@@ -36,15 +36,18 @@ router
         authController.restrictTo('admin', 'consultant'),
         consultationController.updateConsultationProfile
     )
-    .put(
-        authController.protect,
-        authController.restrictTo('admin', 'consultant'),
-        consultationController.endConsultant
-    )
     .delete(
         authController.protect,
         authController.restrictTo('admin', 'consultant'),
         consultationController.deleteConsultation
+    )
+
+router
+    .route('/end-consultant/:id')
+    .patch(
+        authController.protect,
+        authController.restrictTo('admin', 'consultant'),
+        consultationController.endConsultant
     )
 
 router
@@ -170,6 +173,20 @@ router
     .get(
         authController.protect,
         consultationController.viewConsultation
+    )
+
+router
+    .route('/edit-question/:id')
+    .patch(
+        authController.protect,
+        consultationController.editQuestion
+    )
+
+router
+    .route('/delete-consultant/:id')
+    .delete(
+        authController.protect,
+        consultationController.deleteConsultant
     )
 
 router

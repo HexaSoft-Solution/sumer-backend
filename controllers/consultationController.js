@@ -87,6 +87,54 @@ exports.createConsultationProfile = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.editQuestion = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const consultId = req.params.id;
+
+    const consultant = await Consultant.findById(consultId)
+
+if (userId !== consultant.consultant._id.toString()) {
+        return next(new AppError("You don't have access to this chat", 400));
+    }
+
+    const { title } = req.body
+
+    const updatedConsultant = await Consultant.findByIdAndUpdate(consultId, {
+        title
+    })
+
+    res.status(201).json({
+        status: 'success',
+        updatedConsultant
+    });
+})
+
+exports.deleteConsultant = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+    const consultantId = req.params.id
+
+    const consultant = await Consultant.findById(consultantId)
+
+    if (userId !== consultant.consultant._id.toString()) {
+        return next(new AppError("You don't have access to this chat", 400));
+    }
+
+    if (consultant.status === "Ended") {
+        return next(new AppError("This chat has ended", 400));
+    }
+
+    await User.findByIdAndUpdate(userId, {
+        $pull: { consultations: consultantId }
+    })
+
+    await Consultant.findOneAndDelete(consultantId)
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Consultant deleted'
+    })
+});
+
 exports.updateConsultationProfile = catchAsync(async (req, res, next) => {
 
     const consultationId = req.user.consultation
@@ -699,6 +747,15 @@ exports.deleteCoursePhoto = catchAsync(async (req, res, next) => {
     })
 })
 
+exports.createConsultantTicket = catchAsync(async (req, res, next) => {
+    const userId = req.user.id
+
+    const { title, consultantationId } = req.body;
+
+
+
+});
+
 exports.consultationSendChat = catchAsync(async (req, res, next) => {
     const userId = req.user.id
     const consultantId = req.params.id
@@ -731,7 +788,7 @@ exports.consultationSendChat = catchAsync(async (req, res, next) => {
         message,
         updatedConsultant
     })
-});
+})
 
 exports.userSendChat = catchAsync(async (req, res, next) => {
     const userId = req.user.id
@@ -749,6 +806,10 @@ exports.userSendChat = catchAsync(async (req, res, next) => {
         return next(new AppError("This chat has ended", 400));
     }
 
+    if (consultant.numOfMessages === 0) {
+        return next(new AppError("You don't have any messages left", 400));
+    }
+
     const message = await Message.create({
         sender: userId,
         receiver: consultant.consultant,
@@ -757,7 +818,8 @@ exports.userSendChat = catchAsync(async (req, res, next) => {
     })
 
     const updatedConsultant = await Consultant.findByIdAndUpdate(consultantId, {
-        $push: { messages: message._id }
+        $push: { messages: message._id },
+        $inc: { numOfMessages: -1 }
     })
 
     res.status(200).json({
@@ -769,7 +831,7 @@ exports.userSendChat = catchAsync(async (req, res, next) => {
 
 
 exports.editMessage = catchAsync(async (req, res, next)  => {
-    const { message, reply } = req.body
+    const { messageChat, reply } = req.body
     const userId = req.user.id;
 
     const messageId = req.params.id
@@ -781,7 +843,7 @@ exports.editMessage = catchAsync(async (req, res, next)  => {
     }
 
     const updatedMessage = await Message.findByIdAndUpdate(messageId, {
-        message,
+        message: messageChat,
         reply
     })
 

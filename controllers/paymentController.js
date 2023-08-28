@@ -444,7 +444,7 @@ exports.verifyBuyingConsultationsConnection = catchAsync(
 );
 
 exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
-  const { title, consultationId, type, number, name, cvc, month, year } =
+  const { consultationId, type, number, name, cvc, month, year } =
     req.body;
 
   const source = { type, number, name, cvc, month, year };
@@ -457,7 +457,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
     consultation.price,
     "Buy Consultation Ticket",
     source,
-    [{ title: title }],
+    [],
     consultation.owner._id,
     req.user.id,
     req.protocol,
@@ -476,18 +476,6 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
 
 exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
   /*
-  #swagger.parameters['consult'] = {
-    in: 'path',
-    type: 'string',
-    required: true,
-    description: 'ID of the consultation'
-  }
-  #swagger.parameters['title'] = {
-    in: 'query',
-    type: 'string',
-    required: true,
-    description: 'Title of the consultant'
-  }
   #swagger.parameters['user'] = {
     in: 'query',
     type: 'string',
@@ -516,26 +504,14 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
   }
 */
   const paymentId = req.query.id;
-  const consultationId = req.params.consult;
-  const title = req.params.title;
   const userId = req.params.user;
 
   let payment = await moyasar.fetchPayment(paymentId);
 
   if (payment.status === "paid") {
-    const consultant = await Consultant.create({
-      title,
-      user: userId,
-      consultant: consultationId,
+    await User.findByIdAndUpdate(userId, {
+      createConsultant: true
     });
-
-    await Consultation.findOneAndUpdate(
-      { owner: consultationId },
-      {
-        $push: { consultants: consultant._id },
-        $inc: { balance: payment.amount / 1000 },
-      }
-    );
 
     res
       .status(200)
