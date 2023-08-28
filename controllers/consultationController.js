@@ -188,7 +188,7 @@ exports.addServices = catchAsync(async (req, res, next) => {
 
 
 
-    const { name, description } = JSON.parse(req.body.data);
+    const { name, description } = req.body;
     const { path } = req.file
 
     const result = await cloudinary.uploader.upload(path, {
@@ -388,7 +388,7 @@ exports.addCertificate = catchAsync(async (req, res, next) => {
         return next(new AppError("You don't have a consultation profile", 400));
     }
 
-    const { title, issueDate, expireDate, certificateID, certificateURL } = JSON.parse(req.body.data);
+    const { title, issueDate, expireDate, certificateID, certificateURL } = req.body;
 
     const result = await cloudinary.uploader.upload(req.file.path, {
         public_id: `/${title}-${Math.random() * 10000000000}/${title}Photo`,
