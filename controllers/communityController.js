@@ -151,9 +151,13 @@ exports.likePost = catchAsync(async (req, res, next) => {
 
     const userPost = await Community.findById(postId);
 
-    if (userPost.likes.find(e => e.id === userId)) {
+    console.log(userPost.likes.length === 0)
+
+
+    if (userPost.likes.find(e => e.id !== userId) || userPost.likes.length === 0) {
+        console.log(userPost.likes)
         await Community.findByIdAndUpdate(postId, {
-            $push : { likes: userId }
+            $push: { likes: userId }
         })
     } else {
         await Community.findByIdAndUpdate(postId, {
@@ -187,6 +191,11 @@ exports.addComment = catchAsync(async (req, res, next) => {
 
     await Community.findByIdAndUpdate(postId, {
         $push: { Comments: Commment._id }
+    })
+
+    res.status(200).json({
+        status: "success",
+        Commment
     })
 })
 
@@ -296,7 +305,7 @@ exports.likeComment = catchAsync(async (req, res, next) => {
 
     const comment = await Comment.findById(commentId);
 
-    if (comment.likes.find(e => e._id !== userId)) {
+    if (comment.likes.find(e => e._id !== userId) || comment.likes.length === 0) {
         await Comment.findByIdAndUpdate(commentId, {
             $push: { likes: userId }
         })
