@@ -238,8 +238,6 @@ exports.editService = catchAsync(async (req, res, next) => {
 
   const consultation = await Consultation.findById(consultationId);
 
-  console.log(consultation);
-
   if (!consultation.service.find((e) => e._id.toString() === serviceId)) {
     return next(new AppError("You don't have this service", 400));
   }
@@ -252,10 +250,18 @@ exports.editService = catchAsync(async (req, res, next) => {
     return next(new AppError("You don't have this service", 400));
   }
 
-  const updatedService = await Service.findByIdAndUpdate(serviceId, {
-    name,
-    description,
-  });
+  const updatedService = await Service.findOneAndUpdate(
+    {
+      _id: serviceId,
+    },
+    {
+      name,
+      description,
+    },
+    {
+      new: true, // Return the updated object
+    }
+  );
 
   res.status(200).json({
     status: "success",
@@ -306,10 +312,18 @@ exports.addServicesPhoto = catchAsync(async (req, res, next) => {
       resource_type: "image",
     });
 
-    const updatedService = await Service.findByIdAndUpdate(serviceId, {
-      servicePhoto: result.secure_url,
-      cloudinaryId: result.public_id,
-    });
+    const updatedService = await Service.findOneAndUpdate(
+      {
+        _id: serviceId,
+      },
+      {
+        servicePhoto: result.secure_url,
+        cloudinaryId: result.public_id,
+      },
+      {
+        new: true, // Return the updated object
+      }
+    );
 
     res.status(200).json({
       status: "success",
@@ -349,30 +363,46 @@ exports.deleteservicePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteService = catchAsync(async (req, res, next) => {
-  const serviceId = req.params.id;
-  const userId = req.user.id;
+  try {
+    const serviceId = req.params.id;
+    const userId = req.user.id;
 
-  const consultationId = req.user.consultation;
+    const consultationId = req.user.consultation;
 
-  if (!consultationId) {
-    return next(new AppError("You don't have a consultation profile", 400));
+    if (!consultationId) {
+      return next(new AppError("You don't have a consultation profile", 400));
+    }
+    const consultation = await Consultation.findById(consultationId);
+
+    const service = consultation.service.find((e) => e._id.equals(serviceId));
+
+    if (!service) {
+      return next(new AppError("You don't have this service", 400));
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { services: serviceId },
+    });
+
+    await Service.findOneAndDelete(
+      {
+        _id: serviceId,
+      },
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Service deleted",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "fail",
+      message: error,
+    });
   }
-  const consultation = await Consultation.findById(consultationId);
-
-  if (!consultation.services.find((e) => e._id.toString() === serviceId)) {
-    return next(new AppError("You don't have this service", 400));
-  }
-
-  await User.findByIdAndUpdate(userId, {
-    $pull: { services: serviceId },
-  });
-
-  await Service.findOneAndDelete(serviceId);
-
-  res.status(200).json({
-    status: "success",
-    message: "Service deleted",
-  });
 });
 
 exports.addCertificate = catchAsync(async (req, res, next) => {
@@ -412,47 +442,57 @@ exports.addCertificate = catchAsync(async (req, res, next) => {
         }
     */
 
-  if (!consultationId) {
-    return next(new AppError("You don't have a consultation profile", 400));
-  }
-
-  const { title, issueDate, expireDate, certificateID, certificateURL } =
-    req.body;
-
-  const result = await cloudinary.uploader.upload(req.file.path, {
-    public_id: `/${title}-${Math.random() * 10000000000}/${title}Photo`,
-    folder: "certificates",
-    resource_type: "image",
-  });
-
-  if (!result) {
-    return next(
-      new AppError("Something went wrong with the image upload", 400)
-    );
-  }
-
-  const certificate = await Certificate.create({
-    title,
-    issueDate,
-    expireDate,
-    certificateID,
-    certificateURL,
-    certificatePhoto: result.secure_url,
-    cloudinaryId: result.public_id,
-  });
-
-  const updateConsultation = await Consultation.findByIdAndUpdate(
-    consultationId,
-    {
-      $push: { certificates: certificate._id },
+  try {
+    if (!consultationId) {
+      return next(new AppError("You don't have a consultation profile", 400));
     }
-  );
 
-  res.status(200).json({
-    status: "success",
-    certificate,
-    updateConsultation,
-  });
+    const { title, issueDate, expireDate, certificateID, certificateURL } =
+      req.body;
+
+    if (!req?.file?.path) {
+      return next(new AppError("image-required", 400));
+    }
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      public_id: `/${title}-${Math.random() * 10000000000}/${title}Photo`,
+      folder: "certificates",
+      resource_type: "image",
+    });
+
+    if (!result) {
+      return next(
+        new AppError("Something went wrong with the image upload", 400)
+      );
+    }
+
+    const certificate = await Certificate.create({
+      title,
+      issueDate,
+      expireDate,
+      certificateID,
+      certificateURL,
+      certificatePhoto: result.secure_url,
+      cloudinaryId: result.public_id,
+    });
+
+    const updateConsultation = await Consultation.findByIdAndUpdate(
+      consultationId,
+      {
+        $push: { certificates: certificate._id },
+      }
+    );
+
+    res.status(200).json({
+      status: "success",
+      certificate,
+      updateConsultation,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "fail",
+      message: error,
+    });
+  }
 });
 
 exports.editCertificate = catchAsync(async (req, res, next) => {
@@ -475,18 +515,23 @@ exports.editCertificate = catchAsync(async (req, res, next) => {
     return next(new AppError("You don't have this certificate", 400));
   }
 
-  const updatedCertificate = await Certificate.findByIdAndUpdate(
-    certificateId,
+  const updatedCertificate = await Certificate.findOneAndUpdate(
+    {
+      _id: certificateId
+    },
     {
       title,
       issueDate,
       expireDate,
       certificateID,
       certificateURL,
+    },
+    {
+      new: true
     }
   );
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     updatedCertificate,
   });
@@ -616,21 +661,10 @@ exports.addCourse = catchAsync(async (req, res, next) => {
     return next(new AppError("You don't have a consultation profile", 400));
   }
 
-  // const result = await cloudinary.uploader.upload(req.file.path, {
-  //     public_id: `/${courseName}-${Math.random() * 100000000}/${courseName}Photo`,
-  //     folder: 'courses',
-  //     resource_type: 'image',
-  // });
-  //
-  // if (!result.secure_url) {
-  //     return next(new AppError('Something went wrong with the image upload', 400));
-  // }
 
   const course = await Course.create({
     courseName,
     issueDate,
-    // coursePhoto: result.secure_url,
-    // cloudinaryId: result.public_id,
   });
 
   const updatedConsultation = await Consultation.findByIdAndUpdate(
@@ -675,57 +709,7 @@ exports.editCourse = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.addCoursePhoto = catchAsync(async (req, res, next) => {
-  const courseId = req.params.id;
 
-  const consultationId = req.user.consultation;
-
-  /*	#swagger.requestBody = {
-            required: true,
-            "@content": {
-                "multipart/form-data": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            image: {
-                                type: "string",
-                                format: "binary"
-                            }
-                        },
-                        required: ["image"]
-                    }
-                }
-            } 
-        }
-    */
-
-  if (!consultationId) {
-    return next(new AppError("You don't have a consultation profile", 400));
-  }
-  const consultation = await Consultation.findById(consultationId);
-
-  if (!consultation.courses.find((e) => e._id.toString() === courseId)) {
-    return next(new AppError("You don't have this course", 400));
-  }
-
-  const course = await Course.findById(courseId);
-
-  const result = await cloudinary.uploader.upload(req.file.path, {
-    public_id: `/${courseId}/${course.courseName}Photo`,
-    folder: "courses",
-    resource_type: "image",
-  });
-
-  const updatedCourse = await Course.findByIdAndUpdate(courseId, {
-    coursePhoto: result.secure_url,
-    cloudinaryId: result.public_id,
-  });
-
-  res.status(200).json({
-    status: "success",
-    updatedCourse,
-  });
-});
 
 exports.deleteCourse = catchAsync(async (req, res, next) => {
   const courseId = req.params.id;
@@ -746,7 +730,9 @@ exports.deleteCourse = catchAsync(async (req, res, next) => {
     $pull: { courses: courseId },
   });
 
-  await Course.findOneAndDelete(courseId);
+  await Course.findOneAndDelete({ 
+    _id: courseId
+  });
 
   res.status(200).json({
     status: "success",
