@@ -11,6 +11,7 @@ const BusinussProfile = require("../models/businessProfileModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const moyasar = require("../utils/moyasar");
+const Paypal = require('../utils/paypal');
 
 const getProductDetails = async (productId) => {
   return await Product.findById(productId);
@@ -532,5 +533,12 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
 });
 
 exports.paypal = catchAsync(async (req, res, next) => {
-  const { PAYPAL_ENVIROMENT, PAYPAL_CLIENT_ID, PAYPAL_SECRET_KEY } = process.env;
+  const response = await Paypal.createOrder();
+  res.json(response);
+})
+
+exports.complete = catchAsync(async (req, res, next) => {
+  const { orderID } = req.params;
+  const response = await Paypal.capturePayment(orderID);
+  res.json(response);
 })

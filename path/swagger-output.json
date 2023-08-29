@@ -2224,6 +2224,36 @@
         }
       }
     },
+    "/api/v1/payment/paypal/orders": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paypal/orders/{orderID}/capture": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "orderID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/salons/": {
       "get": {
         "description": "",

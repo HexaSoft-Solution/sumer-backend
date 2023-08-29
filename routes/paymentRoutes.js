@@ -94,4 +94,16 @@ router
         paymentController.verifyBuyingConsultationsTicket
     );
 
+router
+    .route('/paypal/orders')
+    .post(
+        paymentController.paypal
+    )
+
+router
+    .route('/paypal/orders/:orderID/capture')
+    .post(
+        paymentController.complete
+    )
+
 module.exports = router;
