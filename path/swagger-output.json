@@ -3747,7 +3747,7 @@
         }
       }
     },
-    "/api/v1/community/": {
+    "/api/v1/community/posts": {
       "get": {
         "description": "",
         "responses": {
@@ -3774,7 +3774,7 @@
         }
       }
     },
-    "/api/v1/community/add-photo/{id}": {
+    "/api/v1/community/posts/add-photo/{id}": {
       "patch": {
         "tags": [
           "Community"
@@ -3856,7 +3856,7 @@
         }
       }
     },
-    "/api/v1/community/like/{id}": {
+    "/api/v1/community/posts/like/{id}": {
       "patch": {
         "tags": [
           "Community"
@@ -4085,7 +4085,7 @@
         }
       }
     },
-    "/api/v1/community/{id}": {
+    "/api/v1/community/posts/{id}": {
       "get": {
         "description": "",
         "parameters": [
