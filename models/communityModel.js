@@ -16,7 +16,7 @@ const CommunitySchema = new mongoose.Schema({
     }],
     Comments: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Comments'
     }],
     postPhoto: String,
     cloudinaryId: String,
