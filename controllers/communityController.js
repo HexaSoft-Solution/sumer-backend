@@ -16,10 +16,9 @@ exports.addPost = catchAsync(async (req, res, next) => {
 
     const  { post } = req.body;
 
-
     let result;
 
-    if (req.file.path) {
+    if (req?.file?.path) {
          result = await cloudinary.uploader.upload(req.file.path, {
             public_id: `/${Math.random() * 10000000000}/Photo`,
             folder: 'posts',
