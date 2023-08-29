@@ -178,13 +178,15 @@ exports.addComment = catchAsync(async (req, res, next) => {
        return next(new AppError('No post found with that ID', 404));
     }
 
-    const comment = await Comment.create({
-        comment: req.body.comment,
+    const { comment } = req.body
+
+    const Comment = await Comment.create({
+        comment,
         user: userId,
     })
 
     await Community.findByIdAndUpdate(postId, {
-        $push: { Comments: comment._id }
+        $push: { Comments: Comment._id }
     })
 })
 
