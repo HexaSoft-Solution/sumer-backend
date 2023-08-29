@@ -154,7 +154,7 @@ exports.likePost = catchAsync(async (req, res, next) => {
     console.log(userPost.likes.length === 0)
 
 
-    if (userPost.likes.find(e => e.id !== userId) || userPost.likes.length === 0) {
+    if (userPost.likes.find(e => e._id !== userId) || userPost.likes.length === 0) {
         console.log(userPost.likes)
         await Community.findByIdAndUpdate(postId, {
             $push: { likes: userId }
