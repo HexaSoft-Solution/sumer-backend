@@ -180,13 +180,13 @@ exports.addComment = catchAsync(async (req, res, next) => {
 
     const { comment } = req.body
 
-    const Comment = await Comment.create({
+    const Commment = await Comment.create({
         comment,
         user: userId,
     })
 
     await Community.findByIdAndUpdate(postId, {
-        $push: { Comments: Comment._id }
+        $push: { Comments: Commment._id }
     })
 })
 
