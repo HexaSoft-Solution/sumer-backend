@@ -296,7 +296,7 @@ exports.likeComment = catchAsync(async (req, res, next) => {
 
     const comment = await Comment.findById(commentId);
 
-    if (comment.likes.find(r => e._id !== userId)) {
+    if (comment.likes.find(e => e._id !== userId)) {
         await Comment.findByIdAndUpdate(commentId, {
             $push: { likes: userId }
         })
