@@ -12,7 +12,7 @@ router
     .get(communityController.getAllPosts)
     .post(
         authController.protect,
-        communityController.getAllPosts
+        communityController.addPost
     );
 
 router
