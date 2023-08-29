@@ -8,7 +8,7 @@ const upload = require('../utils/multer');
 const router = express.Router();
 
 router
-    .route('/')
+    .route('/posts')
     .get(communityController.getAllPosts)
     .post(
         authController.protect,
@@ -16,11 +16,18 @@ router
     );
 
 router
-    .route('/add-photo/:id')
+    .route('/posts/add-photo/:id')
     .patch(
         authController.protect,
         upload.single('photo'),
         communityController.addPostPhoto
+    );
+
+router
+    .route('/my-posts')
+    .get(
+        authController.protect,
+        communityController.myPosts
     );
 
 router
@@ -31,7 +38,7 @@ router
     );
 
 router
-    .route('/like/:id')
+    .route('/posts/like/:id')
     .patch(
         authController.protect,
         communityController.likePost
@@ -73,7 +80,7 @@ router
     );
 
 router
-    .route('/:id')
+    .route('/posts/:id')
     .get(communityController.getPost)
     .patch(
         authController.protect,

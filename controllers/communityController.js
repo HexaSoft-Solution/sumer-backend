@@ -29,6 +29,18 @@ exports.addPost = catchAsync(async (req, res, next) => {
     })
 });
 
+exports.myPosts = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
+    const userId = req.user.id
+
+    const posts = await Community.find({ user: userId });
+
+    res.status(200).json({
+        status: 'success',
+        posts
+    })
+})
+
 exports.addPostPhoto = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Community']
     const postId = req.params.id
