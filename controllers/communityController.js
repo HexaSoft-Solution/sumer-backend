@@ -16,9 +16,26 @@ exports.addPost = catchAsync(async (req, res, next) => {
 
     const  { post } = req.body;
 
+
+    let result;
+
+    if (req.file.path) {
+         result = await cloudinary.uploader.upload(req.file.path, {
+            public_id: `/${Math.random() * 10000000000}/Photo`,
+            folder: 'posts',
+            resource_type: 'image',
+        });
+
+        if (!result) {
+            return next(new AppError('Something went wrong with the image upload', 400));
+        }
+    }
+
     const userPost = await Community.create({
         post,
-        user: userId
+        user: userId,
+        postPhoto: result?.secure_url,
+        cloudinaryId: result?.public_id,
     })
 
     res.status(200).json({
@@ -46,6 +63,7 @@ exports.addPostPhoto = catchAsync(async (req, res, next) => {
     const postId = req.params.id
 
     const userPost = await Community.findById(postId)
+
 
     const result = await cloudinary.uploader.upload(req.file.path, {
         public_id: `/${userPost.user._id}-${Math.random() * 10000000000}/${userPost.user._id}Photo`,
@@ -237,8 +255,8 @@ exports.editComment = catchAsync(async (req, res, next) => {
         return next(new AppError('You are not authorized to perform this action', 401));
     }
 
-    const updatedComment = await Community.findByIdAndUpdate(commentId, {
-        post: req.body.post
+    const updatedComment = await Comment.findByIdAndUpdate(commentId, {
+        comment: req.body.comment
     });
 
     res.status(200).json({

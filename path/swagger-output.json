@@ -4007,7 +4007,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "post": {
+                  "comment": {
                     "example": "any"
                   }
                 }
