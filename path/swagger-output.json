@@ -3757,6 +3757,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Community"
+        ],
         "description": "",
         "parameters": [
           {
@@ -3768,8 +3771,22 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "post": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
