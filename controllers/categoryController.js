@@ -5,6 +5,7 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.getAllCategories = async (req, res, next) => {
+  // #swagger.tags = ['Category']
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
   /*  #swagger.parameters['limit'] = {
               in: 'query',
@@ -29,6 +30,7 @@ type: 'number'
 };
 
 exports.getCategory = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Category']
   const category = await Category.findById(req.params.id);
 
   const products = await Product.find({
@@ -47,6 +49,7 @@ exports.getCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.createCategory = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Category']
   const { name, desc } = req.body;
 
   const category = await Category.create({ name, desc });
@@ -58,6 +61,7 @@ exports.createCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.updateCategory = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Category']
   const categoryId = req.params.id;
   const { name, desc } = req.body;
 
@@ -70,6 +74,7 @@ exports.updateCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteCategory = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Category']
   const doc = await Category.findById(req.params.id);
 
   await Product.findOneAndDelete({

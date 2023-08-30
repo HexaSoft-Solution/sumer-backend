@@ -41,6 +41,7 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   let newUser = null;
   // Check for duplicate email
   const existingEmailUser = await User.findOne({ email: req.body?.email });
@@ -114,6 +115,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']// #swagger.tags = ['Authentication']
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -130,6 +132,7 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.loginMobile = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const { phone, password } = req.body;
 
   if (!phone || !password) {
@@ -146,6 +149,7 @@ exports.loginMobile = catchAsync(async (req, res, next) => {
 });
 
 exports.loginUsername = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -162,6 +166,7 @@ exports.loginUsername = catchAsync(async (req, res, next) => {
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   // 1) Getting to token and check if it's there
   let token;
   if (
@@ -209,6 +214,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.restrictTo =
   (...roles) =>
   (req, res, next) => {
+    // #swagger.tags = ['Authentication']
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError("You  do not have permission to perform this action", 403)
@@ -218,6 +224,7 @@ exports.restrictTo =
   };
 
 exports.resendVerifyOTPEmail = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const { email } = req.body;
   const user = await User.findOne({ email });
 
@@ -249,6 +256,7 @@ exports.resendVerifyOTPEmail = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyEmail = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const hashedToken = crypto
     .createHash("sha256")
     .update(req.params.OTP)
@@ -274,6 +282,7 @@ exports.verifyEmail = catchAsync(async (req, res, next) => {
 });
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(new AppError("There is no user with email address.", 404));
@@ -308,6 +317,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyForgetPasswordOTP = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const HashedOTP = crypto
     .createHash("sha256")
     .update(req.params.OTP)
@@ -327,6 +337,7 @@ exports.verifyForgetPasswordOTP = catchAsync(async (req, res, next) => {
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const hashedToken = crypto
     .createHash("sha256")
     .update(req.params.token)
@@ -352,6 +363,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const user = await User.findById(req.user.id).select("+password");
 
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
@@ -366,6 +378,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
+  // #swagger.tags = ['Authentication']
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
@@ -374,6 +387,7 @@ exports.logout = (req, res) => {
 };
 
 exports.isLoggedIn = async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   if (req.cookies.jwt) {
     try {
       const decoded = await promisify(jwt.verify)(

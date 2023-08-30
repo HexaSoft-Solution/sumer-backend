@@ -60,6 +60,8 @@ exports.addPost = catchAsync(async (req, res, next) => {
 
   const { post } = req.body;
 
+  console.log(post)
+
   let result;
 
   if (req?.file?.path) {

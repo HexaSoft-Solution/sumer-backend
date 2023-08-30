@@ -14,6 +14,7 @@ const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
 
 exports.getAllConsultations = async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
   /*  #swagger.parameters['limit'] = {
               in: 'query',
@@ -42,6 +43,7 @@ exports.deleteConsultation = factory.deleteOne(Consultation);
 exports.deleteMessage = factory.deleteOne(Message);
 
 exports.getMyProfile = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
 
   const consultation = await Consultation.findOne({ owner: userId });
@@ -57,6 +59,7 @@ exports.getMyProfile = catchAsync(async (req, res, next) => {
 });
 
 exports.getMyConsultation = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
   /*  #swagger.parameters['limit'] = {
               in: 'query',
@@ -96,6 +99,7 @@ type: 'number'
 });
 
 exports.endConsultant = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
   const consultantId = req.params.id;
 
@@ -124,6 +128,7 @@ exports.endConsultant = catchAsync(async (req, res, next) => {
 });
 
 exports.createConsultationProfile = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const { Specialization, about, price } = req.body;
 
   const consultation = await Consultation.findOne({ owner: req.user._id });
@@ -154,6 +159,7 @@ exports.createConsultationProfile = catchAsync(async (req, res, next) => {
 });
 
 exports.editQuestion = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
   const consultId = req.params.id;
 
@@ -176,6 +182,7 @@ exports.editQuestion = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteConsultant = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
   const consultantId = req.params.id;
 
@@ -202,6 +209,7 @@ exports.deleteConsultant = catchAsync(async (req, res, next) => {
 });
 
 exports.updateConsultationProfile = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const consultationId = req.user.consultation;
 
   if (!consultationId) {
@@ -226,6 +234,7 @@ exports.updateConsultationProfile = catchAsync(async (req, res, next) => {
 });
 
 exports.addServices = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   /*	#swagger.requestBody = {
             required: true,
             "@content": {
@@ -290,6 +299,7 @@ exports.addServices = catchAsync(async (req, res, next) => {
 });
 
 exports.editService = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const serviceId = req.params.id;
 
   const consultationId = req.user.consultation;
@@ -332,6 +342,7 @@ exports.editService = catchAsync(async (req, res, next) => {
 });
 
 exports.addServicesPhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']// #swagger.tags = ['Consultations']
   /*	#swagger.requestBody = {
             required: true,
             "@content": {
@@ -400,6 +411,7 @@ exports.addServicesPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteservicePhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const serviceId = req.params.id;
 
   const consultationId = req.user.consultation;
@@ -425,6 +437,7 @@ exports.deleteservicePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteService = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   try {
     const serviceId = req.params.id;
     const userId = req.user.id;
@@ -468,6 +481,7 @@ exports.deleteService = catchAsync(async (req, res, next) => {
 });
 
 exports.addCertificate = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const consultationId = req.user.consultation;
 
   /*	#swagger.requestBody = {
@@ -558,6 +572,7 @@ exports.addCertificate = catchAsync(async (req, res, next) => {
 });
 
 exports.editCertificate = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const consultationId = req.user.consultation;
 
   const certificateId = req.params.id;
@@ -600,6 +615,7 @@ exports.editCertificate = catchAsync(async (req, res, next) => {
 });
 
 exports.addCertificatePhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const certificateId = req.params.id;
 
   const consultationId = req.user.consultation;
@@ -656,6 +672,7 @@ exports.addCertificatePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteCertificate = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const certificateId = req.params.id;
   const userId = req.user.id;
 
@@ -685,6 +702,7 @@ exports.deleteCertificate = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteCertificatePhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const certificateId = req.params.id;
   const userId = req.user.id;
 
@@ -716,6 +734,7 @@ exports.deleteCertificatePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.addCourse = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const consultationId = req.user.consultation;
   const { courseName, issueDate } = req.body;
 
@@ -743,6 +762,7 @@ exports.addCourse = catchAsync(async (req, res, next) => {
 });
 
 exports.editCourse = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const consultationId = req.user.consultation;
 
   const courseId = req.params.id;
@@ -771,6 +791,7 @@ exports.editCourse = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteCourse = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const courseId = req.params.id;
   const userId = req.user.id;
 
@@ -800,6 +821,7 @@ exports.deleteCourse = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteCoursePhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const courseId = req.params.id;
   const userId = req.user.id;
 
@@ -826,6 +848,7 @@ exports.deleteCoursePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.createConsultantTicket = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
   const consultatonId = req.params.id
 
@@ -848,6 +871,7 @@ exports.createConsultantTicket = catchAsync(async (req, res, next) => {
 });
 
 exports.consultationSendChat = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
   const consultantId = req.params.id;
 
@@ -882,6 +906,7 @@ exports.consultationSendChat = catchAsync(async (req, res, next) => {
 });
 
 exports.userSendChat = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
   const consultantId = req.params.id;
 
@@ -921,6 +946,7 @@ exports.userSendChat = catchAsync(async (req, res, next) => {
 });
 
 exports.editMessage = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const { messageChat, reply } = req.body;
   const userId = req.user.id;
 
@@ -944,6 +970,7 @@ exports.editMessage = catchAsync(async (req, res, next) => {
 });
 
 exports.viewConsultation = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
   const consultantId = req.params.id;
 
@@ -963,6 +990,7 @@ exports.viewConsultation = catchAsync(async (req, res, next) => {
 });
 
 exports.activeConsultation = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
   const userId = req.user.id;
   const consultantId = req.params.id;
 

@@ -12,6 +12,7 @@ router
     .get(communityController.getAllPosts)
     .post(
         authController.protect,
+        upload.single('photo'),
         communityController.addPost
     );
 
