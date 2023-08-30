@@ -336,9 +336,9 @@ exports.editComment = catchAsync(async (req, res, next) => {
 
   const comment = await Comment.findById(commentId);
 
-  console.log(req.user)
+  console.log(req.user._id.toString())
 
-  if (comment.user._id !== userId) {
+  if (comment.user._id.toString() !== userId) {
     return next(
       new AppError("You are not authorized to perform this action", 401)
     );
@@ -358,12 +358,12 @@ exports.editComment = catchAsync(async (req, res, next) => {
 
 exports.deleteComment = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Community']
-  const userId = req.user.id;
+  const userId = req.user._id;
   const commentId = req.params.id;
 
   const comment = await Comment.findById(commentId);
 
-  if (comment.user._id !== userId) {
+  if (comment.user._id.toString() !== userId) {
     return next(
       new AppError("You are not authorized to perform this action", 401)
     );
