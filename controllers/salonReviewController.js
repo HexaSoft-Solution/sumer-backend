@@ -14,6 +14,7 @@ exports.setSalonUserIds = (req, res, next) => {
 }
 
 exports.getAllSalonReviews = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon Comments']
     let filter = {};
     if (req.params.id) filter = { model: req.params.id };
 
@@ -52,6 +53,7 @@ exports.getSalonReview = factory.getOne(SalonReview);
 
 
 exports.createSalonReview = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon Comments']
     const userId = req.user.id
 
     const user = await User.findById(userId);
@@ -84,6 +86,7 @@ exports.createSalonReview = catchAsync(async (req, res, next) => {
 exports.updateSalonReview = factory.updateOne(SalonReview);
 
 exports.deleteSalonReview = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon Comments']
     const reviewId = req.params.id;
 
     const review = await SalonReview.findById(reviewId);

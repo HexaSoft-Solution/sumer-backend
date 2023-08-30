@@ -62,11 +62,13 @@ const filterArrayOfObjects = (arr, ...allowedFields) => {
 };
 
 exports.getMe = (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   req.params.id = req.user.id;
   next();
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const { firstName, lastName, name, stockName, username, phone } = req.body;
 
   const updatedUser = await User.findByIdAndUpdate(
@@ -94,6 +96,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteMe = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
   res.status(201).json({
@@ -103,6 +106,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 });
 
 exports.myProfile = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const userId = req.user.id;
 
   if (req.user.role === "consultant") {
@@ -147,6 +151,7 @@ exports.myProfile = catchAsync(async (req, res, next) => {
 });
 
 exports.createUser = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const newUser = await User.create({
     name: req.body.name,
     firstName: req.body.firstName,
@@ -164,6 +169,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
 });
 
 exports.uploadPersonalPhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   /*	#swagger.requestBody = {
             required: true,
             "@content": {
@@ -199,6 +205,7 @@ exports.uploadPersonalPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.addAddress = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const userId = req.user.id;
   const { street, city, houseNo, latitude, longitude, houseType } = req.body;
   const address = await Address.create({
@@ -225,6 +232,7 @@ exports.addAddress = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteAddress = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const userId = req.user.id;
   const addressId = req.params.addressId;
   await Address.findByIdAndRemove(addressId);
@@ -239,6 +247,7 @@ exports.deleteAddress = catchAsync(async (req, res, next) => {
 });
 
 exports.getUsers = async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
   /*  #swagger.parameters['limit'] = {
                 in: 'query',
@@ -261,7 +270,9 @@ exports.getUsers = async (req, res, next) => {
 
   return factory.getAllMagdy(req, res, next, User);
 };
+
 exports.getUser = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   let user = await User.findById(req.params.id);
 
   if (!user) {

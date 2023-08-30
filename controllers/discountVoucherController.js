@@ -7,6 +7,7 @@ const AppError = require("../utils/appError");
 const factory = require("./handlerFactory");
 
 exports.getAllVouchers = async (req, res, next) => {
+  // #swagger.tags = ['Vouchers & Discounts']
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
   /*  #swagger.parameters['limit'] = {
                 in: 'query',
@@ -32,6 +33,7 @@ exports.getAllVouchers = async (req, res, next) => {
 exports.getVoucher = factory.getOne(Voucher);
 
 exports.createVoucher = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Vouchers & Discounts']
   const { code, discountPercentage, maxDiscount, expireDate } = req.body;
 
   const voucher = await Voucher.create({
@@ -50,6 +52,7 @@ exports.createVoucher = catchAsync(async (req, res, next) => {
 exports.deleteVoucher = factory.deleteOne(Voucher);
 
 exports.addDiscountToProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Vouchers & Discounts']
   const { discount, productId } = req.body;
 
   const product = await Product.findById(productId);
@@ -78,6 +81,7 @@ exports.addDiscountToProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.removeDicountFromProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Vouchers & Discounts']
   const ProductId = req.params.id;
 
   const product = await Product.findById(ProductId);
@@ -100,6 +104,7 @@ exports.removeDicountFromProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.addVoucherToUser = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Vouchers & Discounts']
   const userId = req.user.id;
   const { code } = req.body;
 

@@ -8,6 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
 
 exports.getAllSalons = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     let filter = {};
     if (req.params.id) filter = { model: req.params.id };
     const features = new APIFeatures(Salon.find(filter), req.query)
@@ -26,6 +27,7 @@ exports.getAllSalons = catchAsync(async (req, res, next) => {
 })
 
 exports.getSalon = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     const salon = await Salon.findById(req.params.id);
     const Reviews = await SalonReview.find({
         _id: { $in: salon.salonReviews }
@@ -39,6 +41,7 @@ exports.getSalon = catchAsync(async (req, res, next) => {
 })
 
 exports.loveSalon = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     const userId = req.user.id;
     const salonId = req.params.id;
 
@@ -70,6 +73,7 @@ exports.loveSalon = catchAsync(async (req, res, next) => {
 });
 
 exports.unloveSalon = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     const userId = req.user.id;
     const salonId = req.params.id;
 
@@ -100,6 +104,7 @@ exports.unloveSalon = catchAsync(async (req, res, next) => {
 });
 
 exports.uploadPhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     const salonId = req.params.id;
 
     const salon = await Salon.findById(salonId)
@@ -122,6 +127,7 @@ exports.uploadPhoto = catchAsync(async (req, res, next) => {
 })
 
 exports.uploadServicePhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     const salonId = req.params.id;
     const { _id } = req.body;
 
@@ -150,6 +156,7 @@ exports.uploadServicePhoto = catchAsync(async (req, res, next) => {
 
 
 exports.createSalon = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     const userId = req.user.id;
 
     const {
@@ -183,6 +190,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
 });
 
 exports.updateSalon = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     const salonId = req.params.id;
 
     if (req.user.salonCreated !== salonId) {
@@ -220,6 +228,7 @@ exports.updateSalon = catchAsync(async (req, res, next) => {
 exports.searchSalon = factory.search(Salon);
 
 exports.deleteSalon = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
     const userId = req.user.id;
     const salonId = req.params.id;
 

@@ -672,6 +672,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Authentication"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -726,6 +729,9 @@
     },
     "/api/v1/users/{id}": {
       "get": {
+        "tags": [
+          "Authentication"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1474,7 +1480,7 @@
     "/api/v1/reviews/": {
       "get": {
         "tags": [
-          "Authentication"
+          "Products Comments & Ratings"
         ],
         "description": "",
         "parameters": [
@@ -1494,7 +1500,7 @@
       },
       "post": {
         "tags": [
-          "Authentication"
+          "Products Comments & Ratings"
         ],
         "description": "",
         "parameters": [
@@ -1557,7 +1563,7 @@
       },
       "delete": {
         "tags": [
-          "Authentication"
+          "Products Comments & Ratings"
         ],
         "description": "",
         "parameters": [
@@ -1614,6 +1620,9 @@
     },
     "/api/v1/discountVouchers/": {
       "get": {
+        "tags": [
+          "Vouchers & Discounts"
+        ],
         "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
         "parameters": [
           {
@@ -1657,7 +1666,7 @@
       },
       "post": {
         "tags": [
-          "Authentication"
+          "Vouchers & Discounts"
         ],
         "description": "",
         "parameters": [
@@ -1750,7 +1759,7 @@
     "/api/v1/discountVouchers/addDiscountToProduct": {
       "post": {
         "tags": [
-          "Authentication"
+          "Vouchers & Discounts"
         ],
         "description": "",
         "parameters": [
@@ -1789,7 +1798,7 @@
     "/api/v1/discountVouchers/removeDiscountFromProduct/{id}": {
       "patch": {
         "tags": [
-          "Authentication"
+          "Vouchers & Discounts"
         ],
         "description": "",
         "parameters": [
@@ -1819,7 +1828,7 @@
     "/api/v1/discountVouchers/addVoucherToUser": {
       "post": {
         "tags": [
-          "Authentication"
+          "Vouchers & Discounts"
         ],
         "description": "",
         "parameters": [
@@ -2839,6 +2848,9 @@
     },
     "/api/v1/salons/": {
       "get": {
+        "tags": [
+          "Salon"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -2848,7 +2860,7 @@
       },
       "post": {
         "tags": [
-          "Authentication"
+          "Salon"
         ],
         "description": "",
         "parameters": [
@@ -2898,6 +2910,9 @@
     },
     "/api/v1/salons/{id}": {
       "get": {
+        "tags": [
+          "Salon"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2917,7 +2932,7 @@
       },
       "delete": {
         "tags": [
-          "Authentication"
+          "Salon"
         ],
         "description": "",
         "parameters": [
@@ -2945,7 +2960,7 @@
       },
       "patch": {
         "tags": [
-          "Authentication"
+          "Salon"
         ],
         "description": "",
         "parameters": [
@@ -3017,7 +3032,7 @@
     "/api/v1/salons/uploadSalonPhoto/{id}": {
       "patch": {
         "tags": [
-          "Authentication"
+          "Salon"
         ],
         "description": "",
         "parameters": [
@@ -3047,7 +3062,7 @@
     "/api/v1/salons/uploadServicePhoto/{id}": {
       "patch": {
         "tags": [
-          "Authentication"
+          "Salon"
         ],
         "description": "",
         "parameters": [
@@ -3091,7 +3106,7 @@
     "/api/v1/salons/loved/{id}": {
       "patch": {
         "tags": [
-          "Authentication"
+          "Salon"
         ],
         "description": "",
         "parameters": [
@@ -3124,7 +3139,7 @@
     "/api/v1/salons/unloved/{id}": {
       "patch": {
         "tags": [
-          "Authentication"
+          "Salon"
         ],
         "description": "",
         "parameters": [
@@ -3157,7 +3172,7 @@
     "/api/v1/salonReviews/": {
       "get": {
         "tags": [
-          "Authentication"
+          "Salon Comments"
         ],
         "description": "",
         "parameters": [
@@ -3177,7 +3192,7 @@
       },
       "post": {
         "tags": [
-          "Authentication"
+          "Salon Comments"
         ],
         "description": "",
         "parameters": [
@@ -3240,7 +3255,7 @@
       },
       "delete": {
         "tags": [
-          "Authentication"
+          "Salon Comments"
         ],
         "description": "",
         "parameters": [
@@ -3298,7 +3313,7 @@
     "/api/v1/salonBooking/": {
       "get": {
         "tags": [
-          "Authentication"
+          "Salon Bookings"
         ],
         "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
         "parameters": [

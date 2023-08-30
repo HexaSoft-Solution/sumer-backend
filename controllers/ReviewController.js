@@ -14,6 +14,7 @@ exports.setProductUserIds = (req, res, next) => {
 };
 
 exports.getAllReviews = catchAsync(async (req, res, next) =>{
+    // #swagger.tags = ['Products Comments  & Ratings']
     let filter = {};
     if (req.params.id) filter = { model: req.params.id };
 
@@ -47,6 +48,7 @@ exports.getAllReviews = catchAsync(async (req, res, next) =>{
 exports.getReview = factory.getOne(Review);
 
 exports.createReview = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Products Comments  & Ratings']
     const userId = req.user.id
 
     const user = await User.findById(userId);
@@ -75,6 +77,7 @@ exports.createReview = catchAsync(async (req, res, next) => {
 
 exports.updateReview = factory.updateOne(Review);
 exports.deleteReview = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Products Comments  & Ratings']
     const reviewId =  req.params.id;
 
     const review = await Review.findById(reviewId)
