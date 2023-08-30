@@ -163,10 +163,49 @@ exports.editPost = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Community']
   const postId = req.params.id;
 
-  const userPost = await Community.findById(postId);
+  /*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            photo: {
+                                type: "string",
+                                format: "binary"
+                            },
+                            post: {
+                                type: "string",
+                            },
+                        },
+                        required: ["photo"]
+                    }
+                }
+            }
+        }
+    */
+
+
+  const { post } = req.body;
+
+  if (req?.file?.path) {
+    result = await cloudinary.uploader.upload(req.file.path, {
+      public_id: `/${Math.random() * 10000000000}/Photo`,
+      folder: "posts",
+      resource_type: "image",
+    });
+
+    if (!result) {
+      return next(
+          new AppError("Something went wrong with the image upload", 400)
+      );
+    }
+  }
 
   const updatedUserPost = await Community.findByIdAndUpdate(postId, {
-    post: req.body.post,
+    post,
+    postPhoto: result?.secure_url,
+    cloudinaryId: result?.public_id,
   });
 
   res.status(200).json({

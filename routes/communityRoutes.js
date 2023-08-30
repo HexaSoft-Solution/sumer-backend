@@ -92,6 +92,7 @@ router
     .get(communityController.getPost)
     .patch(
         authController.protect,
+        upload.single('photo'),
         communityController.editPost
     )
     .delete(

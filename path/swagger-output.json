@@ -5055,15 +5055,23 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
+                  },
                   "post": {
-                    "example": "any"
+                    "type": "string"
                   }
-                }
+                },
+                "required": [
+                  "photo"
+                ]
               }
             }
           }
