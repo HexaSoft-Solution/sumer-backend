@@ -353,7 +353,7 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
 
     await Comment.findByIdAndDelete(commentId);
 
-    res.staus(200).json({
+    res.status(200).json({
         status: 'success',
         data: null
     })

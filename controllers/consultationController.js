@@ -11,6 +11,7 @@ const factory = require("./handlerFactory");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const cloudinary = require("../utils/cloudinary");
+const APIFeatures = require("../utils/apiFeatures");
 
 exports.getAllConsultations = () => {
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
@@ -52,6 +53,24 @@ exports.getMyProfile = catchAsync(async (req, res, next) => {
     consultation,
   });
 });
+
+
+exports.getMyConsultation = catchAsync(async (req, res, next) => {
+  const userId = req.user.id
+
+  const consultants = await new APIFeatures(Consultant.findOne({ consultant: consultant }), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .Pagination();
+  const doc = await consultants.query;
+
+  res.status(200).json({
+    status: "success",
+    results: doc.length,
+    consultants: doc
+  })
+})
 
 exports.endConsultant = catchAsync(async (req, res, next) => {
   const userId = req.user.id;

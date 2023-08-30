@@ -2937,6 +2937,25 @@
         }
       }
     },
+    "/api/v1/consultation/my-consultation": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/consultation/{id}": {
       "get": {
         "description": "",
