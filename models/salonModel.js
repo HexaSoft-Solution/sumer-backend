@@ -15,6 +15,7 @@ const salonSchema = new mongoose.Schema({
     }],
     desc: {
         type: String,
+        default: null,
     },
     address:[{
         type: mongoose.Schema.Types.ObjectId,

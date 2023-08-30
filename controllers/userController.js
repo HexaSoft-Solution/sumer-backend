@@ -119,6 +119,7 @@ exports.myProfile = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       profile: consultation,
+        owner: req.user,
     });
   } else if (req.user.role === "salon service") {
     if (!req.user.salonCreated) {
