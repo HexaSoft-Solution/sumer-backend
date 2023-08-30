@@ -14,6 +14,28 @@ exports.addPost = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Community']
     const userId = req.user.id
 
+    /*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            photo: {
+                                type: "string",
+                                format: "binary"
+                            },
+                            post: {
+                                type: "string",
+                            },
+                        },
+                        required: ["photo"]
+                    }
+                }
+            }
+        }
+    */
+
     const  { post } = req.body;
 
     let result;
@@ -195,6 +217,25 @@ exports.addComment = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: "success",
         Commment
+    })
+})
+
+
+exports.postsComments = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Community']
+    const postId = req.params.id;
+
+    const post = await Community.findById(postId);
+
+    if (!post) {
+        return next(new AppError('No post found with that ID', 404));
+    }
+
+    const comments = await Comment.find({ _id: { $in: post.Comments } }).populate('user');
+
+    res.status(200).json({
+        status: 'success',
+        comments
     })
 })
 

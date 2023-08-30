@@ -3806,17 +3806,55 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
+                  },
                   "post": {
-                    "example": "any"
+                    "type": "string"
                   }
-                }
+                },
+                "required": [
+                  "photo"
+                ]
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/community/posts/{id}/comments": {
+      "get": {
+        "tags": [
+          "Community"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -3957,8 +3995,8 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
           }
         },
         "requestBody": {

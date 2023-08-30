@@ -16,6 +16,13 @@ router
     );
 
 router
+    .route('/posts/:id/comments')
+    .get(
+        authController.protect,
+        communityController.postsComments
+    );
+
+router
     .route('/posts/add-photo/:id')
     .patch(
         authController.protect,
