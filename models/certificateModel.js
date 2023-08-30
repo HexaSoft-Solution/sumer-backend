@@ -4,12 +4,12 @@ const validator = require('validator');
 const CertificateSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: [true, "Please enter a Certificate name"],
+        required: [true, "title-required"],
         trim: true
     },
     issueDate: {
         type: Date,
-        required: [true, "Please enter a issue date"],
+        required: [true, "date-required"],
     },
     expireDate: {
         type: Date,
@@ -20,7 +20,6 @@ const CertificateSchema = new mongoose.Schema({
     },
     certificateURL: {
         type: String,
-        validate: [validator.isURL, 'Please provide a valid URL'],
         trim: true
     },
     certificatePhoto: String,

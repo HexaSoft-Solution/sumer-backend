@@ -146,19 +146,7 @@ router
         consultationController.deleteCourse
     )
 
-router
-    .route('/course-photo/:id')
-    .patch(
-        authController.protect,
-        authController.restrictTo('admin', 'consultant'),
-        upload.single('image'),
-        consultationController.addCoursePhoto
-    )
-    .delete(
-        authController.protect,
-        authController.restrictTo('admin', 'consultant'),
-        consultationController.deleteCoursePhoto
-    )
+
 
 router
     .route('/active-consultant/:id')
