@@ -89,8 +89,9 @@ exports.search = (Model) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-   
-    let filter = {};
+
+      let filter = {};
+      if (req.params.id) filter = { model: req.params.id };
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
@@ -108,3 +109,24 @@ exports.getAll = (Model) =>
       },
     });
   });
+
+exports.getAllMagdy = async (req ,res ,next, Model) => {
+        let filter = {};
+        if (req.params.id) filter = { model: req.params.id };
+
+        const features = new APIFeatures(Model.find(filter), req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .Pagination();
+        const doc = await features.query;
+
+        // SEND RESPONSE
+        res.status(200).json({
+            status: "success",
+            results: doc.length,
+            data: {
+                doc,
+            },
+        });
+    };
