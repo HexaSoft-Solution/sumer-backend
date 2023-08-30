@@ -69,6 +69,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    promotedAds: {
+        type: Number,
+        default: 0
+    },
     ratingsAverage: {
         type: Number,
         default: 1,

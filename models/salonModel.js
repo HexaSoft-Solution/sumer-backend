@@ -46,7 +46,10 @@ const salonSchema = new mongoose.Schema({
             message: 'Provided phone number is invalid.'
         },
     },
-    
+    promotedAds: {
+        type: Number,
+        default: 0
+    },
     salonReviews: [{
        type: mongoose.Schema.Types.ObjectId,
         ref: 'SalonReview',

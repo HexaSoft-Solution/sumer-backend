@@ -14,6 +14,12 @@ const createPayment = async (amount, description, source, metadata, invoiceId, u
             callback = `${http}://${url}/api/v1/payment/verifyPaymentConsultationConnection/${invoiceId}/${user}/${metadata.title}`
         } else if (type === "buyConsultationTicket") {
             callback = `${http}://${url}/api/v1/payment/verify-buying-consultation-ticket/${user}/${invoiceId}`
+        } else if (type === 'promoteProduct'){
+            callback = `${http}://${url}/api/v1/payment/verify-promoting-product/${invoiceId}/${amount}`
+        } else if (type === 'promoteSalon'){
+            callback = `${http}://${url}/api/v1/payment/verify-promoting-salon/${invoiceId}/${amount}`
+        } else if (type === 'promoteConsultation'){
+            callback = `${http}://${url}/api/v1/payment/verify-promoting-consultation/${invoiceId}/${amount}`
         }
         const response = await axios.post(
             'https://api.moyasar.com/v1/payments',

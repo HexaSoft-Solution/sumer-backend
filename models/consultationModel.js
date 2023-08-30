@@ -18,6 +18,10 @@ const ConsultationSchema = new mongoose.Schema({
       type: Number,
       required: [true, "Please enter the Price"],
     },
+    promotedAds: {
+        type: Number,
+        default: 0
+    },
     service: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Service",

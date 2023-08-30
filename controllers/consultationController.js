@@ -827,8 +827,9 @@ exports.deleteCoursePhoto = catchAsync(async (req, res, next) => {
 
 exports.createConsultantTicket = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
+  const consultatonId = req.params.id
 
-  const { title, consultatonId } = req.body;
+  const { title } = req.body;
 
   if (!req.user.createConsultant.find((e) => e === consultatonId)) {
     return next(new AppError("You can not contant with this consultant", 401));
@@ -838,6 +839,11 @@ exports.createConsultantTicket = catchAsync(async (req, res, next) => {
     title,
     user: userId,
     consultant: consultatonId,
+  });
+
+  res.status(201).json({
+    status: "success",
+    consultant,
   });
 });
 

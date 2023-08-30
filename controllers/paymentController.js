@@ -34,6 +34,28 @@ const parseDate = (date) => {
   return date;
 };
 
+const basicPayment = async (req, res, next, amount, description, source, id, reply) => {
+  const payment = await moyasar.createPayment(
+      amount,
+      description,
+      source,
+      [],
+      id,
+      req.user.id,
+      req.protocol,
+      req.get("host"),
+      reply
+  );
+
+  res.status(200).json({
+    status: "success",
+    message: "Checkout successful!",
+    paymentId: payment.id,
+    callback_url: payment.callback_url,
+    payment: payment.source.transaction_url,
+  });
+}
+
 exports.viewCart = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
 
@@ -185,6 +207,102 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
       .json({ status: "error", message: "Payment failed or not yet paid." });
   }
 });
+
+exports.promoteProduct = catchAsync(async (req, res, next) => {
+  const { productId, promote, type, number, name, cvc, month, year } = req.body;
+
+  const source = { type, number, name, cvc, month, year };
+
+  await basicPayment(req, res, next, promote * 10, "Promote Salon", source, productId, "promoteProduct");
+})
+
+exports.verifyPromoteProduct = catchAsync(async (req, res, next) => {
+  const { productId, amount } = req.params;
+  const paymentId = req.query.id;
+  const payment = await moyasar.fetchPayment(paymentId);
+
+  if (payment.status === "paid") {
+    await Product.findByIdAndUpdate(
+        productId,
+        {
+          $inc: { promotedAds: amount },
+        },
+        { new: true }
+    );
+
+    res
+        .status(200)
+        .json({ status: "success", message: "Payment processed successfully." });
+  } else {
+    res
+        .status(400)
+        .json({ status: "error", message: "Payment failed or not yet paid." });
+  }
+})
+
+exports.promoteSalon = catchAsync(async (req, res, next) => {
+  const { salonId, promote, type, number, name, cvc, month, year } = req.body;
+
+  const source = { type, number, name, cvc, month, year };
+
+  await basicPayment(req, res, next, promote * 10, "Promote Salon", source, salonId, "promoteSalon");
+})
+
+exports.verifyPromoteSalon = catchAsync(async (req, res, next) => {
+  const { salonId, amount } = req.params;
+  const paymentId = req.query.id;
+  const payment = await moyasar.fetchPayment(paymentId);
+
+  if (payment.status === "paid") {
+    await Salon.findByIdAndUpdate(
+        salonId,
+        {
+          $inc: { promotedAds: amount },
+        },
+        { new: true }
+    );
+
+    res
+        .status(200)
+        .json({ status: "success", message: "Payment processed successfully." });
+  } else {
+    res
+        .status(400)
+        .json({ status: "error", message: "Payment failed or not yet paid." });
+  }
+})
+
+exports.promoteConsultation = catchAsync(async (req, res, next) => {
+  const { consultationId, promote, type, number, name, cvc, month, year } = req.body;
+
+  const source = { type, number, name, cvc, month, year };
+
+  await basicPayment(req, res, next, promote * 10, "Promote Consultation", source, consultationId, "promoteConsultation");
+})
+
+exports.verifyPromoteConsultation = catchAsync(async (req, res, next) => {
+  const { consultationId, amount } = req.params;
+  const paymentId = req.query.id;
+  const payment = await moyasar.fetchPayment(paymentId);
+
+  if (payment.status === "paid") {
+    await Consultation.findByIdAndUpdate(
+        consultationId,
+        {
+          $inc: { promotedAds: amount },
+        },
+        { new: true }
+    );
+
+    res
+        .status(200)
+        .json({ status: "success", message: "Payment processed successfully." });
+  } else {
+    res
+        .status(400)
+        .json({ status: "error", message: "Payment failed or not yet paid." });
+  }
+})
 
 exports.buyProductConnections = catchAsync(async (req, res, next) => {
   const { type, number, name, cvc, month, year } = req.body;

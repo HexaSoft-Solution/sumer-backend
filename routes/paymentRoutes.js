@@ -95,6 +95,39 @@ router
     );
 
 router
+    .route('/promote-product')
+    .patch(
+        authController.protect,
+        paymentController.promoteProduct
+    );
+
+router
+    .route('verify-promoting-product/:productId/:amount')
+    .get(paymentController.verifyPromoteProduct)
+
+router
+    .route('/promote-salon')
+    .patch(
+        authController.protect,
+        paymentController.promoteSalon
+    );
+
+router
+    .route('verify-promoting-salon/:salonId/:amount')
+    .get(paymentController.verifyPromoteSalon)
+
+router
+    .route('/promote-consultation')
+    .patch(
+        authController.protect,
+        paymentController.promoteConsultation
+    );
+
+router
+    .route('verify-promoting-consultation/:consultationId/:amount')
+    .get(paymentController.verifyPromoteConsultation)
+
+router
     .route('/paypal/orders')
     .post(
         paymentController.paypal
