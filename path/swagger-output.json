@@ -901,6 +901,9 @@
     },
     "/api/v1/products/": {
       "get": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -909,6 +912,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -969,6 +975,9 @@
     },
     "/api/v1/products/cart": {
       "delete": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1000,6 +1009,9 @@
         }
       },
       "patch": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1036,6 +1048,9 @@
     },
     "/api/v1/products/my-products": {
       "get": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1055,6 +1070,9 @@
     },
     "/api/v1/products/{id}": {
       "get": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1073,6 +1091,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1098,6 +1119,9 @@
         }
       },
       "patch": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1176,6 +1200,9 @@
     },
     "/api/v1/products/uploadProductPhoto/{id}": {
       "patch": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1203,6 +1230,9 @@
     },
     "/api/v1/products/uploadMultipleProductPhoto/{id}": {
       "patch": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1255,6 +1285,9 @@
     },
     "/api/v1/products/deleteMultipleProductPhoto/{id}/{imageId}": {
       "delete": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1293,6 +1326,9 @@
     },
     "/api/v1/products/loved/{id}": {
       "patch": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1323,6 +1359,9 @@
     },
     "/api/v1/products/unloved/{id}": {
       "patch": {
+        "tags": [
+          "Product"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1707,6 +1746,9 @@
     },
     "/api/v1/payment/cart": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1726,6 +1768,9 @@
     },
     "/api/v1/payment/checkout": {
       "patch": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1774,6 +1819,9 @@
     },
     "/api/v1/payment/paymentCallback/{invoice_id}": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1804,6 +1852,9 @@
     },
     "/api/v1/payment/buyProductConnection": {
       "patch": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1852,6 +1903,9 @@
     },
     "/api/v1/payment/paymentConnection/{user}": {
       "patch": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1882,6 +1936,9 @@
     },
     "/api/v1/payment/bookSalon": {
       "patch": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1945,6 +2002,9 @@
     },
     "/api/v1/payment/verifyPaymentSalon/{bookingId}/{amount}/{salonId}": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1991,6 +2051,9 @@
     },
     "/api/v1/payment/create-consultation-profile": {
       "post": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2039,6 +2102,9 @@
     },
     "/api/v1/payment/verifyPaymentCreateConsultation/{user}": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2069,6 +2135,9 @@
     },
     "/api/v1/payment/buy-consultant-connection": {
       "patch": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2120,6 +2189,9 @@
     },
     "/api/v1/payment/verifyPaymentConsultationConnection/{consult}/{user}": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2209,6 +2281,9 @@
     },
     "/api/v1/payment/verify-buying-consultation-ticket/{id}/{consult}": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2326,6 +2401,9 @@
     },
     "/api/v1/payment/promote-product": {
       "patch": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2418,6 +2496,9 @@
     },
     "/api/v1/payment/promote-salon": {
       "patch": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2472,6 +2553,9 @@
     },
     "/api/v1/paymentverify-promoting-salon/{salonId}/{amount}": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2510,6 +2594,9 @@
     },
     "/api/v1/payment/promote-consultation": {
       "patch": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2564,6 +2651,9 @@
     },
     "/api/v1/paymentverify-promoting-consultation/{consultationId}/{amount}": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -2602,6 +2692,9 @@
     },
     "/api/v1/payment/paypal/orders": {
       "post": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -2612,6 +2705,9 @@
     },
     "/api/v1/payment/paypal/orders/{orderID}/capture": {
       "post": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {

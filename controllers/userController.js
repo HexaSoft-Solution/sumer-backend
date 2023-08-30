@@ -129,6 +129,7 @@ exports.myProfile = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       profile: salon,
+      owner: req.user,
     });
   } else if (req.user.role === "business") {
     const businessProfile = await BusinessProfile.findOne({ user: userId });
@@ -140,6 +141,7 @@ exports.myProfile = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       profile: businessProfile,
+      owner: req.user,
     });
   }
 });

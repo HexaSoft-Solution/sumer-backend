@@ -198,10 +198,10 @@ exports.likePost = catchAsync(async (req, res, next) => {
 
   const userPost = await Community.findById(postId);
 
-  console.log(userPost.likes.length === 0);
+  console.log(userPost.likes);
 
   if (
-    userPost.likes.find((e) => e._id !== userId) ||
+    userPost.likes.find((e) => e._id.toString() !== userId.toString()) ||
     userPost.likes.length === 0
   ) {
     console.log(userPost.likes);
@@ -336,10 +336,6 @@ exports.editComment = catchAsync(async (req, res, next) => {
 
   const comment = await Comment.findById(commentId);
 
-  console.log(comment.user._id.toString())
-
-  console.log(userId)
-
   if (comment.user._id.toString() !== userId.toString()) {
     return next(
       new AppError("You are not authorized to perform this action", 401)
@@ -360,8 +356,8 @@ exports.editComment = catchAsync(async (req, res, next) => {
 
 exports.deleteComment = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Community']
-  const userId = req.user._id;
   const commentId = req.params.id;
+  const userId = req.user._id;
 
   const comment = await Comment.findById(commentId);
 
@@ -371,7 +367,9 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
     );
   }
 
-  await cloudinary.uploader.destroy(comment.cloudinaryId);
+  if (comment.cloudinaryId) {
+    await cloudinary.uploader.destroy(comment.cloudinaryId);
+  }
 
   await Comment.findByIdAndDelete(commentId);
 

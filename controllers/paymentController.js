@@ -57,6 +57,7 @@ const basicPayment = async (req, res, next, amount, description, source, id, rep
 }
 
 exports.viewCart = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const userId = req.user.id;
 
   const user = await User.findById(userId);
@@ -86,6 +87,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
 });
 
 exports.checkout = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const cart = req.user.cart;
   const userId = req.user._id;
 
@@ -160,6 +162,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
 });
 
 exports.paymentCallback = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const paymentId = req.query.id;
   const payment = await moyasar.fetchPayment(paymentId);
 
@@ -209,6 +212,7 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
 });
 
 exports.promoteProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { productId, promote, type, number, name, cvc, month, year } = req.body;
 
   const source = { type, number, name, cvc, month, year };
@@ -241,6 +245,7 @@ exports.verifyPromoteProduct = catchAsync(async (req, res, next) => {
 })
 
 exports.promoteSalon = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { salonId, promote, type, number, name, cvc, month, year } = req.body;
 
   const source = { type, number, name, cvc, month, year };
@@ -249,6 +254,7 @@ exports.promoteSalon = catchAsync(async (req, res, next) => {
 })
 
 exports.verifyPromoteSalon = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { salonId, amount } = req.params;
   const paymentId = req.query.id;
   const payment = await moyasar.fetchPayment(paymentId);
@@ -273,6 +279,7 @@ exports.verifyPromoteSalon = catchAsync(async (req, res, next) => {
 })
 
 exports.promoteConsultation = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { consultationId, promote, type, number, name, cvc, month, year } = req.body;
 
   const source = { type, number, name, cvc, month, year };
@@ -281,6 +288,7 @@ exports.promoteConsultation = catchAsync(async (req, res, next) => {
 })
 
 exports.verifyPromoteConsultation = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { consultationId, amount } = req.params;
   const paymentId = req.query.id;
   const payment = await moyasar.fetchPayment(paymentId);
@@ -305,6 +313,7 @@ exports.verifyPromoteConsultation = catchAsync(async (req, res, next) => {
 })
 
 exports.buyProductConnections = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { type, number, name, cvc, month, year } = req.body;
 
   const source = { type, number, name, cvc, month, year };
@@ -331,6 +340,7 @@ exports.buyProductConnections = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyBuyConnection = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const userId = req.params.user;
   const paymentId = req.query.id;
   const payment = await moyasar.fetchPayment(paymentId);
@@ -355,6 +365,7 @@ exports.verifyBuyConnection = catchAsync(async (req, res, next) => {
 });
 
 exports.salonBooking = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const {
     salonId,
     startTime,
@@ -444,6 +455,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyBookingSalon = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const paymentId = req.query.id;
   const bookingId = req.params.bookingId;
   const amount = req.params.amount;
@@ -470,6 +482,7 @@ exports.verifyBookingSalon = catchAsync(async (req, res, next) => {
 });
 
 exports.createConsultantProfilePayment = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { type, number, name, cvc, month, year } = req.body;
 
   const source = { type, number, name, cvc, month, year };
@@ -496,6 +509,7 @@ exports.createConsultantProfilePayment = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyCreateConsultationProfile = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const paymentId = req.query.id;
   const userId = req.params.user;
 
@@ -517,6 +531,7 @@ exports.verifyCreateConsultationProfile = catchAsync(async (req, res, next) => {
 });
 
 exports.consultationContectionsPayment = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { connections, type, number, name, cvc, month, year } = req.body;
 
   const source = { type, number, name, cvc, month, year };
@@ -544,6 +559,7 @@ exports.consultationContectionsPayment = catchAsync(async (req, res, next) => {
 
 exports.verifyBuyingConsultationsConnection = catchAsync(
   async (req, res, next) => {
+    // #swagger.tags = ['Payment']
     const paymentId = req.query.id;
     const connection = req.params.consult;
     const userId = req.params.user;
@@ -570,6 +586,7 @@ exports.verifyBuyingConsultationsConnection = catchAsync(
 );
 
 exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
+
   const { consultationId, type, number, name, cvc, month, year } =
     req.body;
 
@@ -601,6 +618,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   /*
   #swagger.parameters['user'] = {
     in: 'query',
@@ -651,11 +669,13 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
 });
 
 exports.paypal = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const response = await Paypal.createOrder();
   res.json(response);
 })
 
 exports.complete = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { orderID } = req.params;
   const response = await Paypal.capturePayment(orderID);
   res.json(response);

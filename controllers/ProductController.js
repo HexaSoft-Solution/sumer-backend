@@ -11,6 +11,7 @@ const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   let filter = {};
   if (req.params.id) filter = { model: req.params.id };
   const features = new APIFeatures(Product.find(filter), req.query)
@@ -28,6 +29,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
 });
 
 exports.getProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const product = await Product.findById(req.params.id);
   const Reviews = await Review.find({
     _id: { $in: product.Reviews },
@@ -42,6 +44,7 @@ exports.getProduct = catchAsync(async (req, res, next) => {
   });
 });
 exports.getMyProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   // Assuming user ID is available in the request (e.g., req.user.id)
   console.log(req);
   const userId = req.user.id;
@@ -55,6 +58,7 @@ exports.getMyProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.loveProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const userId = req.user.id;
   const productId = req.params.id;
 
@@ -89,6 +93,7 @@ exports.loveProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.unloveProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const userId = req.user.id;
   const productId = req.params.id;
 
@@ -122,6 +127,7 @@ exports.unloveProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.uploadPhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const productId = req.params.id;
 
   const product = await Product.findById(productId);
@@ -144,6 +150,7 @@ exports.uploadPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.uploadMultiplePhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const productId = req.params.id;
   const product = await Product.findById(productId);
   /*
@@ -212,6 +219,7 @@ exports.uploadMultiplePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteMultiplePhoto = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   try {
     const productId = req.params.id;
     const imageId = req.params.imageId;
@@ -237,6 +245,7 @@ exports.deleteMultiplePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.createProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const userId = req.user.id;
 
   if (!req.user.productCreationAvailability) {
@@ -299,6 +308,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.makeProductTrend = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const userId = req.user.id;
   const productId = req.params.id;
 
@@ -330,6 +340,7 @@ exports.makeProductTrend = catchAsync(async (req, res, next) => {
 });
 
 exports.updateProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const userId = req.user.id;
   const productId = req.params.id;
 
@@ -378,6 +389,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
 exports.searchProduct = factory.search(Product);
 
 exports.deleteProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const userId = req.user.id;
   const productIds = req.params.id;
 
@@ -399,6 +411,7 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.addToCart = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const userId = req.user.id;
   const { productId, quantity } = req.body;
 
@@ -432,6 +445,7 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 });
 
 exports.removeFromCart = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
   const { _id } = req.body;
   const userId = req.user.id;
 
