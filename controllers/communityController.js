@@ -332,9 +332,11 @@ exports.deleteCommentPhoto = catchAsync(async (req, res, next) => {
 exports.editComment = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Community']
   const commentId = req.params.id;
-  const userId = req.user.id;
+  const userId = req.user._id;
 
   const comment = await Comment.findById(commentId);
+
+  console.log(req.user)
 
   if (comment.user._id !== userId) {
     return next(
