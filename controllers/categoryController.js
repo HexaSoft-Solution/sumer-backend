@@ -5,7 +5,28 @@ const factory = require('./handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-exports.getAllCategories = factory.getAll(Category);
+exports.getAllCategories = 
+() => {
+    /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
+    /*  #swagger.parameters['limit'] = {
+              in: 'query',
+              description: 'Page size: ex: ?limit=10',
+      } */
+    /*  #swagger.parameters['fields'] = {
+              in: 'query',
+              description: 'example: ?fields=name,description' ,
+      } */
+    /*  #swagger.parameters['page'] = {
+              in: 'query',
+              description: 'indexing page: ex: ?page=2',
+      } */
+    /*  #swagger.parameters['sort'] = {
+              in: 'query',
+              description: 'example: ?sort=name,-createdAt',
+      } */
+  
+    return factory.getAll(Category);
+  }; 
 
 exports.getCategory = catchAsync(async (req, res, next) => {
     const category = await Category.findById(req.params.id);

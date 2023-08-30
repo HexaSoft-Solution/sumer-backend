@@ -227,7 +227,27 @@ exports.deleteAddress = catchAsync(async (req, res, next) => {
     })
 })
 
-exports.getUsers = factory.getAll(User);
+exports.getUsers = () => {
+    /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
+    /*  #swagger.parameters['limit'] = {
+              in: 'query',
+              description: 'Page size: ex: ?limit=10',
+      } */
+    /*  #swagger.parameters['fields'] = {
+              in: 'query',
+              description: 'example: ?fields=name,description' ,
+      } */
+    /*  #swagger.parameters['page'] = {
+              in: 'query',
+              description: 'indexing page: ex: ?page=2',
+      } */
+    /*  #swagger.parameters['sort'] = {
+              in: 'query',
+              description: 'example: ?sort=name,-createdAt',
+      } */
+  
+    return factory.getAll(User);
+  };
 exports.getUser = catchAsync(async (req, res, next) => {
     let user = await User.findById(req.params.id);
 

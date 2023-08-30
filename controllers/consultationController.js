@@ -12,7 +12,27 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const cloudinary = require("../utils/cloudinary");
 
-exports.getAllConsultations = factory.getAll(Consultation);
+exports.getAllConsultations = () => {
+  /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
+  /*  #swagger.parameters['limit'] = {
+            in: 'query',
+            description: 'Page size: ex: ?limit=10',
+    } */
+  /*  #swagger.parameters['fields'] = {
+            in: 'query',
+            description: 'example: ?fields=name,description' ,
+    } */
+  /*  #swagger.parameters['page'] = {
+            in: 'query',
+            description: 'indexing page: ex: ?page=2',
+    } */
+  /*  #swagger.parameters['sort'] = {
+            in: 'query',
+            description: 'example: ?sort=name,-createdAt',
+    } */
+
+  return factory.getAll(Consultation);
+};
 exports.searchConsultations = factory.search(Consultation);
 exports.getConsultantation = factory.getOne(Consultation);
 exports.deleteConsultation = factory.deleteOne(Consultation);
@@ -517,7 +537,7 @@ exports.editCertificate = catchAsync(async (req, res, next) => {
 
   const updatedCertificate = await Certificate.findOneAndUpdate(
     {
-      _id: certificateId
+      _id: certificateId,
     },
     {
       title,
@@ -527,7 +547,7 @@ exports.editCertificate = catchAsync(async (req, res, next) => {
       certificateURL,
     },
     {
-      new: true
+      new: true,
     }
   );
 
@@ -661,7 +681,6 @@ exports.addCourse = catchAsync(async (req, res, next) => {
     return next(new AppError("You don't have a consultation profile", 400));
   }
 
-
   const course = await Course.create({
     courseName,
     issueDate,
@@ -709,8 +728,6 @@ exports.editCourse = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
 exports.deleteCourse = catchAsync(async (req, res, next) => {
   const courseId = req.params.id;
   const userId = req.user.id;
@@ -730,8 +747,8 @@ exports.deleteCourse = catchAsync(async (req, res, next) => {
     $pull: { courses: courseId },
   });
 
-  await Course.findOneAndDelete({ 
-    _id: courseId
+  await Course.findOneAndDelete({
+    _id: courseId,
   });
 
   res.status(200).json({
