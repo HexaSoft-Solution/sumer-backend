@@ -76,13 +76,25 @@ exports.addPost = catchAsync(async (req, res, next) => {
         new AppError("Something went wrong with the image upload", 400)
       );
     }
+
+    const userPost = await Community.create({
+      post,
+      user: userId,
+      postPhoto: result?.secure_url,
+      cloudinaryId: result?.public_id,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        userPost,
+      },
+    });
   }
 
   const userPost = await Community.create({
     post,
     user: userId,
-    postPhoto: result?.secure_url,
-    cloudinaryId: result?.public_id,
   });
 
   res.status(200).json({
@@ -200,12 +212,22 @@ exports.editPost = catchAsync(async (req, res, next) => {
           new AppError("Something went wrong with the image upload", 400)
       );
     }
+    const updatedUserPost = await Community.findByIdAndUpdate(postId, {
+      post,
+      postPhoto: result?.secure_url,
+      cloudinaryId: result?.public_id,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        updatedUserPost,
+      },
+    });
   }
 
   const updatedUserPost = await Community.findByIdAndUpdate(postId, {
     post,
-    postPhoto: result?.secure_url,
-    cloudinaryId: result?.public_id,
   });
 
   res.status(200).json({
