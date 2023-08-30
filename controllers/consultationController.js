@@ -13,28 +13,28 @@ const AppError = require("../utils/appError");
 const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
 
-exports.getAllConsultations = () => {
+exports.getAllConsultations = async (req, res, next) => {
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
   /*  #swagger.parameters['limit'] = {
-            in: 'query',
-            description: 'Page size: ex: ?limit=10',
+              in: 'query',
+              description: 'Page size: ex: ?limit=10',
 type: 'number'
-    } */
+      } */
   /*  #swagger.parameters['fields'] = {
-            in: 'query',
-            description: 'example: ?fields=name,description' ,
-    } */
+              in: 'query',
+              description: 'example: ?fields=name,description' ,
+      } */
   /*  #swagger.parameters['page'] = {
-            in: 'query',
-            description: 'indexing page: ex: ?page=2',
+              in: 'query',
+              description: 'indexing page: ex: ?page=2',
 type: 'number'
-    } */
+      } */
   /*  #swagger.parameters['sort'] = {
-            in: 'query',
-            description: 'example: ?sort=name,-createdAt',
-    } */
+              in: 'query',
+              description: 'example: ?sort=name,-createdAt',
+      } */
 
-  return factory.getAll(Consultation);
+  return factory.getAllMagdy(req, res, next, Consultation);
 };
 exports.searchConsultations = factory.search(Consultation);
 exports.getConsultantation = factory.getOne(Consultation);
@@ -56,44 +56,45 @@ exports.getMyProfile = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.getMyConsultation = catchAsync(async (req, res, next) => {
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
-    /*  #swagger.parameters['limit'] = {
+  /*  #swagger.parameters['limit'] = {
               in: 'query',
               description: 'Page size: ex: ?limit=10',
 type: 'number'
       } */
-    /*  #swagger.parameters['fields'] = {
+  /*  #swagger.parameters['fields'] = {
               in: 'query',
               description: 'example: ?fields=name,description' ,
       } */
-    /*  #swagger.parameters['page'] = {
+  /*  #swagger.parameters['page'] = {
               in: 'query',
               description: 'indexing page: ex: ?page=2',
 type: 'number'
       } */
-    /*  #swagger.parameters['sort'] = {
+  /*  #swagger.parameters['sort'] = {
               in: 'query',
               description: 'example: ?sort=name,-createdAt',
       } */
 
+  const userId = req.user.id;
 
-  const userId = req.user.id
-
-  const consultants = await new APIFeatures(Consultant.find({ consultant: consultant }), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .Pagination();
+  const consultants = await new APIFeatures(
+    Consultant.find({ consultant: consultant }),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .Pagination();
   const doc = await consultants.query;
 
   res.status(200).json({
     status: "success",
     results: doc.length,
-    consultants: doc
-  })
-})
+    consultants: doc,
+  });
+});
 
 exports.endConsultant = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
