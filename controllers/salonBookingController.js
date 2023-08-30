@@ -7,6 +7,7 @@ exports.getAllSalonBookings = () => {
     /*  #swagger.parameters['limit'] = {
               in: 'query',
               description: 'Page size: ex: ?limit=10',
+type: 'number'
       } */
     /*  #swagger.parameters['fields'] = {
               in: 'query',
@@ -15,6 +16,7 @@ exports.getAllSalonBookings = () => {
     /*  #swagger.parameters['page'] = {
               in: 'query',
               description: 'indexing page: ex: ?page=2',
+type: 'number'
       } */
     /*  #swagger.parameters['sort'] = {
               in: 'query',

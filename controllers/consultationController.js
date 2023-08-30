@@ -18,6 +18,7 @@ exports.getAllConsultations = () => {
   /*  #swagger.parameters['limit'] = {
             in: 'query',
             description: 'Page size: ex: ?limit=10',
+type: 'number'
     } */
   /*  #swagger.parameters['fields'] = {
             in: 'query',
@@ -26,6 +27,7 @@ exports.getAllConsultations = () => {
   /*  #swagger.parameters['page'] = {
             in: 'query',
             description: 'indexing page: ex: ?page=2',
+type: 'number'
     } */
   /*  #swagger.parameters['sort'] = {
             in: 'query',
@@ -60,6 +62,7 @@ exports.getMyConsultation = catchAsync(async (req, res, next) => {
     /*  #swagger.parameters['limit'] = {
               in: 'query',
               description: 'Page size: ex: ?limit=10',
+type: 'number'
       } */
     /*  #swagger.parameters['fields'] = {
               in: 'query',
@@ -68,13 +71,14 @@ exports.getMyConsultation = catchAsync(async (req, res, next) => {
     /*  #swagger.parameters['page'] = {
               in: 'query',
               description: 'indexing page: ex: ?page=2',
+type: 'number'
       } */
     /*  #swagger.parameters['sort'] = {
               in: 'query',
               description: 'example: ?sort=name,-createdAt',
       } */
 
-      
+
   const userId = req.user.id
 
   const consultants = await new APIFeatures(Consultant.find({ consultant: consultant }), req.query)

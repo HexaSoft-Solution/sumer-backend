@@ -577,7 +577,7 @@
             "in": "query",
             "description": "Page size: ex: ?limit=10",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -593,7 +593,7 @@
             "in": "query",
             "description": "indexing page: ex: ?page=2",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -743,7 +743,7 @@
             "in": "query",
             "description": "Page size: ex: ?limit=10",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -759,7 +759,7 @@
             "in": "query",
             "description": "indexing page: ex: ?page=2",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -1489,7 +1489,7 @@
             "in": "query",
             "description": "Page size: ex: ?limit=10",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -1505,7 +1505,7 @@
             "in": "query",
             "description": "indexing page: ex: ?page=2",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -2792,7 +2792,7 @@
             "in": "query",
             "description": "Page size: ex: ?limit=10",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -2808,7 +2808,7 @@
             "in": "query",
             "description": "indexing page: ex: ?page=2",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -2836,7 +2836,7 @@
             "in": "query",
             "description": "Page size: ex: ?limit=10",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -2852,7 +2852,7 @@
             "in": "query",
             "description": "indexing page: ex: ?page=2",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -2953,7 +2953,7 @@
             "in": "query",
             "description": "Page size: ex: ?limit=10",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -2969,7 +2969,7 @@
             "in": "query",
             "description": "indexing page: ex: ?page=2",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -3938,7 +3938,7 @@
             "in": "query",
             "description": "Page size: ex: ?limit=10",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
@@ -3954,7 +3954,7 @@
             "in": "query",
             "description": "indexing page: ex: ?page=2",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
