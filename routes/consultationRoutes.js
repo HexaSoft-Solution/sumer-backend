@@ -32,7 +32,7 @@ router
     .route('/my-consultation')
     .get(
         authController.protect,
-        authController.restrictTo('admin', 'consultant'),
+        authController.restrictTo('consultant'),
         consultationController.getMyConsultation
     )
 
