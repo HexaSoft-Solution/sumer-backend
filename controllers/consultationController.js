@@ -77,10 +77,9 @@ type: 'number'
               description: 'example: ?sort=name,-createdAt',
       } */
 
-  const userId = req.user.id;
-
+  const user = req.user;
   const consultants = await new APIFeatures(
-    Consultant.find({ consultant: consultant }),
+    Consultant.find({ consultant: user.consultant }),
     req.query
   )
     .filter()
