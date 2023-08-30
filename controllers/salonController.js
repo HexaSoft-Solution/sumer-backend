@@ -198,14 +198,16 @@ exports.updateSalon = catchAsync(async (req, res, next) => {
         desc,
         address,
         phone,
+        pricePerHour
     } = req.body;
 
-    const updatedSalon = await Salon.findByIdAndUpdate(salonId, {
+    const updatedSalon = await Salon.findOneAndUpdate({ _id: salonId }, {
         name,
         service,
         desc,
         address,
         phone,
+        pricePerHour
     });
 
     res.status(200).json({

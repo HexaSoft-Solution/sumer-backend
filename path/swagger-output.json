@@ -2501,6 +2501,9 @@
                   },
                   "phone": {
                     "example": "any"
+                  },
+                  "pricePerHour": {
+                    "example": "any"
                   }
                 }
               }
