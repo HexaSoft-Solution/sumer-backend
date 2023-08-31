@@ -1,14 +1,15 @@
 const Salon = require('../models/salonModel');
 const SalonReview = require('../models/salonReviewModel');
 const User = require('../models/userModel');
+const Service = require("../models/serviceModel");
+const SalonBooking = require('../models/salonBookingModel');
 
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
-const Service = require("../models/serviceModel");
-const Consultation = require("../models/consultationModel");
+
 
 exports.getAllSalons = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
@@ -413,7 +414,7 @@ exports.deleteservicePhoto = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
     const serviceId = req.params.id;
 
-    const salonId = req.user.salonCreatedsalonCreated;
+    const salonId = req.user.salonCreated;
 
     if (!salonId) {
         return next(new AppError("You don't have a consultation profile", 400));
@@ -441,7 +442,7 @@ exports.deleteService = catchAsync(async (req, res, next) => {
         const serviceId = req.params.id;
         const userId = req.user.id;
 
-        const salonId = req.user.consultation;
+        const salonId = req.user.salonCreated;
 
         if (!salonId) {
             return next(new AppError("You don't have a consultation profile", 400));
@@ -493,3 +494,10 @@ exports.deleteSalon = catchAsync(async (req, res, next) => {
         message: "Salon deleted successfully",
     })
 });
+
+exports.getMyBookings = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    const salonId = req.user.salonCreated
+
+    const bookings = await SalonBooking.findOne({ salon: salonId })
+})

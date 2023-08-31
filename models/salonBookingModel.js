@@ -32,7 +32,10 @@ const salonBookingModel = new mongoose.Schema({
         ref: 'Salon',
         required: true
     },
-
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+    },
 })
 
 function parseDate(date) {
