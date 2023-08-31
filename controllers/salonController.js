@@ -259,7 +259,11 @@ exports.addServices = catchAsync(async (req, res, next) => {
               }
           }
       */
-    const salonId = req.params.salonId;
+    const salonId = req.user.salonCreated;
+
+    if (!salonId) {
+        return next(new AppError("You don't have a salon profile", 400));
+    }
 
     const { name, description } = req.body;
     const { path } = req.file;

@@ -31,7 +31,7 @@ router
     )
 
 router
-    .route('/service/:salonId')
+    .route('/service')
     .post(
         authController.protect,
         authController.restrictTo('admin', 'salon service'),

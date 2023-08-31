@@ -3019,21 +3019,13 @@
         }
       }
     },
-    "/api/v1/salons/service/{salonId}": {
+    "/api/v1/salons/service": {
       "post": {
         "tags": [
           "Salon"
         ],
         "description": "",
         "parameters": [
-          {
-            "name": "salonId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "authorization",
             "in": "header",
