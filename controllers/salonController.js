@@ -267,26 +267,33 @@ exports.addServices = catchAsync(async (req, res, next) => {
     }
 
     const { name, description } = req.body;
-    const { path } = req.file;
+    let result
+    let service
+    if (req?.file?.path) {
+        const { path } = req.file;
 
-    const result = await cloudinary.uploader.upload(path, {
-        public_id: `/${name}-${Math.random() * 10000000000}/${name}Photo`,
-        folder: "services",
-        resource_type: "image",
-    });
+        result = await cloudinary.uploader.upload(path, {
+            public_id: `/${name}-${Math.random() * 10000000000}/${name}Photo`,
+            folder: "services",
+            resource_type: "image",
+        });
 
-    if (!result) {
-        return next(
-            new AppError("Something went wrong with the image upload", 400)
-        );
+        if (!result) {
+            return next(
+                new AppError("Something went wrong with the image upload", 400)
+            );
+        }
+
+        service = await Service.create({
+            name,
+            description,
+        });
+    } else {
+        service = await Service.create({
+            name,
+            description,
+        });
     }
-
-    const service = await Service.create({
-        name,
-        description,
-        servicePhoto: result.secure_url,
-        cloudinaryId: result.public_id,
-    });
 
     await Salon.findByIdAndUpdate(salonId, {
         $push: { service: service._id },
