@@ -244,7 +244,15 @@ exports.deletePost = catchAsync(async (req, res, next) => {
 
   const userPost = await Community.findById(postId);
 
-  await cloudinary.uploader.destroy(userPost.cloudinaryId);
+  if (userPost.user._id.toString() !== req.user._id.toString()) {
+    return next(
+      new AppError("You are not authorized to perform this action", 401)
+    );
+  }
+
+  if (userPost.cloudinaryId) {
+    await cloudinary.uploader.destroy(userPost.cloudinaryId);
+  }
 
   await Community.findByIdAndDelete(postId);
 
