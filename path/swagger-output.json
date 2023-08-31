@@ -3019,6 +3019,61 @@
         }
       }
     },
+    "/api/v1/salons/service/{salonId}": {
+      "post": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "salonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/salons/search": {
       "get": {
         "description": "",
@@ -5085,9 +5140,9 @@
         "title": "Address",
         "required": [
           "street",
-          "city",
-          "houseNo",
+          "area",
           "houseType",
+          "phone",
           "latitude",
           "longitude"
         ],
@@ -5095,7 +5150,7 @@
           "street": {
             "type": "string"
           },
-          "city": {
+          "area": {
             "type": "string"
           },
           "houseNo": {
@@ -5108,6 +5163,12 @@
               "House",
               "Office"
             ]
+          },
+          "AdditionalDirection": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
           },
           "latitude": {
             "type": "number"
@@ -5725,21 +5786,7 @@
           "service": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "ServicePhoto": {
-                  "type": "string"
-                },
-                "cloudinaryId": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "name"
-              ]
+              "type": "string"
             }
           },
           "about": {

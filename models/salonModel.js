@@ -6,12 +6,8 @@ const salonSchema = new mongoose.Schema({
         required: [true, 'A salon must have a name'],
     },
     service: [{
-        name: {
-            type: String,
-            required: [true, 'A salon must have a service name'],
-        },
-        ServicePhoto: String,
-        cloudinaryId: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Service'
     }],
     about: {
         type: String,

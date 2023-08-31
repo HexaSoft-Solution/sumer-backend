@@ -31,6 +31,14 @@ router
     )
 
 router
+    .route('/service/:salonId')
+    .post(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        salonController.addServices
+    )
+
+router
     .route('/search')
     .get(salonController.searchSalon);
 
@@ -42,7 +50,6 @@ router
         authController.restrictTo('admin', 'salon service'),
         salonController.uploadPhoto
     )
-
 
 router
     .route('/uploadServicePhoto/:id')

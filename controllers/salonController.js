@@ -6,6 +6,9 @@ const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
+const AppError = require("../utils/appError");
+const Service = require("../models/serviceModel");
+const Consultation = require("../models/consultationModel");
 
 exports.getAllSalons = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
@@ -226,6 +229,67 @@ exports.updateSalon = catchAsync(async (req, res, next) => {
         status: "success",
         message: "Salon updated successfully",
         updatedSalon
+    });
+});
+
+exports.addServices = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    /*	#swagger.requestBody = {
+              required: true,
+              "@content": {
+                  "multipart/form-data": {
+                      schema: {
+                          type: "object",
+                          properties: {
+                              image: {
+                                  type: "string",
+                                  format: "binary"
+                              },
+                              name: {
+                                  type: "string",
+                              },
+                              description: {
+                                  type: "string",
+                              }
+
+                          },
+                          required: ["image"]
+                      }
+                  }
+              }
+          }
+      */
+    const salonId = req.params.salonId;
+
+    const { name, description } = req.body;
+    const { path } = req.file;
+
+    const result = await cloudinary.uploader.upload(path, {
+        public_id: `/${name}-${Math.random() * 10000000000}/${name}Photo`,
+        folder: "services",
+        resource_type: "image",
+    });
+
+    if (!result) {
+        return next(
+            new AppError("Something went wrong with the image upload", 400)
+        );
+    }
+
+    const service = await Service.create({
+        name,
+        description,
+        servicePhoto: result.secure_url,
+        cloudinaryId: result.public_id,
+    });
+
+    await Salon.findByIdAndUpdate(salonId, {
+        $push: { service: service._id },
+    });
+
+    res.status(200).json({
+        status: "success",
+        service,
     });
 });
 
