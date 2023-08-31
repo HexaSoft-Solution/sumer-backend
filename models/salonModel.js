@@ -13,7 +13,7 @@ const salonSchema = new mongoose.Schema({
         ServicePhoto: String,
         cloudinaryId: String,
     }],
-    desc: {
+    about: {
         type: String,
         default: null,
     },

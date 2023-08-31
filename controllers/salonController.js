@@ -162,7 +162,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
     const {
         name,
         service,
-        desc,
+        about,
         pricePerHour,
         address,
         phone
@@ -171,7 +171,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
     const salon = await Salon.create({
         name,
         service: [{name: service}],
-        desc,
+        about,
         pricePerHour,
         address,
         phone,
@@ -203,7 +203,7 @@ exports.updateSalon = catchAsync(async (req, res, next) => {
     const {
         name,
         service,
-        desc,
+        about,
         address,
         phone,
         pricePerHour
@@ -212,7 +212,7 @@ exports.updateSalon = catchAsync(async (req, res, next) => {
     const updatedSalon = await Salon.findOneAndUpdate({ _id: salonId }, {
         name,
         service,
-        desc,
+        about,
         address,
         phone,
         pricePerHour
