@@ -2889,7 +2889,7 @@
                   "service": {
                     "example": "any"
                   },
-                  "desc": {
+                  "about": {
                     "example": "any"
                   },
                   "pricePerHour": {
@@ -3000,7 +3000,7 @@
                   "service": {
                     "example": "any"
                   },
-                  "desc": {
+                  "about": {
                     "example": "any"
                   },
                   "address": {
@@ -5742,7 +5742,7 @@
               ]
             }
           },
-          "desc": {
+          "about": {
             "type": "string"
           },
           "address": {

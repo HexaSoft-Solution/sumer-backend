@@ -193,7 +193,11 @@ exports.updateSalon = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
     const salonId = req.params.id;
 
-    if (req.user.salonCreated !== salonId) {
+    console.log(req.user.salonCreated.toString())
+    console.log(req.user)
+    console.log(salonId)
+
+    if (req.user.salonCreated.toString() !== salonId) {
         return res.status(400).json({
             status: 'fail',
             message: "You are not the owner of this salon"
