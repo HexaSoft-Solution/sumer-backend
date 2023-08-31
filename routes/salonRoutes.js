@@ -102,4 +102,11 @@ router
         salonController.unloveSalon
     )
 
+router
+    .route('/my-bookings')
+    .get(
+        authController.protect,
+        salonController.getMyBookings
+    )
+
 module.exports = router;

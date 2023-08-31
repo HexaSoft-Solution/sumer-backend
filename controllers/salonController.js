@@ -497,7 +497,41 @@ exports.deleteSalon = catchAsync(async (req, res, next) => {
 
 exports.getMyBookings = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
+    /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
+    /*  #swagger.parameters['limit'] = {
+                in: 'query',
+                description: 'Page size: ex: ?limit=10',
+  type: 'number'
+        } */
+    /*  #swagger.parameters['fields'] = {
+                in: 'query',
+                description: 'example: ?fields=name,description' ,
+        } */
+    /*  #swagger.parameters['page'] = {
+                in: 'query',
+                description: 'indexing page: ex: ?page=2',
+  type: 'number'
+        } */
+    /*  #swagger.parameters['sort'] = {
+                in: 'query',
+                description: 'example: ?sort=name,-createdAt',
+        } */
     const salonId = req.user.salonCreated
 
-    const bookings = await SalonBooking.findOne({ salon: salonId })
+    if (!salonId) {
+        return next(new AppError("You don't have a consultation profile", 400));
+    }
+
+    const doc = await new APIFeatures(SalonBooking.findOne({ salon: salonId }), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .Pagination();
+    const bookings = await doc.query;
+
+    res.status(200).json({
+        status: "success",
+        results: bookings.length,
+        bookings
+    });
 })
