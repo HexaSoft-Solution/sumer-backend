@@ -371,7 +371,7 @@ exports.addServicesPhoto = catchAsync(async (req, res, next) => {
 
         const salon = await Salon.findById(salonId);
 
-        if (!consultation.service.find((e) => e._id.toString() === serviceId)) {
+        if (!salon.service.find((e) => e._id.toString() === serviceId)) {
             return next(new AppError("You don't have this service", 400));
         }
 
@@ -400,6 +400,72 @@ exports.addServicesPhoto = catchAsync(async (req, res, next) => {
         res.status(200).json({
             status: "success",
             updatedService,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: "fail",
+            message: error,
+        });
+    }
+});
+
+exports.deleteservicePhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    const serviceId = req.params.id;
+
+    const salonId = req.user.salonCreatedsalonCreated;
+
+    if (!salonId) {
+        return next(new AppError("You don't have a consultation profile", 400));
+    }
+    const salon = await Salon.findById(salonId);
+
+    if (!salon.service.find((e) => e._id.toString() === serviceId)) {
+        return next(new AppError("You don't have this service", 400));
+    }
+
+    const updateService = await Service.findByIdAndUpdate(serviceId, {
+        servicePhoto: null,
+        cloudinaryId: null,
+    });
+
+    res.status(200).json({
+        status: "success",
+        updateService,
+    });
+});
+
+exports.deleteService = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    try {
+        const serviceId = req.params.id;
+        const userId = req.user.id;
+
+        const salonId = req.user.consultation;
+
+        if (!salonId) {
+            return next(new AppError("You don't have a consultation profile", 400));
+        }
+        const salon = await Salon.findById(salonId);
+
+        const service = salon.service.find((e) => e._id.equals(serviceId));
+
+        if (!service) {
+            return next(new AppError("You don't have this service", 400));
+        }
+
+        await Service.findOneAndDelete(
+            {
+                _id: serviceId,
+            },
+            {
+                new: true,
+            }
+        );
+
+        res.status(200).json({
+            status: "success",
+            message: "Service deleted",
         });
     } catch (error) {
         res.status(500).json({

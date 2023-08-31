@@ -39,13 +39,31 @@ router
         salonController.addServices
     )
 
-
 router
     .route('/service/:id')
     .patch(
         authController.protect,
         authController.restrictTo('admin', 'salon service'),
         salonController.editService
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        salonController.deleteService
+    )
+
+router
+    .route('/service-photo')
+    .patch(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        upload.single('image'),
+        salonController.addServicesPhoto
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        salonController.deleteservicePhoto
     )
 
 router
