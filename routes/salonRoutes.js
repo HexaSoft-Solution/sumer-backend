@@ -35,7 +35,17 @@ router
     .post(
         authController.protect,
         authController.restrictTo('admin', 'salon service'),
+        upload.single('image'),
         salonController.addServices
+    )
+
+
+router
+    .route('/service/:id')
+    .patch(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        salonController.editService
     )
 
 router

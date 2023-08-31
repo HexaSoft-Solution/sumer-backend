@@ -73,7 +73,7 @@ const salonSchema = new mongoose.Schema({
 });
 
 salonSchema.pre(/^find/, function (next) {
-    this.populate('booking');
+    this.populate('booking').populate('service');
     next();
 });
 

@@ -297,6 +297,118 @@ exports.addServices = catchAsync(async (req, res, next) => {
     });
 });
 
+exports.editService = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    const serviceId = req.params.id;
+
+    const salonId = req.user.salonCreated;
+
+    if (!salonId) {
+        return next(new AppError("You don't have a consultation profile", 400));
+    }
+
+    const salon = await Salon.findById(salonId);
+
+    if (!salon.service.find((e) => e._id.toString() === serviceId)) {
+        return next(new AppError("You don't have this service", 400));
+    }
+
+    const { name, description } = req.body;
+
+    const service = await Service.findById(serviceId);
+
+    if (!service) {
+        return next(new AppError("You don't have this service", 400));
+    }
+
+    const updatedService = await Service.findOneAndUpdate(
+        {
+            _id: serviceId,
+        },
+        {
+            name,
+            description,
+        },
+        {
+            new: true, // Return the updated object
+        }
+    );
+
+    res.status(200).json({
+        status: "success",
+        updatedService,
+    });
+});
+
+exports.addServicesPhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    /*	#swagger.requestBody = {
+              required: true,
+              "@content": {
+                  "multipart/form-data": {
+                      schema: {
+                          type: "object",
+                          properties: {
+                              image: {
+                                  type: "string",
+                                  format: "binary"
+                              }
+                          },
+                          required: ["image"]
+                      }
+                  }
+              }
+          }
+      */
+    try {
+        const serviceId = req.params.id;
+
+        const salonId = req.user.salonCreated;
+
+        if (!salonId) {
+            return next(new AppError("You don't have a consultation profile", 400));
+        }
+
+        const salon = await Salon.findById(salonId);
+
+        if (!consultation.service.find((e) => e._id.toString() === serviceId)) {
+            return next(new AppError("You don't have this service", 400));
+        }
+
+        const service = await Service.findById(serviceId);
+        const { path } = req.file;
+
+        const result = await cloudinary.uploader.upload(path, {
+            public_id: `/${serviceId}/${service.name}Photo`,
+            folder: "services",
+            resource_type: "image",
+        });
+
+        const updatedService = await Service.findOneAndUpdate(
+            {
+                _id: serviceId,
+            },
+            {
+                servicePhoto: result.secure_url,
+                cloudinaryId: result.public_id,
+            },
+            {
+                new: true, // Return the updated object
+            }
+        );
+
+        res.status(200).json({
+            status: "success",
+            updatedService,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: "fail",
+            message: error,
+        });
+    }
+});
+
 exports.searchSalon = factory.search(Salon);
 
 exports.deleteSalon = catchAsync(async (req, res, next) => {
