@@ -78,10 +78,6 @@ reviewSalonSchema.post('save', function () {
     this.constructor.calcAverageRatings(this.salon);
 });
 
-
-
-
-
 const SalonReview = mongoose.model('Salon-Review', reviewSalonSchema);
 
 module.exports = SalonReview;
