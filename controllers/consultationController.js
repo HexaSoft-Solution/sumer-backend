@@ -38,7 +38,11 @@ type: 'number'
   return factory.getAllMagdy(req, res, next, Consultation);
 };
 exports.searchConsultations = factory.search(Consultation);
-exports.getConsultantation = factory.getOne(Consultation);
+exports.getConsultantation =  async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
+
+  return factory.getOne(req, res, next, Consultation);
+};
 exports.deleteConsultation = factory.deleteOne(Consultation);
 exports.deleteMessage = factory.deleteOne(Message);
 
@@ -151,6 +155,8 @@ exports.createConsultationProfile = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user._id, {
     consultation: consultationProfile.id,
   });
+
+  
 
   res.status(201).json({
     status: "success",

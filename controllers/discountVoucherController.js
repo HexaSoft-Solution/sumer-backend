@@ -30,7 +30,11 @@ exports.getAllVouchers = async (req, res, next) => {
 
   return factory.getAllMagdy(req, res, next, Voucher);
 };
-exports.getVoucher = factory.getOne(Voucher);
+exports.getVoucher = async (req, res, next) => {
+  // #swagger.tags = ['Vouchers & Discounts']
+
+  return factory.getOne(req, res, next,Voucher);
+}; 
 
 exports.createVoucher = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Vouchers & Discounts']

@@ -45,9 +45,8 @@ exports.createOne = (Model) =>
     });
   });
 
-exports.getOne = (Model, popOptions) =>
-  catchAsync(async (req, res, next) => {
-    let query = Model.findById(req.params.id);
+exports.getOne = async(req, res, next, Model, popOptions) => {
+  let query = Model.findById(req.params.id);
     if (popOptions) query = query.populate(popOptions);
     const doc = await query;
 
@@ -61,7 +60,7 @@ exports.getOne = (Model, popOptions) =>
         doc,
       },
     });
-  });
+};
 
 exports.search = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -89,9 +88,8 @@ exports.search = (Model) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-
-      let filter = {};
-      if (req.params.id) filter = { model: req.params.id };
+    let filter = {};
+    if (req.params.id) filter = { model: req.params.id };
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
@@ -103,30 +101,32 @@ exports.getAll = (Model) =>
     // SEND RESPONSE
     res.status(200).json({
       status: "success",
-      results: doc.length,
+      results: Model?.length || 0,
       data: {
         doc,
       },
     });
   });
 
-exports.getAllMagdy = async (req ,res ,next, Model) => {
-        let filter = {};
-        if (req.params.id) filter = { model: req.params.id };
+exports.getAllMagdy = async (req, res, next, Model) => {
+  let filter = {};
+  if (req.params.id) filter = { model: req.params.id };
 
-        const features = new APIFeatures(Model.find(filter), req.query)
-            .filter()
-            .sort()
-            .limitFields()
-            .Pagination();
-        const doc = await features.query;
+  const features = new APIFeatures(Model.find(filter), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .Pagination();
 
-        // SEND RESPONSE
-        res.status(200).json({
-            status: "success",
-            results: doc.length,
-            data: {
-                doc,
-            },
-        });
-    };
+  const doc = await features.query;
+
+  // SEND RESPONSE
+  res.status(200).json({
+    status: "success",
+    filteredResults: doc?.length || 0,
+    results: Model?.length || 0,
+    data: {
+      doc,
+    },
+  });
+};

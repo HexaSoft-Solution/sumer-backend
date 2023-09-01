@@ -1544,6 +1544,9 @@
     },
     "/api/v1/reviews/{id}": {
       "get": {
+        "tags": [
+          "Products Comments & Ratings"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1710,6 +1713,9 @@
     },
     "/api/v1/discountVouchers/{id}": {
       "get": {
+        "tags": [
+          "Vouchers & Discounts"
+        ],
         "description": "",
         "parameters": [
           {
@@ -3479,6 +3485,9 @@
     },
     "/api/v1/salonReviews/{id}": {
       "get": {
+        "tags": [
+          "Salon Comments"
+        ],
         "description": "",
         "parameters": [
           {
@@ -3782,6 +3791,9 @@
     },
     "/api/v1/consultation/{id}": {
       "get": {
+        "tags": [
+          "Consultations"
+        ],
         "description": "",
         "parameters": [
           {
@@ -5225,6 +5237,9 @@
     },
     "/api/v1/community/posts/{id}": {
       "get": {
+        "tags": [
+          "Community"
+        ],
         "description": "",
         "parameters": [
           {
