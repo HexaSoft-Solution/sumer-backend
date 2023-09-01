@@ -45,7 +45,11 @@ exports.getAllReviews = catchAsync(async (req, res, next) =>{
     });
 });
 
-exports.getReview = factory.getOne(Review);
+exports.getReview = async (req, res, next) => {
+    // #swagger.tags = ['Products Comments  & Ratings']
+  
+    return factory.getOne(req, res, next,Review);
+  }; 
 
 exports.createReview = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Products Comments  & Ratings']

@@ -30,7 +30,12 @@ type: 'number'
   
     return factory.getAllMagdy(req, res, next, Community);
   }; 
-exports.getPost = factory.getOne(Community);
+exports.getPost = 
+async (req, res, next) => {
+  // #swagger.tags = ['Community']
+
+  return factory.getOne(req, res, next,Community);
+};
 
 exports.addPost = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Community']
