@@ -208,7 +208,7 @@ exports.uploadPersonalPhoto = catchAsync(async (req, res, next) => {
 exports.addAddress = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Authentication']
   const userId = req.user.id;
-  const { street, city, houseNo, latitude, longitude, houseType } = req.body;
+  const { street, city, houseNo, latitude, longitude, houseType, phone, area } = req.body;
   const address = await Address.create({
     street,
     city,
@@ -216,6 +216,8 @@ exports.addAddress = catchAsync(async (req, res, next) => {
     latitude,
     longitude,
     houseType,
+    phone,
+    area,
   });
 
   await User.findByIdAndUpdate(
