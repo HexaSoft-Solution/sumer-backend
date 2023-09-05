@@ -10,11 +10,9 @@ const userSchema = new mongoose.Schema(
     },
     firstName: {
       type: String,
-      required: [true, "firstName-required"],
     },
     lastName: {
       type: String,
-      required: [true, "lastName-required"],
     },
     stockName: {
       type: String,
