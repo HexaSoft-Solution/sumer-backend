@@ -21,6 +21,27 @@ router
     .get(salonController.searchSalon);
 
 router
+    .route('/address/:id')
+    .post(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        salonController.addAddress
+    )
+    .patch(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        salonController.updateAddress
+    )
+
+router
+    .route('/address/:id/:addressId')
+    .delete(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        salonController.deleteAddress
+    )
+
+router
     .route('/:id')
     .get(salonController.getSalon)
     .patch(

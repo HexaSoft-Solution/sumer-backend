@@ -2993,6 +2993,172 @@
         }
       }
     },
+    "/api/v1/salons/address/{id}": {
+      "post": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "This Id For salon",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "street": {
+                    "example": "any"
+                  },
+                  "AdditionalDirection": {
+                    "example": "any"
+                  },
+                  "houseNo": {
+                    "example": "any"
+                  },
+                  "latitude": {
+                    "example": "any"
+                  },
+                  "longitude": {
+                    "example": "any"
+                  },
+                  "houseType": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  },
+                  "area": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "This Id For address",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "street": {
+                    "example": "any"
+                  },
+                  "AdditionalDirection": {
+                    "example": "any"
+                  },
+                  "houseNo": {
+                    "example": "any"
+                  },
+                  "latitude": {
+                    "example": "any"
+                  },
+                  "longitude": {
+                    "example": "any"
+                  },
+                  "houseType": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  },
+                  "area": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/salons/address/{id}/{addressId}": {
+      "delete": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "id: Salon Id , addressId: AdressId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "addressId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/v1/salons/{id}": {
       "get": {
         "tags": [
@@ -5741,7 +5907,7 @@
     "/api/v1/banner/banner-photo/{cloudinary_id}": {
       "patch": {
         "tags": [
-          "Authentication"
+          "Banner"
         ],
         "description": "",
         "parameters": [
@@ -5771,7 +5937,7 @@
     "/api/v1/banner/{id}": {
       "delete": {
         "tags": [
-          "Authentication"
+          "Banner"
         ],
         "description": "",
         "parameters": [

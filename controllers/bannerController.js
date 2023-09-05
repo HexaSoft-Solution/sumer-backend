@@ -105,6 +105,7 @@ exports.updateBanner = catchAsync(async (req, res, next) => {
 })
 
 exports.updateBannerPhoto = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Banner']
     const { cloudinary_id } = req.params;
     const { path } = req.file;
 
@@ -135,6 +136,7 @@ exports.updateBannerPhoto = catchAsync(async (req, res, next) => {
 })
 
 exports.deleteBanner = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Banner']
     const { id } = req.params;
     const banner = await Banner.findById(id);
 

@@ -10,6 +10,7 @@ const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
 const SalonBooking = require("../models/salonBookingModel");
+const Address = require("../models/addressModel");
 
 const parseDate = (date) => {
     if (typeof date === "string") {
@@ -607,3 +608,92 @@ exports.addTimeTable = catchAsync(async (req, res, next) => {
         newTime,
     });
 })
+
+exports.addAddress = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    /*  #swagger.description = 'This Id For salon' */
+    const salonId = req.params.id;
+    const {
+        street,
+        AdditionalDirection,
+        houseNo,
+        latitude,
+        longitude,
+        houseType,
+        phone,
+        area } = req.body;
+    const address = await Address.create({
+        street,
+        houseNo,
+        latitude,
+        longitude,
+        houseType,
+        AdditionalDirection,
+        phone,
+        area,
+    });
+
+    await Salon.findByIdAndUpdate(
+        salonId,
+        {
+            $push: { address: address.id },
+        },
+        { new: true }
+    );
+
+    res.status(201).json({
+        status: "success",
+        message: "Address Add successful",
+    });
+});
+
+exports.updateAddress = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    /*  #swagger.description = 'This Id For address' */
+    const addressId = req.params.id;
+    const {
+        street,
+        AdditionalDirection,
+        houseNo,
+        latitude,
+        longitude,
+        houseType,
+        phone,
+        area } = req.body;
+    const updatedAddress = await Address.findOneAndUpdate(
+        {
+            _id: addressId,
+        },
+        {
+            street,
+            houseNo,
+            latitude,
+            longitude,
+            houseType,
+            AdditionalDirection,
+            phone,
+            area,
+        });
+
+    res.status(201).json({
+        status: "success",
+        message: "Address update successful",
+        updatedAddress,
+    });
+})
+
+exports.deleteAddress = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    /*  #swagger.description = 'id: Salon Id , addressId: AdressId*/
+    const salonId = req.params.id;
+    const { addressId } = req.params;
+    await Address.findByIdAndRemove(addressId);
+    await Salon.findByIdAndUpdate(salonId, {
+        $pull: { address: addressId },
+    });
+
+    res.status(201).json({
+        status: "success",
+        message: "address remove successful",
+    });
+});
