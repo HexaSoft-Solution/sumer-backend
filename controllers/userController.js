@@ -208,14 +208,22 @@ exports.uploadPersonalPhoto = catchAsync(async (req, res, next) => {
 exports.addAddress = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Authentication']
   const userId = req.user.id;
-  const { street, city, houseNo, latitude, longitude, houseType, phone, area } = req.body;
-  const address = await Address.create({
+  const {
     street,
-    city,
+    AdditionalDirection,
     houseNo,
     latitude,
     longitude,
     houseType,
+    phone,
+    area } = req.body;
+  const address = await Address.create({
+    street,
+    houseNo,
+    latitude,
+    longitude,
+    houseType,
+    AdditionalDirection,
     phone,
     area,
   });
@@ -233,6 +241,40 @@ exports.addAddress = catchAsync(async (req, res, next) => {
     message: "Address Add successful",
   });
 });
+
+exports.updateAddress = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
+  const { addressId } = req.params;
+  const {
+    street,
+    AdditionalDirection,
+    houseNo,
+    latitude,
+    longitude,
+    houseType,
+    phone,
+    area } = req.body;
+  const updatedAddress = await Address.findOneAndUpdate(
+      {
+        _id: addressId,
+      },
+      {
+    street,
+    houseNo,
+    latitude,
+    longitude,
+    houseType,
+    AdditionalDirection,
+    phone,
+    area,
+  });
+
+  res.status(201).json({
+    status: "success",
+    message: "Address update successful",
+    updatedAddress,
+  });
+})
 
 exports.deleteAddress = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Authentication']

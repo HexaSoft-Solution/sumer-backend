@@ -56,7 +56,8 @@ router
   .post(authController.protect, userController.addAddress);
 router
   .route("/address/:addressId")
-  .delete(authController.protect, userController.deleteAddress);
+    .patch(authController.protect, userController.updateAddress)
+    .delete(authController.protect, userController.deleteAddress);
 router
   .route("/uploadPersonalPhoto")
   .patch(

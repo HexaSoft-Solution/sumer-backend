@@ -525,7 +525,7 @@
                   "street": {
                     "example": "any"
                   },
-                  "city": {
+                  "AdditionalDirection": {
                     "example": "any"
                   },
                   "houseNo": {
@@ -579,6 +579,69 @@
         "responses": {
           "201": {
             "description": "Created"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "street": {
+                    "example": "any"
+                  },
+                  "AdditionalDirection": {
+                    "example": "any"
+                  },
+                  "houseNo": {
+                    "example": "any"
+                  },
+                  "latitude": {
+                    "example": "any"
+                  },
+                  "longitude": {
+                    "example": "any"
+                  },
+                  "houseType": {
+                    "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  },
+                  "area": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1161,6 +1224,16 @@
         }
       }
     },
+    "/api/v1/products/search": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/v1/products/{id}": {
       "get": {
         "tags": [
@@ -1277,16 +1350,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/api/v1/products/search": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
           }
         }
       }
@@ -2920,6 +2983,16 @@
         }
       }
     },
+    "/api/v1/salons/search": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/v1/salons/{id}": {
       "get": {
         "tags": [
@@ -3216,16 +3289,6 @@
                 ]
               }
             }
-          }
-        }
-      }
-    },
-    "/api/v1/salons/search": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
           }
         }
       }
@@ -5626,6 +5689,43 @@
           },
           "_id": {
             "type": "string"
+          }
+        }
+      },
+      "bannarModel": {
+        "title": "Banner",
+        "required": [
+          "name",
+          "image",
+          "cloudinary_id",
+          "link"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "cloudinary_id": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
