@@ -539,6 +539,12 @@
                   },
                   "houseType": {
                     "example": "any"
+                  },
+                  "phone": {
+                    "example": "any"
+                  },
+                  "area": {
+                    "example": "any"
                   }
                 }
               }
@@ -3418,6 +3424,51 @@
         }
       }
     },
+    "/api/v1/salons/add-timetable": {
+      "post": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "startTime": {
+                    "example": "any"
+                  },
+                  "endTime": {
+                    "example": "any"
+                  },
+                  "day": {
+                    "example": "any"
+                  },
+                  "date": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/salonReviews/": {
       "get": {
         "tags": [
@@ -4854,6 +4905,9 @@
     },
     "/api/v1/consultationReview/{id}": {
       "get": {
+        "tags": [
+          "Community"
+        ],
         "description": "",
         "parameters": [
           {
@@ -6143,6 +6197,78 @@
           }
         }
       },
+      "salonAvailableTimeModel": {
+        "title": "Salon-table",
+        "required": [
+          "startTime",
+          "endTime",
+          "day",
+          "date",
+          "salon"
+        ],
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "enum": [
+              "8:00",
+              "9:00",
+              "10:00",
+              "11:00",
+              "12:00",
+              "13:00",
+              "14:00",
+              "15:00",
+              "16:00",
+              "17:00",
+              "18:00",
+              "19:00",
+              "20:00",
+              "21:00"
+            ]
+          },
+          "endTime": {
+            "type": "string",
+            "enum": [
+              "9:00",
+              "10:00",
+              "11:00",
+              "12:00",
+              "13:00",
+              "14:00",
+              "15:00",
+              "16:00",
+              "17:00",
+              "18:00",
+              "19:00",
+              "20:00",
+              "21:00",
+              "22:00"
+            ]
+          },
+          "day": {
+            "type": "string",
+            "enum": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "salon": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
       "salonBookingModel": {
         "title": "SalonBooking",
         "required": [
@@ -6273,6 +6399,12 @@
           },
           "favouriteCount": {
             "type": "number"
+          },
+          "availableTable": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "ratingsAverage": {
             "type": "number"

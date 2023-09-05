@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
-const salonBookingModel = new mongoose.Schema({
+const salonAvailableTableSchema = new mongoose.Schema({
     startTime: {
         type: String,
-        enum: ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
+        enum: ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'],
         required: true
     },
     endTime: {
         type: String,
-        enum: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
+        enum: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'],
         required: true,
     },
     day: {
@@ -21,19 +21,10 @@ const salonBookingModel = new mongoose.Schema({
         set: parseDate,
         required: true
     },
-    paymentStatus: {
-        type: String,
-        enum: ['Paid', 'Unpaid'],
-        default: 'Unpaid'
-    },
     salon: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Salon',
         required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now(),
     },
 })
 
@@ -50,7 +41,6 @@ function parseDate(date) {
     return date;
 }
 
+const SalonAvailableTable = mongoose.model('Salon-table', salonAvailableTableSchema);
 
-const SalonBooking = mongoose.model('SalonBooking', salonBookingModel);
-
-module.exports = SalonBooking;
+module.exports = SalonAvailableTable;

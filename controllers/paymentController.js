@@ -12,6 +12,7 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const moyasar = require("../utils/moyasar");
 const Paypal = require('../utils/paypal');
+const SalonTimeTable = require("../models/salonAvailableTimeModel");
 
 const getProductDetails = async (productId) => {
   return await Product.findById(productId);
@@ -391,24 +392,52 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
     date: parseDate(date),
   });
 
-  let conflict = bookings.map((booking) => {
-    if (booking.day === day && booking.salon === salonId) {
-      if (booking.startTime <= startTime && booking.endTime >= startTime) {
-        return true;
-      }
-      if (booking.startTime <= endTime && booking.endTime >= endTime) {
-        return true;
-      }
-      if (booking.startTime >= startTime && booking.endTime <= endTime) {
+  const newBookingCheck = {
+    startTime: startTime,
+    endTime: endTime,
+    day: day,
+    date: parseDate(date),
+  };
+
+  const conflicts = bookings.filter((booking) => {
+    const bookingDate = new Date(booking.date);
+    const newBookingDate = new Date(newBookingCheck.date);
+
+    if (booking.day === newBookingCheck.day && bookingDate.getTime() === newBookingDate.getTime()) {
+      const bookingStartTime = new Date(`1970-01-01T${booking.startTime}:00`);
+      const bookingEndTime = new Date(`1970-01-01T${booking.endTime}:00`);
+      const newBookingStartTime = new Date(`1970-01-01T${newBookingCheck.startTime}:00`);
+      const newBookingEndTime = new Date(`1970-01-01T${newBookingCheck.endTime}:00`);
+
+      if (
+          (newBookingStartTime >= bookingStartTime && newBookingStartTime < bookingEndTime) ||
+          (newBookingEndTime > bookingStartTime && newBookingEndTime <= bookingEndTime) ||
+          (newBookingStartTime <= bookingStartTime && newBookingEndTime >= bookingEndTime)
+      ) {
         return true;
       }
     }
+
+    return false;
   });
 
-  if (bookings.length === 0) conflict = false;
 
-  if (conflict) {
+  if (conflicts.length > 0) {
     return next(new AppError("Salon is already booked at this time.", 400));
+  }
+
+  const availability = await SalonTimeTable.find({
+    salon: salonId,
+    startTime,
+    endTime,
+    day,
+    date,
+  })
+
+  console.log(availability)
+
+  if (availability.length === 0) {
+    return next(new AppError("Salon is not available at this time.", 400));
   }
 
   const source = { type, number, name, cvc, month, year };
@@ -430,7 +459,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
     (endHours - startHours) * salon.pricePerHour,
     "Book Salon",
     source,
-    [{salon: salon.id}],
+    [{salon: salon._id.toString()}],
     newBooking.id,
     req.user.id,
     req.protocol,

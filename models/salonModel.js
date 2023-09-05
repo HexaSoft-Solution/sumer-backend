@@ -55,6 +55,10 @@ const salonSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    availableTable: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Salon-table',
+    }],
     ratingsAverage: {
         type: Number,
         default: 1,
@@ -73,7 +77,7 @@ const salonSchema = new mongoose.Schema({
 });
 
 salonSchema.pre(/^find/, function (next) {
-    this.populate('booking').populate('service');
+    this.populate('booking');
     next();
 });
 

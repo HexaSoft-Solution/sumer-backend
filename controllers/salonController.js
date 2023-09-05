@@ -2,13 +2,27 @@ const Salon = require('../models/salonModel');
 const SalonReview = require('../models/salonReviewModel');
 const User = require('../models/userModel');
 const Service = require("../models/serviceModel");
-const SalonBooking = require('../models/salonBookingModel');
+const SalonTimeTable = require('../models/salonAvailableTimeModel');
 
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
+const SalonBooking = require("../models/salonBookingModel");
+
+const parseDate = (date) => {
+    if (typeof date === "string") {
+        const parts = date.split("/");
+        if (parts.length === 3) {
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parseInt(parts[2], 10);
+            return new Date(year, month, day);
+        }
+    }
+    return date;
+};
 
 
 exports.getAllSalons = catchAsync(async (req, res, next) => {
@@ -540,5 +554,56 @@ exports.getMyBookings = catchAsync(async (req, res, next) => {
         status: "success",
         results: bookings.length,
         bookings
+    });
+})
+
+
+exports.addTimeTable = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    const salonId = req.params.id;
+
+    if (req.user.salonCreated !== salonId) {
+        return next(new AppError("You are not the owner of this salon", 400));
+    }
+
+    const { startTime, endTime, day, date,  } = req.body;
+
+    const available = await SalonTimeTable.find({
+        salon: salonId,
+        day: day,
+        date: parseDate(date),
+    });
+
+    let conflict = available.map((available) => {
+        if (available.day === day && available.salon === salonId) {
+            if (available.startTime <= startTime && available.endTime >= startTime) {
+                return true;
+            }
+            if (available.startTime <= endTime && available.endTime >= endTime) {
+                return true;
+            }
+            if (available.startTime >= startTime && available.endTime <= endTime) {
+                return true;
+            }
+        }
+    });
+
+    if (available.length === 0) conflict = false;
+
+    if (conflict) {
+        return next(new AppError("Salon is already available at this time.", 400));
+    }
+
+    const newTime = await SalonTimeTable.create({
+        salon: salonId,
+        startTime,
+        endTime,
+        day,
+        date,
+    });
+
+    res.status(200).json({
+        status: "success",
+        newTime,
     });
 })

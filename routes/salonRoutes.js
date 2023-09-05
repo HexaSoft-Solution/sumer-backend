@@ -109,4 +109,12 @@ router
         salonController.getMyBookings
     )
 
+router
+    .route('/add-timetable')
+    .post(
+        authController.protect,
+        authController.restrictTo('admin', 'salon service'),
+        salonController.addTimeTable
+    )
+
 module.exports = router;
