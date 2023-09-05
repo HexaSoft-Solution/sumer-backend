@@ -1,0 +1,1 @@
+{"title":"Banner","required":["name","image","cloudinary_id","link"],"properties":{"name":{"type":"string"},"image":{"type":"string"},"cloudinary_id":{"type":"string"},"link":{"type":"string"},"status":{"type":"boolean"},"_id":{"type":"string"},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}}}

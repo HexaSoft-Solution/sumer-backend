@@ -24,6 +24,7 @@ const salonBookingRoutes = require("./routes/salonBookingRoutes");
 const consultationRoutes = require("./routes/consultationRoutes");
 const consultationReviewRoutes = require("./routes/consultationReviewRoutes");
 const communityRoutes = require("./routes/communityRoutes")
+const bannerRoutes = require('./routes/bannerRoutes');
 
 const app = express();
 
@@ -102,6 +103,7 @@ app.use("/api/v1/salonBooking", salonBookingRoutes);
 app.use("/api/v1/consultation", consultationRoutes);
 app.use('/api/v1/consultationReview', consultationReviewRoutes);
 app.use("/api/v1/community", communityRoutes);
+app.use("/api/v1/banner", bannerRoutes);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
