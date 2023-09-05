@@ -46,7 +46,11 @@ exports.signup = catchAsync(async (req, res, next) => {
   // Check for duplicate email
   const existingEmailUser = await User.findOne({ email: req.body?.email });
   if (existingEmailUser) {
-    return next(new AppError("email-duplicated", 400));
+    res.status(400).json({
+        status: "fail",
+        message: "email-duplicated",
+    })
+    // return next(new AppError("email-duplicated", 400));
   }
 
   // Check for duplicate phone number
