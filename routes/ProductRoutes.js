@@ -26,6 +26,9 @@ router
     authController.restrictTo("business"),
     ProductController.getMyProduct
   );
+
+router.route("/search").get(ProductController.searchProduct);
+
 router
   .route("/:id")
   .get(ProductController.getProduct)
@@ -39,9 +42,6 @@ router
     authController.restrictTo("admin", "business"),
     ProductController.deleteProduct
   );
-
-
-router.route("/search").get(ProductController.searchProduct);
 
 router
   .route("/uploadProductPhoto/:id")

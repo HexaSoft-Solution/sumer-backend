@@ -17,6 +17,10 @@ router
     )
 
 router
+    .route('/search')
+    .get(salonController.searchSalon);
+
+router
     .route('/:id')
     .get(salonController.getSalon)
     .patch(
@@ -65,10 +69,6 @@ router
         authController.restrictTo('admin', 'salon service'),
         salonController.deleteservicePhoto
     )
-
-router
-    .route('/search')
-    .get(salonController.searchSalon);
 
 router
     .route('/uploadSalonPhoto/:id')

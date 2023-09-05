@@ -6511,8 +6511,6 @@
       "userModel": {
         "title": "User",
         "required": [
-          "firstName",
-          "lastName",
           "email",
           "username",
           "phone",
