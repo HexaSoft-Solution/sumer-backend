@@ -230,7 +230,8 @@ exports.verifyPromoteProduct = catchAsync(async (req, res, next) => {
     await Product.findByIdAndUpdate(
         productId,
         {
-          $inc: { promotedAds: amount },
+          $inc: { promotedAds: amount / 10 },
+          adsExpireDate: Date.now() + 7 * 24 * 60 * 60 * 1000,
         },
         { new: true }
     );
@@ -264,7 +265,8 @@ exports.verifyPromoteSalon = catchAsync(async (req, res, next) => {
     await Salon.findByIdAndUpdate(
         salonId,
         {
-          $inc: { promotedAds: amount },
+          $inc: { promotedAds: amount / 10 },
+          adsExpireDate: Date.now() + 7 * 24 * 60 * 60 * 1000,
         },
         { new: true }
     );
@@ -298,7 +300,8 @@ exports.verifyPromoteConsultation = catchAsync(async (req, res, next) => {
     await Consultation.findByIdAndUpdate(
         consultationId,
         {
-          $inc: { promotedAds: amount },
+          $inc: { promotedAds: amount / 10 },
+          adsExpireDate: Date.now() + 7 * 24 * 60 * 60 * 1000,
         },
         { new: true }
     );

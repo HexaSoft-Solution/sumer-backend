@@ -47,6 +47,10 @@ const salonSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    adsExpireDate: {
+        type: Date,
+        default: Date.now(),
+    },
     salonReviews: [{
        type: mongoose.Schema.Types.ObjectId,
         ref: 'SalonReview',

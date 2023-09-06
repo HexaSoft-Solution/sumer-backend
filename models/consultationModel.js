@@ -22,6 +22,10 @@ const ConsultationSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    adsExpireDate: {
+        type: Date,
+        default: Date.now(),
+    },
     service: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Service",

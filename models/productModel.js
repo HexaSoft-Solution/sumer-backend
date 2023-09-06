@@ -73,6 +73,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    adsExpireDate: {
+        type: Date,
+        default: Date.now(),
+    },
     ratingsAverage: {
         type: Number,
         default: 1,

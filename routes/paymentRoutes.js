@@ -102,7 +102,7 @@ router
     );
 
 router
-    .route('verify-promoting-product/:productId/:amount')
+    .route('/verify-promoting-product/:productId/:amount')
     .get(paymentController.verifyPromoteProduct)
 
 router
