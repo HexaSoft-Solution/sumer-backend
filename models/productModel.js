@@ -41,11 +41,11 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 1,
     },
-    color: {
+    color: [{
         type: String,
         required: [true, 'Must be not Empty !'],
         validate: [validator.isHexColor, "Please enter valid hex color code"],
-    },
+    }],
     howToUse: {
         type: String,
         required: [true, 'Must be not Empty !'],
