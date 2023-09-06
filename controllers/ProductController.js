@@ -43,6 +43,7 @@ exports.getProduct = catchAsync(async (req, res, next) => {
     },
   });
 });
+
 exports.getMyProduct = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Product']
   // Assuming user ID is available in the request (e.g., req.user.id)
@@ -247,12 +248,6 @@ exports.deleteMultiplePhoto = catchAsync(async (req, res, next) => {
 exports.createProduct = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Product']
   const userId = req.user.id;
-
-  if (!req.user.productCreationAvailability) {
-    return next(
-      new AppError("You have reached your product creation limit", 400)
-    );
-  }
 
   const {
     name,
