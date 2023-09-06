@@ -8,6 +8,7 @@ const AppError = require("../utils/appError");
 const cloudinary = require("../utils/cloudinary");
 
 exports.getAllPosts = async (req, res, next) => {
+  // #swagger.tags = ['Community']
     /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
     /*  #swagger.parameters['limit'] = {
               in: 'query',
@@ -65,7 +66,6 @@ exports.addPost = catchAsync(async (req, res, next) => {
 
   const { post } = req.body;
 
-  console.log(post)
 
   let result;
 
@@ -126,6 +126,25 @@ exports.addPostPhoto = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Community']
   const postId = req.params.id;
 
+  /*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            photo: {
+                                type: "string",
+                                format: "binary"
+                            },
+                           
+                        },
+                        required: ["photo"]
+                    }
+                }
+            }
+        }
+    */
   const userPost = await Community.findById(postId);
 
   const result = await cloudinary.uploader.upload(req.file.path, {
@@ -347,6 +366,25 @@ exports.addCommentPhoto = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Community']
   const commentId = req.params.id;
   const userId = req.user.id;
+  /*	#swagger.requestBody = {
+            required: true,
+            "@content": {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            photo: {
+                                type: "string",
+                                format: "binary"
+                            },
+                           
+                        },
+                        required: ["photo"]
+                    }
+                }
+            }
+        }
+    */
 
   const comment = await Comment.findById(commentId);
 

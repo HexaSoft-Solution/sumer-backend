@@ -1346,6 +1346,9 @@
                   },
                   "highlights": {
                     "example": "any"
+                  },
+                  "color": {
+                    "example": "any"
                   }
                 }
               }
@@ -2651,7 +2654,7 @@
         }
       }
     },
-    "/api/v1/paymentverify-promoting-product/{productId}/{amount}": {
+    "/api/v1/payment/verify-promoting-product/{productId}/{amount}": {
       "get": {
         "description": "",
         "parameters": [
@@ -2926,7 +2929,41 @@
         "tags": [
           "Salon"
         ],
-        "description": "",
+        "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Page size: ex: ?limit=10",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "example: ?fields=name,description",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "indexing page: ex: ?page=2",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "example: ?sort=name,-createdAt",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -5281,6 +5318,9 @@
     },
     "/api/v1/community/posts": {
       "get": {
+        "tags": [
+          "Community"
+        ],
         "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
         "parameters": [
           {
@@ -5421,6 +5461,28 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "post": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "photo"
+                ]
+              }
+            }
           }
         }
       }
@@ -6115,6 +6177,9 @@
               "type": "string"
             }
           },
+          "promotedAdsCount": {
+            "type": "number"
+          },
           "_id": {
             "type": "string"
           }
@@ -6335,6 +6400,10 @@
           "promotedAds": {
             "type": "number"
           },
+          "adsExpireDate": {
+            "type": "string",
+            "format": "date-time"
+          },
           "service": {
             "type": "array",
             "items": {
@@ -6515,7 +6584,6 @@
           "name",
           "price",
           "desc",
-          "color",
           "howToUse",
           "size",
           "category"
@@ -6564,7 +6632,14 @@
             "type": "number"
           },
           "color": {
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string",
+              "required": [
+                true,
+                "Must be not Empty !"
+              ]
+            }
           },
           "howToUse": {
             "type": "string"
@@ -6596,6 +6671,10 @@
           },
           "promotedAds": {
             "type": "number"
+          },
+          "adsExpireDate": {
+            "type": "string",
+            "format": "date-time"
           },
           "ratingsAverage": {
             "type": "number"
@@ -6855,6 +6934,10 @@
           },
           "promotedAds": {
             "type": "number"
+          },
+          "adsExpireDate": {
+            "type": "string",
+            "format": "date-time"
           },
           "salonReviews": {
             "type": "array",

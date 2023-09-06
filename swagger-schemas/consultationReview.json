@@ -1,0 +1,1 @@
+{"title":"Consultation-Review","required":["review","consultation","user"],"properties":{"review":{"type":"string"},"rating":{"type":"number"},"createdAt":{"type":"string","format":"date-time"},"consultation":{"type":"string"},"user":{"type":"string"},"_id":{"type":"string"},"updatedAt":{"type":"string","format":"date-time"}}}
