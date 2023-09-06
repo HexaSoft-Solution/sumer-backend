@@ -358,9 +358,10 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     availabilityCount,
     howToUse,
     highlights,
+    color
   } = req.body;
 
-  const product = await Product.findByIdAndUpdate(productId, {
+  const product = await Product.findOneAndUpdate({ _id: productId}, {
     name,
     desc,
     price,
@@ -370,14 +371,13 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     brand,
     howToUse,
     highlights,
+    color
   });
 
   res.status(201).json({
     status: "success",
     message: "Product updated successfully",
-    data: {
-      product,
-    },
+    product
   });
 });
 
