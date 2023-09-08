@@ -76,6 +76,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
     cartDetails.push({
       Product: product,
       quantity: item.quantity,
+      cartId: item._id,
       totalPriceForProduct: totalPriceForProduct,
     });
   }
