@@ -7,7 +7,7 @@ const BusinessProfileSchema = new mongoose.Schema({
     },
     products: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'product',
+        ref: 'Product',
         default: []
     }],
     balance: {
@@ -27,7 +27,7 @@ const BusinessProfileSchema = new mongoose.Schema({
 
 BusinessProfileSchema.pre('save', async function (next) {
     try {
-        const totalPromotedAdsCount = await this.model('product')
+        const totalPromotedAdsCount = await this.model('Product')
             .find({ _id: { $in: this.products } })
             .select('promotedAds')
             .then(products => products.reduce((acc, product) => acc + product.promotedAds, 0));
