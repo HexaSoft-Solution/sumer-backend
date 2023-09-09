@@ -49,7 +49,8 @@ type: 'number'
       } */
     let filter = {};
     if (req.params.id) filter = { model: req.params.id };
-    const features = new APIFeatures(Salon.find(filter), req.query)
+    const allSalons = Salon.find(filter)
+    const features = new APIFeatures(allSalons, req.query)
         .filter()
         .sort()
         .limitFields()
@@ -59,7 +60,7 @@ type: 'number'
 
     res.status(200).json({
         status: 'success',
-        results: salons.length,
+        results: allSalons.length,
         salons,
     });
 })
