@@ -25,6 +25,13 @@ const parseDate = (date) => {
     return date;
 };
 
+const isTimeConflict = (availableStartTime, availableEndTime, newStartTime, newEndTime) => {
+    const isStartConflict = availableStartTime <= newStartTime && availableEndTime >= newStartTime;
+    const isEndConflict = availableStartTime <= newEndTime && availableEndTime >= newEndTime;
+
+    return isStartConflict || isEndConflict;
+}
+
 
 exports.getAllSalons = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
@@ -581,9 +588,9 @@ exports.getMyBookings = catchAsync(async (req, res, next) => {
 
 exports.addTimeTable = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
-    const salonId = req.params.id;
+    const salonId = req.user.salonCreated;
 
-    if (req.user.salonCreated !== salonId) {
+    if (!salonId) {
         return next(new AppError("You are not the owner of this salon", 400));
     }
 
@@ -596,22 +603,10 @@ exports.addTimeTable = catchAsync(async (req, res, next) => {
     });
 
     let conflict = available.map((available) => {
-        if (available.day === day && available.salon === salonId) {
-            if (available.startTime <= startTime && available.endTime >= startTime) {
-                return true;
-            }
-            if (available.startTime <= endTime && available.endTime >= endTime) {
-                return true;
-            }
-            if (available.startTime >= startTime && available.endTime <= endTime) {
-                return true;
-            }
-        }
+        return isTimeConflict(available.startTime, available.endTime, startTime, endTime);
     });
 
-    if (available.length === 0) conflict = false;
-
-    if (conflict) {
+    if (conflict.includes(true)) {
         return next(new AppError("Salon is already available at this time.", 400));
     }
 
@@ -622,6 +617,13 @@ exports.addTimeTable = catchAsync(async (req, res, next) => {
         day,
         date,
     });
+
+    await Salon.findOneAndUpdate(
+        { _id: salonId },
+        {
+            $push: { availableTable: newTime._id },
+        }
+    )
 
     res.status(200).json({
         status: "success",

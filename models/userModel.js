@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema(
       required: [true, "username-required"],
       unique: true,
     },
-
     phone: {
       type: String,
       required: [true, "telephone-required"],
