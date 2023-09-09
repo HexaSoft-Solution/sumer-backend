@@ -2426,7 +2426,7 @@
     "/api/v1/payment/buy-consultation-ticket": {
       "patch": {
         "tags": [
-          "Authentication"
+          "Payment"
         ],
         "description": "",
         "parameters": [
@@ -2656,6 +2656,9 @@
     },
     "/api/v1/payment/verify-promoting-product/{productId}/{amount}": {
       "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
@@ -5473,9 +5476,6 @@
                   "photo": {
                     "type": "string",
                     "format": "binary"
-                  },
-                  "post": {
-                    "type": "string"
                   }
                 },
                 "required": [
@@ -5737,6 +5737,25 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "photo"
+                ]
+              }
+            }
           }
         }
       }

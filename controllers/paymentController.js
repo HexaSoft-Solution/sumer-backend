@@ -223,6 +223,7 @@ exports.promoteProduct = catchAsync(async (req, res, next) => {
 })
 
 exports.verifyPromoteProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
   const { productId, amount } = req.params;
   const paymentId = req.query.id;
   const payment = await moyasar.fetchPayment(paymentId);
@@ -619,7 +620,7 @@ exports.verifyBuyingConsultationsConnection = catchAsync(
 );
 
 exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
-
+  // #swagger.tags = ['Payment']
   const { consultationId, type, number, name, cvc, month, year } =
     req.body;
 
