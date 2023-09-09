@@ -358,6 +358,8 @@ exports.getUser = catchAsync(async (req, res, next) => {
 });
 exports.updateUser = async (req, res, next) => {
   // #swagger.tags = ['Authentication']
+   // #swagger.parameters['review'] = {}
+  // #swagger.parameters['rating'] = {}
 
   return factory.getOne(req, res, next,User);
 }; 
