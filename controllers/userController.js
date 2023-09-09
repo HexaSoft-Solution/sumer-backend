@@ -356,5 +356,9 @@ exports.getUser = catchAsync(async (req, res, next) => {
     address,
   });
 });
-exports.updateUser = factory.updateOne(User);
+exports.updateUser = async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
+
+  return factory.getOne(req, res, next,User);
+}; 
 exports.deleteUser = factory.deleteOne(User);
