@@ -7,23 +7,23 @@ const ConsultantSchema = new mongoose.Schema({
         trim: true,
         maxlength: [100, 'Title can not be more than 100 characters']
     },
-   user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-   },
-   consultant: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-   },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    consultant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     numOfMessages: {
         type: Number,
         default: 50
     },
-   messages: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Message',
-       default: null
-   }],
+    messages: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message',
+        default: null
+    }],
     status: {
         type: String,
         enum: ['Active', 'Ended'],
