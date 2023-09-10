@@ -16,6 +16,11 @@ router
         consultationController.createConsultationProfile
     );
 
+
+    router
+        .route('/consltant')
+        .get(consultationController.getAllConsultant)
+
 router
     .route('/search')
     .get(consultationController.searchConsultations)

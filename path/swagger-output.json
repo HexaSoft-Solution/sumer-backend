@@ -1241,7 +1241,7 @@
     "/api/v1/products/invoices": {
       "get": {
         "tags": [
-          "Consultations"
+          "Product"
         ],
         "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
         "parameters": [
@@ -4115,6 +4115,53 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/consultation/consltant": {
+      "get": {
+        "tags": [
+          "Consultations"
+        ],
+        "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Page size: ex: ?limit=10",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "example: ?fields=name,description",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "indexing page: ex: ?page=2",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "example: ?sort=name,-createdAt",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
           }
         }
       }
