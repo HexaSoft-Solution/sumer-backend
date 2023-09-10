@@ -7321,21 +7321,10 @@
               "type": "object",
               "properties": {
                 "product": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                  "type": "string"
                 },
                 "quantity": {
                   "type": "number"
-                },
-                "default": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {},
-                    "required": []
-                  }
                 }
               },
               "required": []

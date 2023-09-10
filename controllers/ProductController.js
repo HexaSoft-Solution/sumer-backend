@@ -425,6 +425,13 @@ exports.addToCart = catchAsync(async (req, res, next) => {
     return next(new AppError("Product is not available in stock", 400));
   }
 
+  console.log(req.user.cart.findIndex((el) => el.product == productId))
+
+  if (req.user.cart.find((el) => el.product.toString() === productId)) {
+
+    return next(new AppError("Product already in cart", 400));
+  }
+
   await User.findByIdAndUpdate(userId, {
     $push: {
       cart: {

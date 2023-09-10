@@ -113,16 +113,15 @@ const userSchema = new mongoose.Schema(
     },
     cart: [
       {
-        product: [{
+        product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
-        }],
+        },
         quantity: {
           type: Number,
           default: 1,
           min: 1,
         },
-        default: []
       },
     ],
 
