@@ -35,7 +35,7 @@ type: 'number'
               description: 'example: ?sort=name,-createdAt',
       } */
 
-  return factory.getAllMagdy(req, res, next, Consultant);
+  return factory.getAllMagdy(req, res, next, Consultation);
 };
 
 exports.getAllConsultant = async (req, res, next) => {
@@ -60,7 +60,7 @@ type: 'number'
               description: 'example: ?sort=name,-createdAt',
       } */
 
-      return factory.getAllMagdy(req, res, next, Consultation);
+      return factory.getAllMagdy(req, res, next, Consultant);
 }
 
 exports.searchConsultations = factory.search(Consultation);
