@@ -120,11 +120,10 @@ productSchema.pre(/^find/, function (next) {
     this.populate({
         path: 'category',
         select: 'name',
+    }).populate({
+        path: 'owner',
+        select: 'stockName',
     })
-        .populate({
-            path: 'owner',
-            select: 'stockName',
-        })
 
     next();
 });

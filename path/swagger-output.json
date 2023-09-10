@@ -1666,7 +1666,7 @@
       },
       "patch": {
         "tags": [
-          "Authentication"
+          "Products Comments & Ratings"
         ],
         "description": "",
         "parameters": [
@@ -3855,7 +3855,7 @@
       },
       "patch": {
         "tags": [
-          "Authentication"
+          "Salon Comments"
         ],
         "description": "",
         "parameters": [

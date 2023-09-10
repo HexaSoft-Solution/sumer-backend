@@ -79,7 +79,11 @@ exports.createReview = catchAsync(async (req, res, next) => {
     })
 })
 
-exports.updateReview = factory.updateOne(Review);
+// exports.updateReview = factory.updateOne(Review);
+exports.updateReview = async (req, res, next) => {
+    // #swagger.tags = ['Products Comments  & Ratings']
+    return factory.updateOneMagdy(req, res, next, Review)
+};
 exports.deleteReview = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Products Comments  & Ratings']
     const reviewId =  req.params.id;
