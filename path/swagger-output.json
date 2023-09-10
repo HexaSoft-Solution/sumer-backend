@@ -6533,6 +6533,10 @@
               "Ended"
             ]
           },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "_id": {
             "type": "string"
           }

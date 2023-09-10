@@ -28,6 +28,10 @@ const ConsultantSchema = new mongoose.Schema({
         type: String,
         enum: ['Active', 'Ended'],
         default: 'Active'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 
