@@ -27,6 +27,13 @@ router
     ProductController.getMyProduct
   );
 
+  router
+    .route('/invoices')
+    .get(
+      authController.protect,
+      ProductController.getIvoices
+    )
+
 router.route("/search").get(ProductController.searchProduct);
 
 router

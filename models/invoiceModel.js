@@ -20,7 +20,18 @@ const invoiceSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     }
+});
+
+invoiceSchema.pre(/^find/, function (next) {
+
+    this.populate('transactions')
+
+    next();
 });
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
