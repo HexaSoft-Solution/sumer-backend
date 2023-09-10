@@ -82,12 +82,12 @@ exports.createSalonReview = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.updateSalonReview = factory.updateOne(SalonReview);
-
 exports.updateSalonReview = async (req, res, next) => {
   // #swagger.tags = ['Salon Comments']
-  return factory.updateOneMagdy(req, res, next, SalonReview);
-}
+ // #swagger.parameters['review'] = {}
+  // #swagger.parameters['rating'] = {}
+  return factory.updateOne(req, res, next,SalonReview);
+};
 
 exports.deleteSalonReview = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Salon Comments']
