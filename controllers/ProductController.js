@@ -15,6 +15,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Product']
   let filter = {};
   if (req.params.id) filter = { model: req.params.id };
+  const count = await Model.find()
   const features = new APIFeatures(Product.find(filter), req.query)
     .filter()
     .sort()
@@ -24,7 +25,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    results: Products.length,
+    results: count.length,
     Products,
   });
 });
