@@ -125,7 +125,7 @@ exports.getAll = (Model) =>
 exports.getAllMagdy = async (req, res, next, Model) => {
   let filter = {};
   if (req.params.id) filter = { model: req.params.id };
-
+  const count = await Model.find()
   const features = new APIFeatures(Model.find(filter), req.query)
     .filter()
     .sort()
@@ -137,7 +137,7 @@ exports.getAllMagdy = async (req, res, next, Model) => {
   // SEND RESPONSE
   res.status(200).json({
     status: "success",
-    filteredResults: doc?.length || 0,
+    filteredResults: count?.length || 0,
     results: Model?.length || 0,
     data: {
       doc,
