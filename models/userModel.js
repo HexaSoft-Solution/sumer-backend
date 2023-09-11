@@ -202,6 +202,11 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.pre(/^find/, function (next) {
+  this.populate('addresses')
+  next();
+});
+
 userSchema.pre("save", function (next) {
   if (!this.isModified("password") || this.isNew) {
     return next();
