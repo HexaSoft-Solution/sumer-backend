@@ -124,6 +124,13 @@ exports.checkout = catchAsync(async (req, res, next) => {
     });
     await transaction.save();
     transactionIds.push(transaction._id);
+
+    const product = await Product.findById(item.product);
+
+    await User.findByIdAndUpdate(
+      { _id: product.owner._id },
+      { $inc: { balance: product.price } },
+    )
   }
 
   const { type, number, name, cvc, month, year } = req.body;
@@ -476,6 +483,11 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
     return next(new AppError("Payment failed.", 400));
   }
 
+  await User.findByIdAndUpdate(
+    { _id: salon.owner },
+    { $inc: { balance: salon.pricePerHour } },
+  )
+
   salon.booking.push(newBooking._id);
   await salon.save();
 
@@ -641,6 +653,12 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
     req.get("host"),
     "buyConsultationTicket"
   );
+
+
+  await User.findByIdAndUpdate(
+    { _id: consultation.user._id },
+    { $inc: { balance: consultation.price } },
+  )
 
   res.status(200).json({
     status: "success",

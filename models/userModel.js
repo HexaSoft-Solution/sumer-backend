@@ -76,6 +76,10 @@ const userSchema = new mongoose.Schema(
         ref: "Address",
       },
     ],
+    balance: {
+      type: Number,
+      default: 0,
+    },
     passwordConfirm: {
       type: String,
       // required: [true, "password-confirm"],

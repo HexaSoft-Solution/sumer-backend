@@ -52,7 +52,7 @@ const salonSchema = new mongoose.Schema({
         default: Date.now(),
     },
     salonReviews: [{
-       type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'SalonReview',
     }],
     favouriteCount: {

@@ -61,20 +61,42 @@ exports.addDiscountToProduct = catchAsync(async (req, res, next) => {
 
   const product = await Product.findById(productId);
 
+  const voucher = await Voucher.findOne({ code: discount })
+
   if (!product) {
     return next(new AppError("No product found with that ID", 404));
   }
 
-  if (discount > 60) {
-    return next(new AppError("Discount must be less than 60", 400));
+  if (!voucher) {
+    return next(new AppError("No voucher found with that code", 404));
   }
 
-  const productDiscount = product.price * (discount / 100);
+  if(voucher.used) {
+    return next(new AppError("This voucher has been used", 400));
+  }
 
-  await Product.findByIdAndUpdate(productId, {
-    discountPercentage: discount,
-    discountedPrice: product.price - productDiscount,
+  let productDiscount
+
+  if ( product.price - product.price * (voucher.discountPercentage / 100) > voucher.maxDiscount) {
+    productDiscount = product.price - voucher.maxDiscount
+  } else {
+    productDiscount = product.price * (voucher.discountPercentage / 100);
+  }
+
+  console.log(voucher)
+
+  console.log(product.price)
+  console.log(voucher.discountPercentage)
+  console.log(productDiscount)
+
+  await Product.findOneAndUpdate({ _id: productId }, {
+    discountPercentage: voucher.discountPercentage,
+    discountedPrice: Product.price,
+    price: productDiscount,
   });
+
+  voucher.used = true;
+  voucher.save();
 
   res.status(200).json({
     status: "success",
@@ -96,6 +118,7 @@ exports.removeDicountFromProduct = catchAsync(async (req, res, next) => {
 
   await Product.findByIdAndUpdate(ProductId, {
     discountPercentage: 0,
+    price: product.discountedPrice,
     discountedPrice: 0,
   });
 
