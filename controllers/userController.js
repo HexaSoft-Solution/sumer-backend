@@ -364,3 +364,56 @@ exports.updateUser = async (req, res, next) => {
   return factory.getOne(req, res, next,User);
 };
 exports.deleteUser = factory.deleteOne(User);
+
+exports.getMyFavouriteProduct = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
+  const lovedProducts = req.user.lovedProducts;
+
+  const products = await Product.find({
+    _id: { $in: lovedProducts },
+  });
+
+  if (req.user && req.user.lovedProducts) {
+
+    products.forEach((product) => {
+      product.isFavorite = req.user.lovedProducts.includes(product._id.toString());
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    results: products.length,
+    products,
+  });
+});
+
+exports.getMyAddress = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
+  const addressId = req.user.addresses;
+
+  const address = await Address.find({
+    _id: { $in: addressId },
+  });
+
+  res.status(200).json({
+    status: "success",
+    results: address.length,
+    address,
+  });
+})
+
+
+exports.getMyVouvher = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
+  const voucherId = req.user.vouchers;
+
+  const voucher = await Voucher.find({
+    _id: { $in: voucherId },
+  });
+
+  res.status(200).json({
+    status: "success",
+    results: voucher.length,
+    voucher,
+  });
+});

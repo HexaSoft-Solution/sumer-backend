@@ -34,13 +34,19 @@ type: 'number'
       } */
   let filter = {};
   if (req.params.id) filter = { model: req.params.id };
-  const count = await Product.find()
+  const count = await Product.find();
   const features = new APIFeatures(Product.find(filter), req.query)
     .filter()
     .sort()
     .limitFields()
     .Pagination();
   const Products = await features.query;
+
+  if (req.user && req.user.lovedProducts) {
+    Products.forEach((product) => {
+      product.isFavorite = req.user.lovedProducts.includes(product._id.toString());
+    });
+  }
 
   res.status(200).json({
     status: "success",
@@ -222,7 +228,7 @@ exports.uploadMultiplePhoto = catchAsync(async (req, res, next) => {
 
     const uploadedImages = await Promise.all(uploadPromises);
 
-    const updatedProduct = await Product.findByIdAndUpdate(productId, {
+    const updatedProduct = await Product.findOneAndUpdate({ _id: productId }, {
       $push: {
         imageArray: { $each: uploadedImages },
       },
@@ -445,25 +451,24 @@ exports.addToCart = catchAsync(async (req, res, next) => {
     return next(new AppError("Product is not available in stock", 400));
   }
 
-  console.log(req.user.cart.findIndex((el) => el.product == productId))
+  const user = await User.findById(userId);
 
-  if (req.user.cart.find((el) => el.product.toString() === productId)) {
+  const cartItemIndex = user.cart.findIndex((el) => el.product.toString() === productId);
 
-    return next(new AppError("Product already in cart", 400));
+  if (cartItemIndex !== -1) {
+    user.cart[cartItemIndex].quantity = quantity;
+  } else {
+    user.cart.push({
+      product: productId,
+      quantity: quantity,
+    });
   }
 
-  await User.findByIdAndUpdate(userId, {
-    $push: {
-      cart: {
-        product: productId,
-        quantity: quantity,
-      },
-    },
-  });
+  await user.save();
 
   res.status(200).json({
     status: "success",
-    message: "Product added to cart successfully",
+    message: "Product added/updated in the cart successfully",
   });
 });
 

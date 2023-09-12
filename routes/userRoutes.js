@@ -44,6 +44,7 @@ router.get(
 router
   .route("/me")
   .get(authController.protect, userController.getMe, userController.getUser);
+
 router.patch(
   "/updateMyPassword",
   authController.protect,
@@ -65,6 +66,27 @@ router
     authController.protect,
     userController.uploadPersonalPhoto
   );
+
+  router
+    .route("/loved-product")
+    .get(
+      authController.protect,
+      userController.getMyFavouriteProduct
+    )
+
+  router
+    .route("/my-addressess")
+    .get(
+      authController.protect,
+      userController.getMyAddress
+    )
+
+    router
+      .route("/my-voucher")
+      .get(
+        authController.protect,
+        userController.getMyVouvher
+      )
 
 router
   .route("/")

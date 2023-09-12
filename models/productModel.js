@@ -77,6 +77,10 @@ const productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    isFavorite : {
+        type: Boolean,
+        default: false,
+    },
     ratingsAverage: {
         type: Number,
         default: 1,

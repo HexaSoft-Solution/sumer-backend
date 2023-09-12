@@ -7,7 +7,10 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(ProductController.getAllProducts)
+  .get(
+    authController.protect,
+    ProductController.getAllProducts
+  )
   .post(
     authController.protect,
     authController.restrictTo("admin", "business"),
