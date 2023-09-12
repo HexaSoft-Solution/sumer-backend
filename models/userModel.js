@@ -191,6 +191,7 @@ const userSchema = new mongoose.Schema(
     passwordResetExpires: Date,
     verifyEmailOTPToken: String,
     verifyEmailExpires: Date,
+    googleId: String,
   },
   {
     timestamps: true,

@@ -1,4 +1,6 @@
 const express = require("express");
+const passport = require("passport");
+
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const upload = require("../utils/multer");
@@ -17,6 +19,15 @@ router.post("/loginPhone", authController.loginMobile);
 router.post("/loginUsername", authController.loginUsername);
 router.get("/logout", authController.logout);
 router.get("/isLoggedIn", authController.protect, authController.isLoggedIn);
+
+router.get(
+  "/auth/google/callback", 
+  passport.authenticate('google', { 
+    failureRedirect: '/' ,
+    scope: ["profile", "email"],
+  }),
+  authController.googleAuth
+  );
 
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch(

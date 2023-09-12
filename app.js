@@ -7,7 +7,11 @@ const xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./path/swagger-output.json");
+const passport = require('passport');
+const session = require('express-session');
+const mongoose = require('mongoose');
+
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -25,6 +29,9 @@ const consultationRoutes = require("./routes/consultationRoutes");
 const consultationReviewRoutes = require("./routes/consultationReviewRoutes");
 const communityRoutes = require("./routes/communityRoutes")
 const bannerRoutes = require('./routes/bannerRoutes');
+const swaggerDocument = require("./path/swagger-output.json");
+
+const GoogleUsers = require('./models/googleUsersModel');
 
 const app = express();
 
@@ -43,6 +50,7 @@ app.use(
     },
   })
 );
+
 app.use(
   cors({
     origin: [
@@ -60,6 +68,54 @@ app.use(
     optionSuccessStatus: 200,
   })
 );
+
+app.use(
+  session({
+    secret: process.env.JWT_SECRET,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_ID,
+      callbackURL: 'http://localhost:8000/auth/google/callback',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      // Check if the user exists in the database
+      const existingUser = await GoogleUsers.findOne({ googleId: profile.id });
+
+      if (existingUser) {
+        return done(null, existingUser);
+      }
+
+      const user = await new GoogleUsers({
+        googleId: profile.id,
+        username: profile.displayName,
+        firstName: profile.name.givenName,
+        lastName: profile.name.familyName,
+        email: profile.emails[0].value,
+      }).save();
+
+      return done(null, user);
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  const user = await User.findById(id);
+  done(null, user);
+});
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

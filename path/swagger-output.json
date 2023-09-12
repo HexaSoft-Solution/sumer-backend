@@ -197,6 +197,16 @@
         }
       }
     },
+    "/api/v1/users/auth/google/callback": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/users/forgotPassword": {
       "post": {
         "tags": [
@@ -2168,35 +2178,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "example": "any"
-                  },
-                  "number": {
-                    "example": "any"
-                  },
-                  "name": {
-                    "example": "any"
-                  },
-                  "cvc": {
-                    "example": "any"
-                  },
-                  "month": {
-                    "example": "any"
-                  },
-                  "year": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -6794,6 +6775,32 @@
           }
         }
       },
+      "googleUsersModel": {
+        "title": "Google-Users",
+        "required": [
+          "googleId"
+        ],
+        "properties": {
+          "googleId": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
       "invoiceModel": {
         "title": "Invoice",
         "required": [
@@ -7396,6 +7403,9 @@
               "type": "string"
             }
           },
+          "balance": {
+            "type": "number"
+          },
           "passwordConfirm": {
             "type": "string"
           },
@@ -7511,6 +7521,9 @@
           "verifyEmailExpires": {
             "type": "string",
             "format": "date-time"
+          },
+          "googleId": {
+            "type": "string"
           },
           "_id": {
             "type": "string"
