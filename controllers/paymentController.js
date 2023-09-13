@@ -132,10 +132,6 @@ exports.addVoucher = catchAsync(async (req, res, next) => {
     return next(new AppError("Voucher already owned.", 400));
   }
 
-  if (req.user.cart.voucher) {
-    return next(new AppError("Voucher already added.", 400));
-  }
-
   req.user.cart.voucher = voucher._id;
   await req.user.save();
 
