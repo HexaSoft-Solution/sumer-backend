@@ -38,6 +38,7 @@
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
+    "paypal-rest-sdk": "^1.8.1",
     "slugify": "^1.6.6",
     "swagger-autogen": "^2.23.5",
     "swagger-jsdoc": "^6.2.8",

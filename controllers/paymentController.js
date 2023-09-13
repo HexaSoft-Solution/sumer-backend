@@ -797,15 +797,192 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.paypal = catchAsync(async (req, res, next) => {
-  // #swagger.tags = ['Payment']
-  const response = await Paypal.createOrder();
-  res.json(response);
-})
+exports.checkoutPaypal = catchAsync(async (req, res, next) => {
+  const cart = req.user.cart.items;
+  const userId = req.user._id;
 
-exports.complete = catchAsync(async (req, res, next) => {
-  // #swagger.tags = ['Payment']
-  const { orderID } = req.params;
-  const response = await Paypal.capturePayment(orderID);
-  res.json(response);
-})
+  let totalCartAmount = 0;
+  const metadataArray = [];
+  for (const item of cart) {
+    const product = await Product.findById(item.product);
+    if (product.availabilityCount < item.quantity) {
+      return next(
+        new AppError(`Product ${product.name} is out of stock.`, 400)
+      );
+    }
+
+    let totalPriceForProduct;
+
+    if (product.discountedPrice > 0) {
+      totalPriceForProduct = product.price * item.quantity;
+      totalCartAmount += totalPriceForProduct;
+    } else {
+      totalPriceForProduct = product.price * item.quantity;
+      totalCartAmount += totalPriceForProduct;
+    }
+
+    const metadata = {
+      productName: product.name,
+      quantity: item.quantity,
+      price: product.price,
+    };
+    metadataArray.push(metadata);
+  }
+
+  const transactionIds = [];
+  for (let i = 0; i < cart.length; i++) {
+    const item = cart[i];
+    const transaction = new Transaction({
+      product: item.product,
+      quantity: item.quantity,
+      price: metadataArray[i].price,
+      user: userId,
+    });
+    await transaction.save();
+    transactionIds.push(transaction._id);
+
+    const product = await Product.findById(item.product);
+
+    await User.findByIdAndUpdate(
+      { _id: product.owner._id },
+      { $inc: { balance: product.price } },
+    )
+  }
+
+  if (req.user.cart.voucher) {
+    const voucher = await Voucher.findById(req.user.cart.voucher);
+    const priceAfterVoucher = totalCartAmount - totalCartAmount * voucher.discountPercentage / 100;
+    if (totalCartAmount - priceAfterVoucher > voucher.maxDiscount) {
+      totalCartAmount = totalCartAmount - voucher.maxDiscount;
+    } else {
+      totalCartAmount = totalCartAmount - totalCartAmount * voucher.discountPercentage / 100;
+    }
+    voucher.used = true;
+    await voucher.save();
+  }
+
+  const items = req.user.cart.items.map(item => {
+    return {
+      name: item.product.name,
+      sku: item.product._id,
+      price: item.product.price * 0.27,
+      currency: "USD",
+      quantity: item.quantity
+    }
+  })
+
+  const amount = {
+    currency: "USD",
+    total: totalCartAmount * 0.27
+  }
+
+  const create_payment_json = {
+    intent: "sale",
+    payer: {
+      payment_method: "paypal",
+    },
+    redirect_urls: {
+      return_url: `${req.protocol}://${req.get("host")}/api/v1/payment/paypal/success`,
+      cancel_url: `${req.protocol}://${req.get("host")}/api/v1/products`,
+    },
+    transactions: [
+      {
+        item_list: {
+          items: items,
+        },
+        amount: amount,
+        description: "All products Checkout",
+      },
+    ],
+  };
+
+  Paypal.payment.create(create_payment_json, function (error, payment) {
+    if (error) {
+      console.log(error.response)
+      return next(new AppError(error.response.message, error.response.httpStatusCode));
+    } else {
+      for (let i = 0; i < payment.links.length; i++) {
+        if (payment.links[i].rel === "approval_url") {
+          res.redirect(payment.links[i].href);
+        }
+      }
+    }
+  });
+});
+
+exports.paypalOne = catchAsync(async (req, res, next) => {
+  const create_payment_json = {
+    intent: "sale",
+    payer: {
+      payment_method: "paypal",
+    },
+    redirect_urls: {
+      return_url: `${req.protocol}://${req.get("host")}/api/v1/payment/paypal/success?totalPrice`,
+      cancel_url: `${req.protocol}://${req.get("host")}/api/v1/products`,
+    },
+    transactions: [
+      {
+        item_list: {
+          items: [
+            {
+              name: "Red Sox Hat",
+              sku: "001",
+              price: "25.00",
+              currency: "USD",
+              quantity: 1,
+            },
+          ],
+        },
+        amount: {
+          currency: "USD",
+          total: "25.00",
+        },
+        description: "Hat for the best team ever",
+      },
+    ],
+  };
+
+  Paypal.payment.create(create_payment_json, function (error, payment) {
+      if (error) {
+        console.log(error.response)
+        return next(new AppError(error.response.message, error.response.httpStatusCode));
+      } else {
+        for (let i = 0; i < payment.links.length; i++) {
+          if (payment.links[i].rel === "approval_url") {
+            res.redirect(payment.links[i].href);
+          }
+        }
+      }
+    });
+  });
+
+exports.paypalSuccess = catchAsync(async (req, res, next) => {
+  const payerId = req.query.PayerID;
+  const paymentId = req.query.paymentId;
+
+  const execute_payment_json = {
+    payer_id: payerId,
+    transactions: [
+      {
+        amount: {
+          currency: "USD",
+          total: "25.00",
+        },
+      },
+    ],
+  };
+
+  Paypal.payment.execute(
+    paymentId,
+    execute_payment_json,
+    function (error, payment) {
+      if (error) {
+        console.log(error.response);
+        return next(new AppError(error.response.message, error.response.httpStatusCode));
+      } else {
+        console.log(JSON.stringify(payment));
+        res.send("Success");
+      }
+    }
+  );
+});

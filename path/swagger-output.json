@@ -200,6 +200,15 @@
     "/api/v1/users/auth/google/signin": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -207,12 +216,21 @@
         }
       }
     },
-    "/api/v1/users/auth/facebook/callback": {
+    "/api/v1/users/auth/google/callback": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -3101,29 +3119,29 @@
       }
     },
     "/api/v1/payment/paypal/orders": {
-      "post": {
-        "tags": [
-          "Payment"
-        ],
+      "get": {
         "description": "",
         "responses": {
-          "200": {
-            "description": "OK"
+          "default": {
+            "description": ""
           }
         }
       }
     },
-    "/api/v1/payment/paypal/orders/{orderID}/capture": {
-      "post": {
-        "tags": [
-          "Payment"
-        ],
+    "/api/v1/payment/paypal/success": {
+      "get": {
         "description": "",
         "parameters": [
           {
-            "name": "orderID",
-            "in": "path",
-            "required": true,
+            "name": "PayerID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "paymentId",
+            "in": "query",
             "schema": {
               "type": "string"
             }

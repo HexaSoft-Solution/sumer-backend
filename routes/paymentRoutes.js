@@ -136,14 +136,15 @@ router
 
 router
     .route('/paypal/orders')
-    .post(
-        paymentController.paypal
+    .get(
+        paymentController.paypalOne
     )
 
 router
-    .route('/paypal/orders/:orderID/capture')
-    .post(
-        paymentController.complete
-    )
+    .route('/paypal/success')
+    .get(
+        paymentController.paypalSuccess
+    );
+
 
 module.exports = router;
