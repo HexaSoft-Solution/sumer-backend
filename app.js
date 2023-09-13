@@ -9,7 +9,6 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const passport = require('passport');
 const session = require('express-session');
-const paypal = require('paypal-rest-sdk');
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -122,12 +121,6 @@ passport.deserializeUser(async (id, done) => {
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-
-paypal.configure({
-  'mode': 'sandbox',
-  'client_id': process.env.PAYPAL_CLIENT_ID,
-  'client_secret': process.env.PAYPAL_SECRET_KEY
-});
 
 const limiter = rateLimit({
   max: 10000,

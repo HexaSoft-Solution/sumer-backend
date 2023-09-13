@@ -30,12 +30,16 @@ router
     ProductController.getMyProduct
   );
 
-  router
-    .route('/invoices')
-    .get(
-      authController.protect,
-      ProductController.getIvoices
-    )
+router
+  .route('/invoices')
+  .get(
+    authController.protect,
+    ProductController.getIvoices
+  )
+
+router
+  .route('/transactions')
+  .get(ProductController.getAllTransactions)
 
 router.route("/search").get(ProductController.searchProduct);
 
