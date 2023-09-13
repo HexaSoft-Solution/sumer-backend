@@ -339,16 +339,18 @@ exports.getUser = catchAsync(async (req, res, next) => {
     });
 
     const cart = user.cart;
-    console.log(cart);
     const arr = [];
-    await Promise.all(
-        cart.map(async (e, i) => {
-            const product = await Product.findById(e.product);
-            arr.push({
-                product,
-            });
-        })
-    );
+    console.log(cart)
+    if (cart?.items) {
+        await Promise.all(
+            cart.items.map(async (e, i) => {
+                const product = await Product.findById(e.product);
+                arr.push({
+                    product,
+                });
+            })
+        );
+    }
 
     res.status(200).json({
         status: "success",
