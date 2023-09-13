@@ -137,7 +137,7 @@ router
 router
     .route('/paypal/orders')
     .get(
-        paymentController.paypalOne
+        paymentController.paypalMgmg
     )
 
 router
