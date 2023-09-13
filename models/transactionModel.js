@@ -20,6 +20,13 @@ const transactionSchema = new mongoose.Schema({
     }
 });
 
+transactionSchema.pre(/^find/, function (next) {
+
+    this.populate('product');
+
+    next();
+});
+
 const Transaction = mongoose.model('Transaction', transactionSchema);
 
 module.exports = Transaction;
