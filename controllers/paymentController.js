@@ -109,7 +109,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
     status: "success",
     cartDetails: cartDetails,
     totalPriceForAllProducts: totalPrice,
-    voucherDiscount
+    voucherDiscount,
     voucher,
   });
 });
