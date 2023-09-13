@@ -710,7 +710,7 @@
     "/api/v1/users/loved-product": {
       "get": {
         "tags": [
-          "Authentication"
+          "Product"
         ],
         "description": "",
         "parameters": [
