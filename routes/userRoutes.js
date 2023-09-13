@@ -21,13 +21,18 @@ router.get("/logout", authController.logout);
 router.get("/isLoggedIn", authController.protect, authController.isLoggedIn);
 
 router.get(
-  "/auth/google/callback", 
+  "/auth/google/signin", 
   passport.authenticate('google', { 
     failureRedirect: '/' ,
     scope: ["profile", "email"],
   }),
   authController.googleAuth
   );
+
+  router.get(
+    "/auth/google/callback",
+    authController.googleAuth
+  )
 
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch(

@@ -85,7 +85,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_ID,
-      callbackURL: 'http://localhost:8000/auth/google/callback',
+      callbackURL: 'http://localhost:8000/api/v1/users/auth/google/callback',
     },
     async (accessToken, refreshToken, profile, done) => {
       // Check if the user exists in the database
@@ -95,13 +95,15 @@ passport.use(
         return done(null, existingUser);
       }
 
-      const user = await new GoogleUsers({
+      console.log(accessToken, refreshToken, profile, done)
+
+      const user = await GoogleUsers.create({
         googleId: profile.id,
         username: profile.displayName,
         firstName: profile.name.givenName,
         lastName: profile.name.familyName,
         email: profile.emails[0].value,
-      }).save();
+      })
 
       return done(null, user);
     }
@@ -113,7 +115,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const user = await User.findById(id);
+  const user = await GoogleUsers.findOne({ googleId: id});
   done(null, user);
 });
 
