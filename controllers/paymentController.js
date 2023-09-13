@@ -7,6 +7,7 @@ const SalonBooking = require("../models/salonBookingModel");
 const Consultation = require("../models/consultationModel");
 const Consultant = require("../models/consultantModel");
 const BusinussProfile = require("../models/businessProfileModel");
+const Voucher = require('../models/voucherModel');
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -63,7 +64,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(userId);
 
-  const cart = user.cart;
+  const cart = user.cart.items;
 
   const cartDetails = [];
   let totalPrice = 0;
@@ -81,16 +82,66 @@ exports.viewCart = catchAsync(async (req, res, next) => {
     });
   }
 
+  let voucher;
+
+  if (user.cart.voucher) {
+    voucher = await Voucher.findById(user.cart.voucher);
+    
+    const priceAfterDiscount = totalPrice - totalPrice * voucher.discountPercentage / 100;
+
+    if (totalPrice - priceAfterDiscount > voucher.maxDiscount) {
+      totalPrice = totalPrice - voucher.maxDiscount;
+    } else { 
+      totalPrice = totalPrice - totalPrice * voucher.discountPercentage / 100;
+    }
+  }
+
   res.status(200).json({
     status: "success",
     cartDetails: cartDetails,
     totalPriceForAllProducts: totalPrice,
+    voucher
+  });
+});
+
+exports.addVoucher = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Payment']
+  const userId = req.user.id;
+  const { voucherCode } = req.body;
+
+  const voucher = await Voucher.findOne({ code: voucherCode });
+  if (!voucher) {
+    return next(new AppError("Voucher not found.", 404));
+  }
+
+  if (voucher.used) {
+    return next(new AppError("Voucher already used.", 400));
+  }
+
+  if (voucher.owned) {
+    return next(new AppError("Voucher already owned.", 400));
+  }
+
+  if (req.user.cart.voucher) {
+    return next(new AppError("Voucher already added.", 400));
+  }
+
+  req.user.cart.voucher = voucher._id;
+  await req.user.save();
+
+  voucher.owned = true;
+  voucher.user = userId;
+  await voucher.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "Voucher added successfully.",
   });
 });
 
 exports.checkout = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Payment']
-  const cart = req.user.cart;
+  const cart = req.user.cart.items;
   const userId = req.user._id;
 
   let totalCartAmount = 0;
@@ -131,6 +182,18 @@ exports.checkout = catchAsync(async (req, res, next) => {
       { _id: product.owner._id },
       { $inc: { balance: product.price } },
     )
+  }
+
+  if (req.user.cart.voucher) {
+    const voucher = await Voucher.findById(req.user.cart.voucher);
+    const priceAfterVoucher = totalCartAmount - totalCartAmount * voucher.discountPercentage / 100;
+    if (totalCartAmount - priceAfterVoucher > voucher.maxDiscount) {
+      totalCartAmount = totalCartAmount - voucher.maxDiscount;
+    } else {
+      totalCartAmount = totalCartAmount - totalCartAmount * voucher.discountPercentage / 100;
+    }
+    voucher.used = true;
+    await voucher.save();
   }
 
   const { type, number, name, cvc, month, year } = req.body;

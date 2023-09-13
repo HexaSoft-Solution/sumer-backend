@@ -2153,6 +2153,42 @@
         }
       }
     },
+    "/api/v1/payment/voucher": {
+      "post": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "voucherCode": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/payment/checkout": {
       "patch": {
         "tags": [
@@ -7428,18 +7464,26 @@
             "type": "string"
           },
           "cart": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "product": {
-                  "type": "string"
-                },
-                "quantity": {
-                  "type": "number"
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "product": {
+                      "type": "string"
+                    },
+                    "quantity": {
+                      "type": "number"
+                    }
+                  },
+                  "required": []
                 }
               },
-              "required": []
+              "voucher": {
+                "type": "string"
+              }
             }
           },
           "posts": {

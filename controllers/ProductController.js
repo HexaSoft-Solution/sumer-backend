@@ -453,12 +453,12 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(userId);
 
-  const cartItemIndex = user.cart.findIndex((el) => el.product.toString() === productId);
+  const cartItemIndex = user.cart?.items?.findIndex((el) => el.product.toString() === productId);
 
   if (cartItemIndex !== -1) {
-    user.cart[cartItemIndex].quantity = quantity;
+    user.cart.items[cartItemIndex].quantity = quantity;
   } else {
-    user.cart.push({
+    user.cart.items.push({
       product: productId,
       quantity: quantity,
     });
