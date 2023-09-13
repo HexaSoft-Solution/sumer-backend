@@ -89,6 +89,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
   }
 
   let voucher;
+  let voucherDiscount
 
   if (user.cart.voucher) {
     voucher = await Voucher.findById(user.cart.voucher);
@@ -97,8 +98,10 @@ exports.viewCart = catchAsync(async (req, res, next) => {
 
     if (totalPrice - priceAfterDiscount > voucher.maxDiscount) {
       totalPrice = totalPrice - voucher.maxDiscount;
+      voucherDiscount = voucher.maxDiscount
     } else { 
       totalPrice = totalPrice - totalPrice * voucher.discountPercentage / 100;
+      voucherDiscount = totalPrice * voucher.discountPercentage / 100
     }
   }
 
@@ -106,7 +109,8 @@ exports.viewCart = catchAsync(async (req, res, next) => {
     status: "success",
     cartDetails: cartDetails,
     totalPriceForAllProducts: totalPrice,
-    voucher
+    voucherDiscount
+    voucher,
   });
 });
 

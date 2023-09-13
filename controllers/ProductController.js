@@ -477,6 +477,8 @@ exports.removeFromCart = catchAsync(async (req, res, next) => {
   const { _id } = req.body;
   const userId = req.user.id;
 
+  
+
   await User.findByIdAndUpdate(userId, {
     $pull: { cart: { _id } },
   });
