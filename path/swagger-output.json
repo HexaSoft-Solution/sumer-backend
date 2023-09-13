@@ -198,7 +198,7 @@
       }
     },
     "/api/v1/users/auth/google/callback": {
-      "post": {
+      "get": {
         "description": "",
         "responses": {
           "200": {
@@ -700,7 +700,7 @@
     "/api/v1/users/loved-product": {
       "get": {
         "tags": [
-          "Authentication"
+          "Product"
         ],
         "description": "",
         "parameters": [
@@ -1152,13 +1152,6 @@
         ],
         "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
         "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "limit",
             "in": "query",
