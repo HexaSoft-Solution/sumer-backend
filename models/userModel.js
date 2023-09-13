@@ -115,8 +115,8 @@ const userSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Salon",
     },
-    cart: [
-      {
+    cart: {
+      items: [{
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
@@ -126,9 +126,12 @@ const userSchema = new mongoose.Schema(
           default: 1,
           min: 1,
         },
+      },],
+      voucher: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Voucher",
       },
-    ],
-
+    },
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,

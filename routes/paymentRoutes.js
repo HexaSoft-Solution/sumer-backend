@@ -13,6 +13,13 @@ router
     );
 
 router
+    .route('/voucher')
+    .post(
+        authController.protect,
+        paymentController.addVoucher
+    );
+
+router
     .route('/checkout')
     .patch(
         authController.protect,
