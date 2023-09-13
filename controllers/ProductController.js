@@ -477,10 +477,20 @@ exports.removeFromCart = catchAsync(async (req, res, next) => {
   const { _id } = req.body;
   const userId = req.user.id;
 
-  
+  const cart = req.user.cart.items;
+
+  console.log(cart);
+
+  const cartItemIndex = cart.findIndex((el) => el.product.toString() === _id);
+
+  if (cartItemIndex === -1) {
+    return next(new AppError("Product not found in the cart", 404));
+  } else {
+    cart.splice(cartItemIndex, 1);
+  }
 
   await User.findByIdAndUpdate(userId, {
-    $pull: { cart: { _id } },
+    $set: { cart: { items: cart } },
   });
 
   res.status(200).json({
