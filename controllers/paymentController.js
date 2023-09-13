@@ -71,7 +71,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
 
   for (const item of cart) {
     const product = await getProductDetails(item.product);
-    const totalPriceForProduct;
+    let totalPriceForProduct;
     if (product.discountedPrice > 0) {
       totalPriceForProduct = product.price * item.quantity;
       totalPrice += totalPriceForProduct;
