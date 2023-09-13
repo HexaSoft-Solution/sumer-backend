@@ -153,8 +153,16 @@ exports.checkout = catchAsync(async (req, res, next) => {
         new AppError(`Product ${product.name} is out of stock.`, 400)
       );
     }
-    const totalPriceForProduct = product.price * item.quantity;
-    totalCartAmount += totalPriceForProduct;
+
+    let totalPriceForProduct;
+
+    if (product.discountedPrice > 0) {
+      totalPriceForProduct = product.price * item.quantity;
+      totalCartAmount += totalPriceForProduct;
+    } else {
+      totalPriceForProduct = product.price * item.quantity;
+      totalCartAmount += totalPriceForProduct;
+    }
 
     const metadata = {
       productName: product.name,
