@@ -86,7 +86,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_ID,
-      callbackURL: 'http://localhost:8000/api/v1/users/auth/google/callback',
+      callbackURL: '/api/v1/users/auth/google/callback',
     },
     async (accessToken, refreshToken, profile, done) => {
       // Check if the user exists in the database
