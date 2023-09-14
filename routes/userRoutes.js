@@ -24,7 +24,7 @@ router.get(
   "/auth/google/signin", 
   passport.authenticate('google', { 
     failureRedirect: '/' ,
-    scope: ["public_profile", "email"],
+    scope: "email",
   }),
   );
 

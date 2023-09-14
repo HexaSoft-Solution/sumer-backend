@@ -81,7 +81,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
 
   if (req?.body?.role === "salon service") {
-    await Salon.create({
+    const salon = await Salon.create({
       name: req.body.salonName,
       phone: req.body.phone,
     });
@@ -463,5 +463,5 @@ exports.googleAuth = catchAsync(async (req, res, next) => {
 
 
 exports.facebookAuth = catchAsync(async (req, res, next) => {
-  
+
 })
