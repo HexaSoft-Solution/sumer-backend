@@ -36,7 +36,8 @@ const parseDate = (date) => {
             const day = parseInt(parts[0], 10);
             const month = parseInt(parts[1], 10) - 1;
             const year = parseInt(parts[2], 10);
-            return new Date(year, month, day);
+            const utcDate = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
+            return utcDate;
         }
     }
     return date;
@@ -530,6 +531,8 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         date: parseDate(date),
     })
 
+    console.log(parseDate(date))
+
     if (availability.length === 0) {
         return next(new AppError("Salon is not available at this time.", 400));
     }
@@ -550,7 +553,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
     const endHours = parseInt(endParts[0], 10);
 
     const payment = await moyasar.createPayment(
-        (endHours - startHours) * salon.pricePerHour,
+        (endHours - startHours) * (salon.pricePerHour || 10),
         "Book Salon",
         source,
         [{salon: salon._id.toString()}],
@@ -565,10 +568,8 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         return next(new AppError("Payment failed.", 400));
     }
 
-    await User.findByIdAndUpdate(
-        {_id: salon.owner},
-        {$inc: {balance: salon.pricePerHour}},
-    )
+    salon.balance += salon.pricePerHour;
+    await salon.save();
 
     salon.booking.push(newBooking._id);
     await salon.save();
