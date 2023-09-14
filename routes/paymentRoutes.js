@@ -56,7 +56,7 @@ router
     );
 
 router
-    .route('/verifyPaymentSalon/:bookingId/:amount/:salonId')
+    .route('/verifyPaymentSalon/:bookingId/:amount/:salonId/:user')
     .get(
         paymentController.verifyBookingSalon
     );

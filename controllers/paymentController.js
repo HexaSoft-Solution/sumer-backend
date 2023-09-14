@@ -587,6 +587,7 @@ exports.verifyBookingSalon = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
     const paymentId = req.query.id;
     const bookingId = req.params.bookingId;
+    const userId = req.params.user;
     const amount = req.params.amount;
     const salonId = req.params.salonId;
 
@@ -598,6 +599,10 @@ exports.verifyBookingSalon = catchAsync(async (req, res, next) => {
         await Salon.findByIdAndUpdate(salonId, {
             $inc: {balance: amount},
             $push: {booking: salonBook.id}
+        });
+
+        await User.findByIdAndUpdate(userId, {
+            $push: {salonBooking: salonBook.id}
         });
 
         res

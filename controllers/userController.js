@@ -4,6 +4,7 @@ const Voucher = require("../models/voucherModel");
 const Product = require("../models/productModel");
 const Salon = require("../models/salonModel");
 const BusinessProfile = require("../models/businessProfileModel");
+const Booking = require("../models/salonBookingModel");
 
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
@@ -424,5 +425,19 @@ exports.getMyVouvher = catchAsync(async (req, res, next) => {
         status: "success",
         results: voucher.length,
         voucher,
+    });
+});
+
+exports.getMySalonbooking = catchAsync(async (req, res, next) => {
+    const bookingsIds = req.user.salonBookings;
+
+    const bookings = await Booking.find({
+        _id: {$in: bookingsIds},
+    })
+
+    res.status(200).json({
+        status: "success",
+        results: bookings.length,
+        bookings,
     });
 });

@@ -115,6 +115,11 @@ const userSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Salon",
     },
+
+    salonBooking: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SalonBooking",
+    }],
     cart: {
       items: [{
         product: {

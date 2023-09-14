@@ -82,6 +82,14 @@ router
   .route("/me")
   .get(authController.protect, userController.getMe, userController.getUser);
 
+router
+  .route('/my-salon-booking')
+  .get(
+    authController.protect,
+
+    userController.getMySalonbooking
+  )
+
 router.patch(
   "/updateMyPassword",
   authController.protect,

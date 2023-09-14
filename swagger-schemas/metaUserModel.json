@@ -1,0 +1,1 @@
+{"title":"Meta-Users","required":["metaId"],"properties":{"metaId":{"type":"string"},"username":{"type":"string"},"firstName":{"type":"string"},"lastName":{"type":"string"},"email":{"type":"string"},"_id":{"type":"string"}}}

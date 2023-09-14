@@ -199,6 +199,16 @@
     },
     "/api/v1/users/auth/google/signin": {
       "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/users/auth/google/callback": {
+      "get": {
         "tags": [
           "Authentication"
         ],
@@ -219,7 +229,17 @@
         }
       }
     },
-    "/api/v1/users/auth/google/callback": {
+    "/api/v1/users/auth/facebook/signin": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/users/auth/facebook/callback": {
       "get": {
         "tags": [
           "Authentication"
@@ -446,6 +466,28 @@
       }
     },
     "/api/v1/users/me": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/users/my-salon-booking": {
       "get": {
         "tags": [
           "Authentication"
@@ -1186,6 +1228,13 @@
         ],
         "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "limit",
             "in": "query",
@@ -2491,7 +2540,7 @@
         }
       }
     },
-    "/api/v1/payment/verifyPaymentSalon/{bookingId}/{amount}/{salonId}": {
+    "/api/v1/payment/verifyPaymentSalon/{bookingId}/{amount}/{salonId}/{user}": {
       "get": {
         "tags": [
           "Payment"
@@ -2516,6 +2565,14 @@
           },
           {
             "name": "salonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user",
             "in": "path",
             "required": true,
             "schema": {
@@ -3331,6 +3388,60 @@
         }
       }
     },
+    "/api/v1/salons/my-bookings": {
+      "get": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Page size: ex: ?limit=10",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "example: ?fields=name,description",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "indexing page: ex: ?page=2",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "example: ?sort=name,-createdAt",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/salons/search": {
       "get": {
         "description": "",
@@ -3943,60 +4054,6 @@
           },
           "400": {
             "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/v1/salons/my-bookings": {
-      "get": {
-        "tags": [
-          "Salon"
-        ],
-        "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Page size: ex: ?limit=10",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "example: ?fields=name,description",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "indexing page: ex: ?page=2",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "example: ?sort=name,-createdAt",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -7003,6 +7060,32 @@
           }
         }
       },
+      "metaUserModel": {
+        "title": "Meta-Users",
+        "required": [
+          "metaId"
+        ],
+        "properties": {
+          "metaId": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
       "productModel": {
         "title": "Product",
         "required": [
@@ -7574,6 +7657,12 @@
           },
           "salonCreated": {
             "type": "string"
+          },
+          "salonBooking": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "cart": {
             "type": "object",
