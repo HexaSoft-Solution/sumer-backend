@@ -10,6 +10,7 @@ const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
 const cloudinary = require("../utils/cloudinary");
+const APIFeatures = require("../utils/apiFeatures");
 
 const jwt = require("jsonwebtoken");
 const Consultation = require("../models/consultationModel");
@@ -429,15 +430,31 @@ exports.getMyVouvher = catchAsync(async (req, res, next) => {
 });
 
 exports.getMySalonbooking = catchAsync(async (req, res, next) => {
-    const bookingsIds = req.user.salonBookings;
+    const bookingsIds = req.user.salonBooking;
 
-    const bookings = await Booking.find({
-        _id: {$in: bookingsIds},
-    })
+    // const bookings = await Booking.find({
+    //     _id: {$in: bookingsIds},
+    // })
+
+    
+    const ids = bookingsIds.map((e) => {
+        return e.toString();
+    });
+    console.log(ids)
+  if (req.params.id) filter = { model: req.params.id };
+
+  const features = new APIFeatures(Booking.find({
+        _id: {$in: ids},
+  }), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .Pagination();
+  const bokkkinnga = await features.query;
 
     res.status(200).json({
         status: "success",
-        results: bookings.length,
-        bookings,
+        results: bokkkinnga.length,
+        bookings: bokkkinnga,
     });
 });

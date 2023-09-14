@@ -86,7 +86,6 @@ router
   .route('/my-salon-booking')
   .get(
     authController.protect,
-
     userController.getMySalonbooking
   )
 
