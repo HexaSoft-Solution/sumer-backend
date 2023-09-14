@@ -24,15 +24,30 @@ router.get(
   "/auth/google/signin", 
   passport.authenticate('google', { 
     failureRedirect: '/' ,
-    scope: ["profile", "email"],
+    scope: ["public_profile", "email"],
   }),
-  authController.googleAuth
   );
 
   router.get(
     "/auth/google/callback",
     authController.googleAuth
-  )
+  );
+
+
+  router.get(
+    "/auth/facebook/signin",
+    passport.authenticate('facebook', { 
+      failureRedirect: '/' ,
+      scope: ["profile", "email"],
+    }),
+    authController.facebookAuth
+  );
+
+
+  router.get(
+    "/auth/facebook/callback",
+    authController.googleAuth
+  );
 
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch(

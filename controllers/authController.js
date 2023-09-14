@@ -459,8 +459,9 @@ exports.googleAuth = catchAsync(async (req, res, next) => {
       googleAuthData:  profileResponse.data
     });
   }
-
-  console.log('Google Profile ID:', id);
-  console.log('Name:', name);
-  console.log('Email:', email);
 });
+
+
+exports.facebookAuth = catchAsync(async (req, res, next) => {
+  
+})

@@ -11,6 +11,7 @@ const passport = require('passport');
 const session = require('express-session');
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -31,6 +32,7 @@ const bannerRoutes = require('./routes/bannerRoutes');
 const swaggerDocument = require("./path/swagger-output.json");
 
 const GoogleUsers = require('./models/googleUsersModel');
+const MetaUsers = require('./models/metaUserModel')
 
 const app = express();
 
@@ -108,6 +110,29 @@ passport.use(
     }
   )
 );
+
+passport.use(new FacebookStrategy({
+  clientID: process.env.META_APP_ID,
+  clientSecret: process.env.META_APP_SECRET,
+  callbackURL: 'https://www.google.com/',
+}, async (accessToken, refreshToken, profile, done) => {
+
+  const existingUser = await MetaUsers.findOne({ metaId: profile.id });
+
+  if (existingUser) {
+      return done(null, existingUser);
+  }
+
+  const user = await MetaUsers.create({
+      metaId: profile.id,
+      username: profile.displayName,
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
+      email: profile.emails[0].value,
+  })
+  
+  return done(null, user);
+}));
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
