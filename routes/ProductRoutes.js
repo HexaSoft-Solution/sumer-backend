@@ -40,6 +40,10 @@ router
 router
   .route('/transactions')
   .get(ProductController.getAllTransactions)
+  
+  router
+  .route('/invoices')
+  .get(ProductController.getAllInvoices)
 
 router.route("/search").get(ProductController.searchProduct);
 
