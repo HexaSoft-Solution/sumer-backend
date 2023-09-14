@@ -17,6 +17,11 @@ const invoiceSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+
+    paypalId: {
+        type: String,
+        default: ""
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

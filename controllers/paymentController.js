@@ -15,6 +15,12 @@ const moyasar = require("../utils/moyasar");
 const Paypal = require('../utils/paypal');
 const SalonTimeTable = require("../models/salonAvailableTimeModel");
 
+const paypal = require("@paypal/checkout-server-sdk");
+const clientId = process.env.PAYPAL_CLIENT_ID;
+const clientSecret = process.env.PAYPAL_SECRET_KEY;
+const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
+const client = new paypal.core.PayPalHttpClient(environment);
+
 const getProductDetails = async (productId) => {
     return await Product.findById(productId);
 };
@@ -910,151 +916,222 @@ exports.checkoutPaypal = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.paypalOne = catchAsync(async (req, res, next) => {
-    const create_payment_json = {
-        intent: "CAPTURE",
-        payer: {
-            payment_method: "paypal",
-        },
-        redirect_urls: {
-            return_url: `${req.protocol}://${req.get("host")}/api/v1/payment/paypal/success?totalPrice`,
-            cancel_url: `${req.protocol}://${req.get("host")}/api/v1/products`,
-        },
-        transactions: [
-            {
-                item_list: {
-                    items: [
-                        {
-                            name: "Red Sox Hat",
-                            sku: "001",
-                            price: "25.00",
-                            currency: "USD",
-                            quantity: 1,
-                        },
-                    ],
-                },
-                amount: {
-                    currency: "USD",
-                    total: "25.00",
-                },
-                description: "Hat for the best team ever",
-            },
-        ],
-    };
+exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+    const cart = req.user.cart.items;
+    const userId = req.user._id;
 
-    const orderData = {
-        intent: 'CAPTURE', // Change to 'AUTHORIZE' if you want to authorize the payment first
-        purchase_units: [
-            {
-                amount: {
-                    currency_code: 'USD',
-                    value: '10.00', // The total amount of the order
-                },
-            },
-        ],
-    };
-    Paypal.orders.create(orderData, function (error, order) {
-        if (error) {
-            console.error(error);
-            return res.status(500).json({error: 'Failed to create order'});
+    let totalCartAmount = 0;
+    const metadataArray = [];
+    for (const item of cart) {
+        const product = await Product.findById(item.product);
+        if (product.availabilityCount < item.quantity) {
+            return next(
+                new AppError(`Product ${product.name} is out of stock.`, 400)
+            );
         }
 
-        // Store the order ID in your database or session for reference
-        const orderId = order.id;
+        let totalPriceForProduct;
 
-        // Return the order ID to the client
-        res.json({orderID: orderId});
-    });
-});
-const paypal = require("@paypal/checkout-server-sdk");
-const clientId = process.env.PAYPAL_CLIENT_ID;
-const clientSecret = process.env.PAYPAL_SECRET_KEY;
-const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
-const client = new paypal.core.PayPalHttpClient(environment);
-exports.paypalMgmg = catchAsync(async (req, res) => {
-    try {
+        if (product.discountedPrice > 0) {
+            totalPriceForProduct = product.price * item.quantity;
+            totalCartAmount += totalPriceForProduct;
+        } else {
+            totalPriceForProduct = product.price * item.quantity;
+            totalCartAmount += totalPriceForProduct;
+        }
 
-        const items = [
-            {
-                name: 'Item Name',
-                description: 'Item Description',
-                quantity: '1',
-                unit_amount: {
-                    currency_code: 'USD',
-                    value: '10.00',
-                },
-            },
-        ]; //the items variable should be an array with objects.
+        const metadata = {
+            name: product.name,
+            description: product.desc,
+            quantity: item.quantity,
+            unit_amount: {
+                currency_code: 'USD',
+                value: (product.price * 0.24).toString(),
+            }
+        };
+        metadataArray.push(metadata);
+    }
 
-        // Call PayPal to set up a transaction. Create a request object and set parameters
-        let request = new paypal.orders.OrdersCreateRequest();
-        request.prefer("return=representation");
-        request.requestBody({
-            intent: "CAPTURE",
-            application_context: {
-                brand_name: "Jewlery",
-                landing_page: "BILLING",
-                user_action: "CONTINUE",
-            },
-            purchase_units: [{
-                reference_id: "PUHF",
-                description: "payment for XY company",
-                soft_descriptor: "Jewlery Fashion",
-                amount: {
-                    currency_code: "USD",
-                    value: 10, //
-                    breakdown: {
-                        item_total: {
-                            currency_code: "USD",
-                            value: 10,
-                        },
+    const transactionIds = [];
+    for (let i = 0; i < cart.length; i++) {
+        const item = cart[i];
+        const transaction = new Transaction({
+            product: item.product,
+            quantity: item.quantity,
+            price: metadataArray[i].unit_amount.value * (100/24),
+            user: userId,
+        });
+        await transaction.save();
+        transactionIds.push(transaction._id);
+
+        const product = await Product.findById(item.product);
+
+        await User.findByIdAndUpdate(
+            {_id: product.owner._id},
+            {$inc: {balance: product.price}},
+        )
+    }
+
+    if (req.user.cart.voucher) {
+        const voucher = await Voucher.findById(req.user.cart.voucher);
+        const priceAfterVoucher = totalCartAmount - totalCartAmount * voucher.discountPercentage / 100;
+        if (totalCartAmount - priceAfterVoucher > voucher.maxDiscount) {
+            totalCartAmount = totalCartAmount - voucher.maxDiscount;
+        } else {
+            totalCartAmount = totalCartAmount - totalCartAmount * voucher.discountPercentage / 100;
+        }
+        voucher.used = true;
+        await voucher.save();
+    }
+
+    const paypalItems = metadataArray;
+    console.log(metadataArray)
+
+    let request = new paypal.orders.OrdersCreateRequest();
+    request.prefer("return=representation");
+
+    request.requestBody({
+        intent: "CAPTURE",
+        application_context: {
+            brand_name: "Products",
+            landing_page: "BILLING",
+            user_action: "CONTINUE",
+        },
+        purchase_units: [{
+            reference_id: "PUHF",
+            description: "Products",
+            soft_descriptor: "Products",
+            amount: {
+                currency_code: "USD",
+                value: (totalCartAmount * 0.24).toString(), 
+                breakdown: {
+                    item_total: {
+                        currency_code: "USD",
+                        value: (totalCartAmount * 0.24).toString()
                     },
                 },
-                items: items,
-            },],
-        });
-        // your client gets a response with the order id
-        const response = await client.execute(request);
+            },
+            items: paypalItems,
+        },],
+    });
+
+    const response = await client.execute(request);
         console.log(`Response: ${JSON.stringify(response)}`);
         const orderID = response.result.id;
         console.log(`Order:    ${JSON.stringify(response.result)}`);
         const resJson = {
             orderID
         };
-        res.json(resJson);
+        const invoiceId = generateRandomInvoiceId();
+        const invoice = new Invoice({
+            invoiceId: invoiceId,
+            transactions: transactionIds,
+            totalAmount: totalCartAmount,
+            user: userId,
+            paypalId: orderID,
+        });
+        await invoice.save();
+        res.status(200).json(resJson);
+});
+
+exports.getOrderStatus = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+    try {
+        const orderID = req.params.orderID; // Get the order ID from the request params
+
+        // Create a request to get order details
+        let request = new paypal.orders.OrdersGetRequest(orderID);
+
+        // Execute the request
+        const response = await client.execute(request);
+
+        // Check the order status in the response
+        const orderStatus = response.result.status;
+
+        console.log(response.result)
+        if (orderStatus === 'COMPLETED') {
+
+
+        const invoice = await Invoice.findOne(
+            {paypalId: orderID},
+        );
+
+        const transactionsArr = invoice.transactions;
+        for (const transactionId of transactionsArr) {
+            const transaction = await Transaction.findById(transactionId);
+            const product = await Product.findOneAndUpdate(
+                {_id: transaction.product},
+                {$inc: {availabilityCount: -transaction.quantity}},
+                {new: true}
+            );
+            await BusinussProfile.findOneAndUpdate(
+                {user: product.owner},
+                {
+                    $inc: {balance: transaction.price},
+                    $push: {Transactions: transaction.id},
+                },
+                {new: true}
+            );
+        }
+
+        const transactions = await Transaction.find({
+            _id: {$in: invoice.transactions},
+        });
+        for (const transaction of transactions) {
+            transaction.paymentId = paymentId;
+            await transaction.save();
+        }
+            return res.json({ status: 'completed' });
+        } else {
+            // Order is not completed or has another status
+            return res.json({ status: 'not completed' });
+        }
     } catch (err) {
         console.error(err);
         return res.status(500).json(err);
     }
 })
 
-exports.paypalSuccess = catchAsync(async (req, res, next) => {
-    const payerId = req.query.PayerID;
-    const paymentId = req.query.paymentId;
+/*
+    // #swagger.tags = ['Payment']
+    
+    if (payment.status === "paid") {
+        const invoiceId = req.params.invoice_id;
 
-    const execute_payment_json = {
-        payer_id: payerId,
-        transactions: [
-            {
-                amount: {
-                    currency: "USD",
-                    total: "25.00",
+        const invoice = await Invoice.findOneAndUpdate(
+            {invoiceId: invoiceId},
+            {paymentIds: paymentId},
+            {new: true}
+        );
+
+        const transactionsArr = invoice.transactions;
+        for (const transactionId of transactionsArr) {
+            const transaction = await Transaction.findById(transactionId);
+            const product = await Product.findOneAndUpdate(
+                {_id: transaction.product},
+                {$inc: {availabilityCount: -transaction.quantity}},
+                {new: true}
+            );
+            await BusinussProfile.findOneAndUpdate(
+                {user: product.owner},
+                {
+                    $inc: {balance: transaction.price},
+                    $push: {Transactions: transaction.id},
                 },
-            },
-        ],
-    };
-
-    Paypal.payment.execute(
-        paymentId,
-        execute_payment_json,
-        function (error, payment) {
-            if (error) {
-                console.log(error.response);
-                return next(new AppError(error.response.message, error.response.httpStatusCode));
-            } else {
-                console.log(JSON.stringify(payment));
-                res.send("Success");
-            }
+                {new: true}
+            );
         }
-    );
-});
+
+        const transactions = await Transaction.find({
+            _id: {$in: invoice.transactions},
+        });
+        for (const transaction of transactions) {
+            transaction.paymentId = paymentId;
+            await transaction.save();
+        }
+
+        res
+            .status(200)
+            .json({status: "success", message: "Payment processed successfully."});
+ */

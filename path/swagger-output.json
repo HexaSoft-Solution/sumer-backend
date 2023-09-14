@@ -3181,33 +3181,16 @@
         }
       }
     },
-    "/api/v1/payment/paypal/orders": {
+    "/api/v1/payment/paypal/checkout-cart": {
       "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/v1/payment/paypal/success": {
-      "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
-            "name": "PayerID",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "paymentId",
-            "in": "query",
+            "name": "authorization",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -3216,6 +3199,32 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paypal/check-order-status/{orderID}": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "orderID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -6945,6 +6954,9 @@
           },
           "totalAmount": {
             "type": "number"
+          },
+          "paypalId": {
+            "type": "string"
           },
           "user": {
             "type": "string"

@@ -135,16 +135,14 @@ router
     .get(paymentController.verifyPromoteConsultation)
 
 router
-    .route('/paypal/orders')
+    .route('/paypal/checkout-cart')
     .get(
-        paymentController.paypalMgmg
+        authController.protect,
+        paymentController.paypalCheckoutOrder
     )
 
 router
-    .route('/paypal/success')
-    .get(
-        paymentController.paypalSuccess
-    );
-
+    .route('/paypal/check-order-status/:orderID')
+    .get(paymentController.getOrderStatus)
 
 module.exports = router;
