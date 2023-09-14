@@ -199,6 +199,9 @@
     },
     "/api/v1/users/auth/google/signin": {
       "get": {
+        "tags": [
+          "Authentication"
+        ],
         "description": "",
         "parameters": [
           {
@@ -218,6 +221,9 @@
     },
     "/api/v1/users/auth/google/callback": {
       "get": {
+        "tags": [
+          "Authentication"
+        ],
         "description": "",
         "parameters": [
           {

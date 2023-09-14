@@ -415,53 +415,52 @@ exports.isLoggedIn = async (req, res, next) => {
 };
 
 exports.googleAuth = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Authentication']
   const { code } = req.query;
 
-    // Define the token exchange URL
-    const tokenExchangeUrl = 'https://oauth2.googleapis.com/token';
+  const tokenExchangeUrl = 'https://oauth2.googleapis.com/token';
 
-    // Prepare the request data
-    const requestData = {
-      code,
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_SECRET_KEY,
-      redirect_uri: 'http://localhost:8000/api/vi/users/auth/google/callback',
-      grant_type: 'authorization_code',
-    };
+  const requestData = {
+    code,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_SECRET_KEY,
+    redirect_uri: `${req.protocol}://${req.get("host")}/api/v1/users/auth/google/callback`,
+    grant_type: 'authorization_code',
+  };
 
-    // Make an HTTP POST request to exchange the code for tokens
-    const response = await axios.post(tokenExchangeUrl, null, {
-      params: requestData,
-    });
+  const response = await axios.post(tokenExchangeUrl, null, {
+    params: requestData,
+  });
 
-    // Extract access and refresh tokens from the response
-    const { access_token, refresh_token, id_token } = response.data;
+  // Extract access and refresh tokens from the response
+  const { access_token, refresh_token, id_token } = response.data;
 
-    // Now you can use these tokens to access the Google API for profile and email information
-    
-    // Make another request to the Google API to fetch profile and email
-    const profileResponse = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+  // Now you can use these tokens to access the Google API for profile and email information
+  
+  // Make another request to the Google API to fetch profile and email
+  const profileResponse = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
 
-    const { id, name, email, picture } = profileResponse.data;
+  console.log(profileResponse.data)
 
-    // You can now use the profile and email information as needed
-    console.log('Google Profile ID:', id);
-    console.log('Name:', name);
-    console.log('Email:', email);
+  const { id, name, email, picture } = profileResponse.data;
 
-    // Redirect or respond to the client as needed
+  const user = await User.findOne({ email });
+
+  if (user) {
+    createSendToken(user, 200, res);
+  } else {
     res.status(200).json({
       status: 'success',
-      message: 'Google Auth Success',
-      profile: {
-        id,
-        name,
-        email,
-        picture,
-      },
+      message: 'Google Auth Success but we need more information',
+      googleAuthData:  profileResponse.data
     });
+  }
+
+  console.log('Google Profile ID:', id);
+  console.log('Name:', name);
+  console.log('Email:', email);
 });
