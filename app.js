@@ -114,7 +114,7 @@ passport.use(
 passport.use(new FacebookStrategy({
   clientID: process.env.META_APP_ID,
   clientSecret: process.env.META_APP_SECRET,
-  callbackURL: 'https://www.google.com/',
+  callbackURL: '/api/v1/users/auth/facebook/callback/',
   state: true
 }, async (accessToken, refreshToken, profile, done) => {
 
