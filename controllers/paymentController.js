@@ -1032,6 +1032,8 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
             paypalId: orderID,
         });
         await invoice.save();
+        req.user.cart = {iitems: []}
+        await req.user.save();
         res.status(200).json(resJson);
 });
 
