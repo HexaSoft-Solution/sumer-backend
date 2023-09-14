@@ -351,7 +351,8 @@ exports.getUser = catchAsync(async (req, res, next) => {
             })
         );
     }
-    const expiredVoucher = voucher.map((e) => {
+    let expiredVoucher = [];
+    expiredVoucher = voucher.map((e) => {
         if (e.expireDate < Date.now()) {
             return e;
         }
