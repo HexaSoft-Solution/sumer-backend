@@ -600,3 +600,13 @@ type: 'number'
         invoices,
       });
 })
+
+exports.getInvoice = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
+  const invoice = await Invoice.findById(req.params.id);
+  
+  res.status(200).json({
+    status: "Success",
+    invoice
+  });
+});

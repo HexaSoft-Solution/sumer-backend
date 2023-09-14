@@ -45,6 +45,10 @@ router
   .route('/invoices')
   .get(ProductController.getAllInvoices)
 
+  router
+  .route('/invoices/:id')
+  .get(ProductController.getInvoice)
+
 router.route("/search").get(ProductController.searchProduct);
 
 router
