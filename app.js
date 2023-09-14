@@ -78,6 +78,7 @@ app.use(
   })
 );
 
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -114,7 +115,7 @@ passport.use(
 passport.use(new FacebookStrategy({
   clientID: process.env.META_APP_ID,
   clientSecret: process.env.META_APP_SECRET,
-  callbackURL: '/api/v1/users/auth/facebook/callback/',
+  callbackURL: 'http://localhost:8000/api/v1/users/auth/facebook/callback',
   state: true
 }, async (accessToken, refreshToken, profile, done) => {
 

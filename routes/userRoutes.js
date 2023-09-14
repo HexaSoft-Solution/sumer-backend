@@ -24,7 +24,8 @@ router.get(
   "/auth/google/signin", 
   passport.authenticate('google', { 
     failureRedirect: '/' ,
-    scope: "email",
+    scope: ["profile", "email"],
+
   }),
   );
 
@@ -38,8 +39,13 @@ router.get(
     "/auth/facebook/signin",
     passport.authenticate('facebook', { 
       failureRedirect: '/' ,
-      scope: ["profile", "email"],
+      scope: "email",
     }),
+    authController.facebookAuth
+  );
+
+  router.get('/auth/facebook/callback',
+    passport.authenticate('facebook', { successRedirect : '/', failureRedirect: '/login' }),
     authController.facebookAuth
   );
 
