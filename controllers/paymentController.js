@@ -737,9 +737,8 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
         "buyConsultationTicket"
     );
 
-
     await User.findByIdAndUpdate(
-        {_id: consultation.user._id},
+        {_id: consultation.owner._id},
         {$inc: {balance: consultation.price}},
     )
 
