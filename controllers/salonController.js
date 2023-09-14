@@ -565,13 +565,13 @@ exports.getMyBookings = catchAsync(async (req, res, next) => {
                 in: 'query',
                 description: 'example: ?sort=name,-createdAt',
         } */
-    const salonId = req.user.salonCreated
+    // const salonId = req.user.salonCreated
 
-    if (!salonId) {
-        return next(new AppError("You don't have a consultation profile", 400));
-    }
+    // if (!salonId) {
+    //     return next(new AppError("You don't have a consultation profile", 400));
+    // }
 
-    const doc = await new APIFeatures(SalonBooking.findOne({ salon: salonId }), req.query)
+    const doc = await new APIFeatures(SalonBooking.findOne(), req.query)
         .filter()
         .sort()
         .limitFields()
