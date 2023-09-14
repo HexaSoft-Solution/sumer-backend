@@ -115,6 +115,7 @@ passport.use(new FacebookStrategy({
   clientID: process.env.META_APP_ID,
   clientSecret: process.env.META_APP_SECRET,
   callbackURL: 'https://www.google.com/',
+  state: true
 }, async (accessToken, refreshToken, profile, done) => {
 
   const existingUser = await MetaUsers.findOne({ metaId: profile.id });
