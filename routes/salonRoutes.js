@@ -16,6 +16,13 @@ router
         salonController.createSalon
     )
 
+    router
+    .route('/my-bookings')
+    .get(
+        authController.protect,
+        salonController.getMyBookings
+    )
+
 router
     .route('/search')
     .get(salonController.searchSalon);
@@ -121,13 +128,6 @@ router
     .patch(
         authController.protect,
         salonController.unloveSalon
-    )
-
-router
-    .route('/my-bookings')
-    .get(
-        authController.protect,
-        salonController.getMyBookings
     )
 
 router
