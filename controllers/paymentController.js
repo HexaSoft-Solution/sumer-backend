@@ -516,6 +516,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         return false;
     });
 
+    console.log(conflicts)
 
     if (conflicts.length > 0) {
         return next(new AppError("Salon is already booked at this time.", 400));
@@ -526,10 +527,8 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         startTime,
         endTime,
         day,
-        date,
+        date: parseDate(date),
     })
-
-    console.log(availability)
 
     if (availability.length === 0) {
         return next(new AppError("Salon is not available at this time.", 400));
