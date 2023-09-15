@@ -5,6 +5,8 @@ const Product = require("../models/productModel");
 const Salon = require("../models/salonModel");
 const BusinessProfile = require("../models/businessProfileModel");
 const Booking = require("../models/salonBookingModel");
+const Invoice = require('../models/invoiceModel');
+const Transactions = require('../models/transactionModel');
 
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
@@ -429,28 +431,75 @@ exports.getMyVouvher = catchAsync(async (req, res, next) => {
     });
 });
 
+exports.getMyInvoices = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Authentication']
+    const invoicesIds = req.user.invoices;
+
+    const allInvoices = await Invoice.find({ 
+        id: { $in: invoicesIds }
+    });
+
+    const features = new APIFeatures(Invoice.find({
+        _id: {$in: invoicesIds},
+    }), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .Pagination();
+    const invoices = await features.query;
+
+    res.status(200).json({
+        status: "success",
+        results: allInvoices.length,
+        invoices
+    });
+});
+
+exports.getMyTransactions = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Authentication']
+    const transactionsIds = req.user.transactions;
+
+    const allTransactions = await Transactions.find({
+        id: { $in: transactionsIds }
+    })
+
+    const features = new APIFeatures(Transactions.find({
+        _id: {$in: transactionsIds},
+    }), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .Pagination();
+    const transactions = await features.query;
+
+    res.status(200).json({
+        status: "success",
+        results: allTransactions.length,
+        transactions
+    });
+});
+
 exports.getMySalonbooking = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Authentication']
     const bookingsIds = req.user.salonBooking;
 
     // const bookings = await Booking.find({
     //     _id: {$in: bookingsIds},
     // })
-
-    
     const ids = bookingsIds.map((e) => {
         return e.toString();
     });
     console.log(ids)
-  if (req.params.id) filter = { model: req.params.id };
+    if (req.params.id) filter = { model: req.params.id };
 
-  const features = new APIFeatures(Booking.find({
-        _id: {$in: ids},
-  }), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .Pagination();
-  const bokkkinnga = await features.query;
+    const features = new APIFeatures(Booking.find({
+            _id: {$in: ids},
+    }).populate('salon'), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .Pagination();
+    const bokkkinnga = await features.query;
 
     res.status(200).json({
         status: "success",

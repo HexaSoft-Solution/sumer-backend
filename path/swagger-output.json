@@ -509,6 +509,50 @@
         }
       }
     },
+    "/api/v1/users/my-invoices": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/users/my-transactions": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/users/updateMe": {
       "patch": {
         "tags": [
@@ -2555,6 +2599,9 @@
                     "example": "any"
                   },
                   "endTime": {
+                    "example": "any"
+                  },
+                  "service": {
                     "example": "any"
                   },
                   "day": {
@@ -7018,6 +7065,35 @@
           }
         }
       },
+      "creditCardModel": {
+        "title": "CreditCard",
+        "required": [
+          "cardNumber",
+          "name",
+          "expiryMonth",
+          "expiryYear"
+        ],
+        "properties": {
+          "cardNumber": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "expiryMonth": {
+            "type": "string"
+          },
+          "expiryYear": {
+            "type": "string"
+          },
+          "cardType": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
       "googleUsersModel": {
         "title": "Google-Users",
         "required": [
@@ -7379,7 +7455,8 @@
           "endTime",
           "day",
           "date",
-          "salon"
+          "salon",
+          "service"
         ],
         "properties": {
           "startTime": {
@@ -7434,6 +7511,9 @@
             ]
           },
           "salon": {
+            "type": "string"
+          },
+          "service": {
             "type": "string"
           },
           "createdAt": {
@@ -7604,6 +7684,13 @@
           "quantity": {
             "type": "number"
           },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "completed"
+            ]
+          },
           "price": {
             "type": "number"
           },
@@ -7639,6 +7726,18 @@
           "salonName": {
             "type": "string"
           },
+          "invoices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "email": {
             "type": "string"
           },
@@ -7665,6 +7764,12 @@
           },
           "image": {
             "type": "string"
+          },
+          "creditCards": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "password": {
             "type": "string"
@@ -7826,7 +7931,8 @@
           "code",
           "discountPercentage",
           "maxDiscount",
-          "expireDate"
+          "expireDate",
+          "type"
         ],
         "properties": {
           "code": {
@@ -7841,6 +7947,14 @@
           "expireDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Product",
+              "Salon",
+              "Consultant"
+            ]
           },
           "used": {
             "type": "boolean"

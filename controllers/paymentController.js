@@ -295,6 +295,16 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
             await transaction.save();
         }
 
+        await User.FindOneAndAUpdate(
+            { id: invoice.user },
+            {
+                $push: {
+                    invoices: invoice.id,
+                    transactions: invoice.transactions
+                }
+            }
+        )
+
         res
             .status(200)
             .json({status: "success", message: "Payment processed successfully."});
@@ -468,6 +478,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         salonId,
         startTime,
         endTime,
+        service,
         day,
         date,
         type,
@@ -545,6 +556,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         endTime,
         day,
         date,
+        service
     });
 
     const startParts = startTime.split(":");
@@ -1089,6 +1101,17 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
             transaction.paymentId = paymentId;
             await transaction.save();
         }
+
+        await User.FindOneAndAUpdate(
+            { id: invoice.user },
+            {
+                $push: {
+                    invoices: invoice.id,
+                    transactions: invoice.transactions
+                }
+            }
+        )
+
             return res.json({ status: 'completed' });
         } else {
             // Order is not completed or has another status
