@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema(
     salonName: {
       type: String,
     },
+    invoices: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Invoice",
+    }],
+    transactions: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Transaction",
+    }],
     email: {
       type: String,
       required: [true, "email-required"],
@@ -63,6 +71,10 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    creditCards: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CreditCard",
+    }],
     password: {
       type: String,
       required: [true, "password-required"],

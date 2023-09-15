@@ -20,6 +20,11 @@ const voucherSchema  = new mongoose.Schema({
         type: Date,
         required: true
     },
+    type: {
+        type: String,
+        required: true,
+        enum: ["Product", "Salon", "Consultant"]
+    },
     used: {
         type: Boolean,
         default: false
