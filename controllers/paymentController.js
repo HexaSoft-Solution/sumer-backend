@@ -1549,17 +1549,18 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
                 $push: {
                     invoices: invoice.id,
                     transactions: invoice.transactions
+                },
+                $set: {
+                    'cart.items': [] // This will clear the cart items
                 }
             }
         )
 
-            if(req?.user?.cart){
-            req.user.cart = {iitems: []}
-            }
+            
             return res.json({ status: 'completed' });
         } else {
             // Order is not completed or has another status
-            return res.json({ status: 'not completed' });
+            return res.status(400).json({ status: 'not completed' });
         }
     } catch (err) {
         console.error(err);
