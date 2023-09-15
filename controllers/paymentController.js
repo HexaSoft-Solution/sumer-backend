@@ -303,12 +303,18 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
             await transaction.save();
         }
 
-        await User.FindOneAndAUpdate(
-            { id: invoice.user },
+        console.log(invoice)
+
+        const transactionsIds = invoice.transactions.map(transaction => {
+            return transaction._id
+        })
+
+        await User.findOneAndUpdate(
+            { _id: invoice.user.toString() },
             {
                 $push: {
-                    invoices: invoice.id,
-                    transactions: invoice.transactions
+                    invoices: invoice._id,
+                    transactions: transactionsIds
                 }
             }
         )
