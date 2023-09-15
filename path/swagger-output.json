@@ -1380,10 +1380,10 @@
         }
       }
     },
-    "/api/v1/products/transactions/{invoiceId}": {
+    "/api/v1/products/get-transactions-by-invoice/{invoiceId}": {
       "get": {
         "tags": [
-          "Authentication"
+          "Product"
         ],
         "description": "",
         "parameters": [
@@ -1406,6 +1406,42 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/products/transactions-status": {
+      "patch": {
+        "tags": [
+          "Product"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1781,6 +1817,25 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
           }
         }
       }
@@ -2427,6 +2482,35 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "example": "any"
+                  },
+                  "number": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "cvc": {
+                    "example": "any"
+                  },
+                  "month": {
+                    "example": "any"
+                  },
+                  "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -7667,11 +7751,26 @@
             "type": "number"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "pending",
-              "completed"
-            ]
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "Placed",
+                    "Dispatched",
+                    "On Way",
+                    "Received"
+                  ]
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": []
+            }
           },
           "price": {
             "type": "number"
@@ -7862,6 +7961,12 @@
           },
           "emailActive": {
             "type": "boolean"
+          },
+          "consultant": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "createConsultant": {
             "type": "array",
