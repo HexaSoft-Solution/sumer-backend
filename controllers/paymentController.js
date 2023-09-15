@@ -156,6 +156,8 @@ exports.checkout = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
     const cart = req.user.cart.items;
     const userId = req.user._id;
+    const {type, number, name, cvc, month, year} = req.body;
+
 
     let totalCartAmount = 0;
     const metadataArray = [];
@@ -217,7 +219,6 @@ exports.checkout = catchAsync(async (req, res, next) => {
         await voucher.save();
     }
 
-    const {type, number, name, cvc, month, year} = req.body;
 
     const source = {type, number, name, cvc, month, year};
 

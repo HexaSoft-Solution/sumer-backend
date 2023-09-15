@@ -1708,6 +1708,25 @@
           "200": {
             "description": "OK"
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
+          }
         }
       }
     },
@@ -2353,6 +2372,35 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "example": "any"
+                  },
+                  "number": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "cvc": {
+                    "example": "any"
+                  },
+                  "month": {
+                    "example": "any"
+                  },
+                  "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
