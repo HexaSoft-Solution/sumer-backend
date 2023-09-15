@@ -205,7 +205,7 @@ const userSchema = new mongoose.Schema(
     }],
     createConsultant: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Consultant"
+      ref: "Consultation"
     }],
     userPhoto: String,
     cloudinaryId: String,
