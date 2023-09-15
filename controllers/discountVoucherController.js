@@ -63,6 +63,10 @@ exports.addDiscountToProduct = catchAsync(async (req, res, next) => {
 
   const voucher = await Voucher.findOne({ code: discount })
 
+  if (voucher.type !== "Product"){
+    return next(new AppError("This voucher is not for product", 400));
+  }
+
   if (!product) {
     return next(new AppError("No product found with that ID", 404));
   }

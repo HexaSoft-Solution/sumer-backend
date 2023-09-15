@@ -199,6 +199,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    consultant: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Consultant"
+    }],
     createConsultant: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Consultant"

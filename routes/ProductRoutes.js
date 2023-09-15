@@ -18,6 +18,20 @@ router
   );
 
 router
+    .route('/get-transactions-by-invoice/:invoiceId')
+    .get(
+      authController.protect,
+      ProductController.getTransactionsbyInvoiceId
+    );
+
+router
+  .route('/transactions-status')
+  .patch(
+    authController.protect,
+    ProductController.changeTransactionStatus
+  );    
+
+router
   .route("/cart")
   .patch(authController.protect, ProductController.addToCart)
   .delete(authController.protect, ProductController.removeFromCart);

@@ -139,6 +139,10 @@ exports.addVoucher = catchAsync(async (req, res, next) => {
         return next(new AppError("Voucher already owned.", 400));
     }
 
+    if (voucher.type !== "Product"){
+        return next(new AppError("This voucher is not for product", 400));
+    }    
+
     req.user.cart.voucher = voucher._id;
     await req.user.save();
 
@@ -192,6 +196,10 @@ exports.checkout = catchAsync(async (req, res, next) => {
             product: item.product,
             quantity: item.quantity,
             price: metadataArray[i].price,
+            status: [{
+                status: "Placed",
+                date: Date.now(),
+            }],
             user: userId,
         });
         await transaction.save();
@@ -976,6 +984,10 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
             product: item.product,
             quantity: item.quantity,
             price: metadataArray[i].unit_amount.value * (100/24),
+            status: [{
+                status: "Placed",
+                date: Date.now(),
+            }],
             user: userId,
         });
         await transaction.save();

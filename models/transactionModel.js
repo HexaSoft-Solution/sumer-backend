@@ -10,11 +10,16 @@ const transactionSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    status:{
-        type: String,
-        enum: ['pending', 'completed'],
-        default: 'pending',
-    },
+    status: [{
+        status: {
+            type: String,
+            enum: ['Placed', 'Dispatched', "On Way", "Received"],
+        },
+        date:{
+            type: Date,
+            default: Date.now(),
+        }
+    }],
     price: {
         type: Number,
         required: true,
