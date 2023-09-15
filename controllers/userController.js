@@ -7,6 +7,7 @@ const BusinessProfile = require("../models/businessProfileModel");
 const Booking = require("../models/salonBookingModel");
 const Invoice = require('../models/invoiceModel');
 const Transactions = require('../models/transactionModel');
+const Consultant = require('../models/consultantModel');
 
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
@@ -505,5 +506,29 @@ exports.getMySalonbooking = catchAsync(async (req, res, next) => {
         status: "success",
         results: bokkkinnga.length,
         bookings: bokkkinnga,
+    });
+});
+
+exports.getMyConsultants = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Authentication']
+    const userId = req.user.id;
+
+    const allConsultants = await Consultant.find({
+        user: req.user.id
+    })
+
+    if (req.params.id) filter = { model: req.params.id };
+
+    const features = new APIFeatures(Consultant.find({ user: req.user.id }), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .Pagination();
+    const consultants = await features.query;
+
+    res.status(200).json({
+        status: "success",
+        results: allConsultants.length,
+        bookings: consultants,
     });
 });

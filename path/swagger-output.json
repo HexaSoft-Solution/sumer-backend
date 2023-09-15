@@ -553,6 +553,28 @@
         }
       }
     },
+    "/api/v1/users/my-consultants": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/users/updateMe": {
       "patch": {
         "tags": [

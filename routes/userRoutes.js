@@ -89,19 +89,26 @@ router
     userController.getMySalonbooking
   )
 
-  router
-  .route('/my-invoices')
+router
+  .route('/my-invoices') 
   .get(
     authController.protect,
     userController.getMyInvoices
   )
 
-  router
+router
   .route('/my-transactions')
   .get(
     authController.protect,
     userController.getMyTransactions
   )
+
+router
+    .route('/my-consultants')
+    .get(
+      authController.protect,
+      userController.getMyConsultants
+    )
 
 router.patch(
   "/updateMyPassword",
