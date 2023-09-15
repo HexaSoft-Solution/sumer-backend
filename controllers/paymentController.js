@@ -235,6 +235,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
 
     if (paymentId) {
         const payment = await CreditCard.findById(paymentId);
+        console.log('\n =========================', ayment, '\n =========================');
         source = {
             type: "creditcard", 
             number: payment.cardNumber, 
@@ -252,7 +253,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
             cardNumber: number,
             name,
             expiryMonth: month,
-            expiryYear: expiryYear,
+            expiryYear: year,
             cvc
         })
 
@@ -333,8 +334,6 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
             await transaction.save();
         }
 
-        console.log(invoice)
-
         const transactionsIds = invoice.transactions.map(transaction => {
             return transaction._id
         })
@@ -376,6 +375,28 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
         })
     }
 });
+
+
+exports.checkPayment = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+  try{
+      const paymentId = req.query.id;
+      const payment = await moyasar.fetchPayment(paymentId);
+
+
+      if (payment.status === "paid") {
+
+          return res.status(200).json({success: "success", status: payment.status})
+      } else {
+          return res.status(400).json({success: "fail", status: payment.status})
+      }
+  }catch(e){
+          return res.status(500).json({success: "error"});
+  }
+});
+
+
+
 
 exports.promoteProduct = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']

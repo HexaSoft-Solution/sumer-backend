@@ -32,6 +32,12 @@ router
         paymentController.paymentCallback
     );
 
+router
+    .route('/checkPayment/:invoice_id')
+    .get(
+        paymentController.checkPayment
+    );
+
 
 router
     .route('/buyProductConnection')
