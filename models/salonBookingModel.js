@@ -31,6 +31,10 @@ const salonBookingModel = new mongoose.Schema({
         ref: 'Salon',
         required: true
     },
+    service: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now(),

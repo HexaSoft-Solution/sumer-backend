@@ -477,6 +477,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         salonId,
         startTime,
         endTime,
+        service,
         day,
         date,
         type,
@@ -554,6 +555,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         endTime,
         day,
         date,
+        service
     });
 
     const startParts = startTime.split(":");

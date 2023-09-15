@@ -2553,6 +2553,9 @@
                   "endTime": {
                     "example": "any"
                   },
+                  "service": {
+                    "example": "any"
+                  },
                   "day": {
                     "example": "any"
                   },
@@ -7404,7 +7407,8 @@
           "endTime",
           "day",
           "date",
-          "salon"
+          "salon",
+          "service"
         ],
         "properties": {
           "startTime": {
@@ -7459,6 +7463,9 @@
             ]
           },
           "salon": {
+            "type": "string"
+          },
+          "service": {
             "type": "string"
           },
           "createdAt": {
