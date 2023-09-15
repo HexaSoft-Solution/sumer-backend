@@ -213,7 +213,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
 
         const product = await Product.findById(item.product);
 
-        await User.findByIdAndUpdate(
+        await User.findOneAndUpdate(
             {_id: product.owner._id},
             {$inc: {balance: product.price}},
         )
@@ -1498,7 +1498,6 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
     try {
         const orderID = req.params.orderID; // Get the order ID from the request params
-
         // Create a request to get order details
         let request = new paypal.orders.OrdersGetRequest(orderID);
 
@@ -1543,7 +1542,8 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
             await transaction.save();
         }
 
-        await User.FindOneAndAUpdate(
+
+            await User.findOneAndUpdate(
             { id: invoice.user },
             {
                 $push: {
@@ -1553,7 +1553,9 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
             }
         )
 
+            if(req?.user?.cart){
             req.user.cart = {iitems: []}
+            }
             return res.json({ status: 'completed' });
         } else {
             // Order is not completed or has another status
