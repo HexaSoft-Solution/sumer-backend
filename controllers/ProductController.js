@@ -306,6 +306,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         howToUse,
         highlights,
         color,
+        discountedPrice
     } = req.body;
 
     const product = await Product.create({
@@ -319,6 +320,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         howToUse,
         highlights,
         color,
+        discountedPrice,
         owner: userId,
     });
 
@@ -404,7 +406,8 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
         availabilityCount,
         howToUse,
         highlights,
-        color
+        color,
+        discountedPrice
     } = req.body;
 
     const product = await Product.findOneAndUpdate({_id: productId}, {
@@ -417,7 +420,8 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
         brand,
         howToUse,
         highlights,
-        color
+        color,
+        discountedPrice
     });
 
     res.status(201).json({
