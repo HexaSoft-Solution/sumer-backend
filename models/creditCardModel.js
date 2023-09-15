@@ -17,6 +17,10 @@ const creditCardSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    cvc: {
+        type: String,
+        required: true,
+    },
     cardType: {
         type: String,
         default: function () {

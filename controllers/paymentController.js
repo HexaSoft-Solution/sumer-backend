@@ -8,6 +8,7 @@ const Consultation = require("../models/consultationModel");
 const Consultant = require("../models/consultantModel");
 const BusinussProfile = require("../models/businessProfileModel");
 const Voucher = require('../models/voucherModel');
+const CreditCard = require('../models/creditCardModel');
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -20,6 +21,9 @@ const clientId = process.env.PAYPAL_CLIENT_ID;
 const clientSecret = process.env.PAYPAL_SECRET_KEY;
 const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
 const client = new paypal.core.PayPalHttpClient(environment);
+
+const fs = require('fs');
+const path = require('path');
 
 const getProductDetails = async (productId) => {
     return await Product.findById(productId);
@@ -160,7 +164,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
     const cart = req.user.cart.items;
     const userId = req.user._id;
-    const {type, number, name, cvc, month, year} = req.body;
+    const {paymentId, save, type, number, name, cvc, month, year} = req.body;
 
 
     let totalCartAmount = 0;
@@ -227,8 +231,34 @@ exports.checkout = catchAsync(async (req, res, next) => {
         await voucher.save();
     }
 
+    let source;
 
-    const source = {type, number, name, cvc, month, year};
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
 
     const invoiceId = generateRandomInvoiceId();
     const payment = await moyasar.createPayment(
@@ -319,21 +349,66 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
             }
         )
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     } else {
-        res
-            .status(400)
-            .json({status: "error", message: "Payment failed or not yet paid."});
+        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     }
 });
 
 exports.promoteProduct = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {productId, promote, type, number, name, cvc, month, year} = req.body;
+    const {productId, paymentId, save, promote, type, number, name, cvc, month, year} = req.body;
 
-    const source = {type, number, name, cvc, month, year};
+    let source;
+
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
 
     await basicPayment(req, res, next, promote * 10, "Promote Salon", source, productId, "promoteProduct");
 })
@@ -354,21 +429,66 @@ exports.verifyPromoteProduct = catchAsync(async (req, res, next) => {
             {new: true}
         );
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     } else {
-        res
-            .status(400)
-            .json({status: "error", message: "Payment failed or not yet paid."});
+        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     }
 })
 
 exports.promoteSalon = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {salonId, promote, type, number, name, cvc, month, year} = req.body;
+    const {salonId, paymentId, save, promote, type, number, name, cvc, month, year} = req.body;
 
-    const source = {type, number, name, cvc, month, year};
+    let source;
+
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
 
     await basicPayment(req, res, next, promote * 10, "Promote Salon", source, salonId, "promoteSalon");
 })
@@ -389,21 +509,66 @@ exports.verifyPromoteSalon = catchAsync(async (req, res, next) => {
             {new: true}
         );
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     } else {
-        res
-            .status(400)
-            .json({status: "error", message: "Payment failed or not yet paid."});
+        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     }
 })
 
 exports.promoteConsultation = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {consultationId, promote, type, number, name, cvc, month, year} = req.body;
+    const {consultationId, paymentId, save, promote, type, number, name, cvc, month, year} = req.body;
 
-    const source = {type, number, name, cvc, month, year};
+    let source;
+
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
 
     await basicPayment(req, res, next, promote * 10, "Promote Consultation", source, consultationId, "promoteConsultation");
 })
@@ -424,21 +589,66 @@ exports.verifyPromoteConsultation = catchAsync(async (req, res, next) => {
             {new: true}
         );
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     } else {
-        res
-            .status(400)
-            .json({status: "error", message: "Payment failed or not yet paid."});
+        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     }
 })
 
 exports.buyProductConnections = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {type, number, name, cvc, month, year} = req.body;
+    const {paymentId, save, type, number, name, cvc, month, year} = req.body;
 
-    const source = {type, number, name, cvc, month, year};
+    let source;
+
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
 
     const payment = await moyasar.createPayment(
         40,
@@ -476,13 +686,31 @@ exports.verifyBuyConnection = catchAsync(async (req, res, next) => {
             {new: true}
         );
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     } else {
-        res
-            .status(400)
-            .json({status: "error", message: "Payment failed or not yet paid."});
+        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     }
 });
 
@@ -496,6 +724,8 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         day,
         date,
         type,
+        paymentId,
+        save,
         number,
         name,
         cvc,
@@ -563,7 +793,35 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         return next(new AppError("Salon is not available at this time.", 400));
     }
 
-    const source = {type, number, name, cvc, month, year};
+    let source;
+
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
+
     const newBooking = await SalonBooking.create({
         salon: salonId,
         startTime,
@@ -632,21 +890,66 @@ exports.verifyBookingSalon = catchAsync(async (req, res, next) => {
             $push: {salonBooking: salonBook.id}
         });
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     } else {
-        res
-            .status(400)
-            .json({status: "error", message: "Payment failed or not yet paid."});
+        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     }
 });
 
 exports.createConsultantProfilePayment = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {type, number, name, cvc, month, year} = req.body;
+    const {paymentId, save, type, number, name, cvc, month, year} = req.body;
 
-    const source = {type, number, name, cvc, month, year};
+    let source;
+
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
 
     const payment = await moyasar.createPayment(
         40,
@@ -681,21 +984,66 @@ exports.verifyCreateConsultationProfile = catchAsync(async (req, res, next) => {
             createConsultation: true,
         });
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     } else {
-        res
-            .status(400)
-            .json({status: "error", message: "Payment failed or not yet paid."});
+        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     }
 });
 
 exports.consultationContectionsPayment = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {connections, type, number, name, cvc, month, year} = req.body;
+    const {paymentId, save, connections, type, number, name, cvc, month, year} = req.body;
 
-    const source = {type, number, name, cvc, month, year};
+    let source;
+
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
 
     const payment = await moyasar.createPayment(
         connections * 10,
@@ -732,12 +1080,18 @@ exports.verifyBuyingConsultationsConnection = catchAsync(
                 $inc: {consultantConnection: connection},
             });
 
-            res
-                .status(200)
-                .json({
-                    status: "success",
-                    message: "Payment processed successfully.",
-                });
+            fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
         } else {
             res
                 .status(400)
@@ -748,10 +1102,36 @@ exports.verifyBuyingConsultationsConnection = catchAsync(
 
 exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {consultationId, type, number, name, cvc, month, year} =
-        req.body;
+    const {consultationId, paymentId, save, type, number, name, cvc, month, year} = req.body;
 
-    const source = {type, number, name, cvc, month, year};
+    let source;
+
+    if (paymentId) {
+        const payment = await CreditCard.findById(paymentId);
+        source = {
+            type: "creditcard", 
+            number: payment.cardNumber, 
+            name: payment.name, 
+            cvc: payment.cvc,
+            month: payment.expiryMonth, 
+            year: payment.expiryYear
+        }
+    } else {
+        source = {type, number, name, cvc, month, year};
+    }
+
+    if (save === true) {
+        const creditCard = await CreditCard.create({
+            cardNumber: number,
+            name,
+            expiryMonth: month,
+            expiryYear: expiryYear,
+            cvc
+        })
+
+        req.user.creditCards.push(creditCard._id);
+        await req.user.save();
+    }
 
     const consultation = await Consultation.findById(consultationId);
 
@@ -826,13 +1206,32 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
             $push: {createConsultant: consult}
         });
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
+
     } else {
-        res
-            .status(400)
-            .json({status: "error", message: "Payment failed or not yet paid."});
+        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
     }
 });
 
@@ -1181,7 +1580,16 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
             await transaction.save();
         }
 
-        res
-            .status(200)
-            .json({status: "success", message: "Payment processed successfully."});
+        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error');
+              } else {
+                // Set the Content-Type header to indicate that you're sending HTML
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                // Send the HTML content as the response
+                res.end(data);
+              }
+        })
  */

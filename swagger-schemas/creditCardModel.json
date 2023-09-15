@@ -1,1 +1,1 @@
-{"title":"CreditCard","required":["cardNumber","name","expiryMonth","expiryYear"],"properties":{"cardNumber":{"type":"string"},"name":{"type":"string"},"expiryMonth":{"type":"string"},"expiryYear":{"type":"string"},"cardType":{"type":"string"},"_id":{"type":"string"}}}
+{"title":"CreditCard","required":["cardNumber","name","expiryMonth","expiryYear","cvc"],"properties":{"cardNumber":{"type":"string"},"name":{"type":"string"},"expiryMonth":{"type":"string"},"expiryYear":{"type":"string"},"cvc":{"type":"string"},"cardType":{"type":"string"},"_id":{"type":"string"}}}
