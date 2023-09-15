@@ -814,8 +814,10 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
     }
   */
     const paymentId = req.query.id;
-    const userId = req.params.user;
+    const userId = req.params.id;
     const consult = req.params.consult;
+
+    console.log(consult, userId)
 
     let payment = await moyasar.fetchPayment(paymentId);
 
