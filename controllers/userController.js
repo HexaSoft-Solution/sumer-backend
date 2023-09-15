@@ -143,7 +143,7 @@ exports.myProfile = catchAsync(async (req, res, next) => {
         });
     } else if (req.user.role === "business") {
         const businessProfile = await BusinessProfile.findOne({user: userId});
-
+       
         if (!businessProfile) {
             return next(new AppError("You don't have a business profile", 400));
         }
