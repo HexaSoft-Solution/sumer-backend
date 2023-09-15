@@ -1538,7 +1538,8 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
             _id: {$in: invoice.transactions},
         });
         for (const transaction of transactions) {
-            transaction.paymentId = paymentId;
+
+            transaction.paymentId = response.result.id;
             await transaction.save();
         }
 
