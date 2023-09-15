@@ -1,1 +1,1 @@
-{"title":"Transaction","required":["product","quantity","price"],"properties":{"product":{"type":"string"},"quantity":{"type":"number"},"price":{"type":"number"},"user":{"type":"string"},"_id":{"type":"string"}}}
+{"title":"Transaction","required":["product","quantity","price"],"properties":{"product":{"type":"string"},"quantity":{"type":"number"},"status":{"type":"string","enum":["pending","completed"]},"price":{"type":"number"},"user":{"type":"string"},"_id":{"type":"string"}}}

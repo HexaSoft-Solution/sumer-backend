@@ -1,0 +1,1 @@
+{"title":"CreditCard","required":["cardNumber","name","expiryMonth","expiryYear"],"properties":{"cardNumber":{"type":"string"},"name":{"type":"string"},"expiryMonth":{"type":"string"},"expiryYear":{"type":"string"},"cardType":{"type":"string"},"_id":{"type":"string"}}}
