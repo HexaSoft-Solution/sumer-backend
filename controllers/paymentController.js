@@ -1489,7 +1489,7 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
             paypalId: orderID,
         });
         await invoice.save();
-        req.user.cart = {iitems: []}
+
         await req.user.save();
         res.status(200).json(resJson);
 });
@@ -1553,6 +1553,7 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
             }
         )
 
+            req.user.cart = {iitems: []}
             return res.json({ status: 'completed' });
         } else {
             // Order is not completed or has another status
