@@ -620,63 +620,63 @@ exports.getAllInvoices = catchAsync(async (req, res, next) => {
 })
 
 exports.getInvoice = catchAsync(async (req, res, next) => {
-  // #swagger.tags = ['Product']
-  const invoice = await Invoice.findById(req.params.id);
-  
-  res.status(200).json({
-    status: "Success",
-    invoice
-  });
+    // #swagger.tags = ['Product']
+    const invoice = await Invoice.findById(req.params.id);
+
+    res.status(200).json({
+        status: "Success",
+        invoice
+    });
 });
 
 exports.getTransactionsbyInvoiceId = catchAsync(async (req, res, next) => {
-  // #swagger.tags = ['Product']
-  const invoiceId = req.params.invoiceId;
+    // #swagger.tags = ['Product']
+    const invoiceId = req.params.invoiceId;
 
-  const invoice = await Invoice.findOne({ invoiceId });
+    const invoice = await Invoice.findOne({invoiceId});
 
-  const transactions = invoice.transactions
+    const transactions = invoice.transactions
 
-  const transactionsId = transactions.map((el) => el._id.toString());
+    const transactionsId = transactions.map((el) => el._id.toString());
 
-  const transactionsDetails = await Transactions.find({
-    _id: { $in: transactionsId },
-  });
+    const transactionsDetails = await Transactions.find({
+        _id: {$in: transactionsId},
+    });
 
-  res.status(200).json({
-    status: "Success",
-    transactionsDetails
-  });
+    res.status(200).json({
+        status: "Success",
+        transactionsDetails
+    });
 });
 
 
 exports.changeTransactionStatus = catchAsync(async (req, res, next) => {
-  // #swagger.tags = ['Product']
-  const transactionId = req.params.id;
-  const { status } = req.body;
+    // #swagger.tags = ['Product']
+    const transactionId = req.params.id;
+    const {status} = req.body;
 
-  const transaction = await Transactions.findById(transactionId);
+    const transaction = await Transactions.findById(transactionId);
 
-  const transactionOwner = transaction.product.owner._id.toString();
-  const transactionsStatus = transaction.status;
+    const transactionOwner = transaction.product.owner._id.toString();
+    const transactionsStatus = transaction.status;
 
-  if(transactionOwner !== req.user.id) {
-    return next(new AppError("You are not allowed to update this transaction", 400));
-  }
+    if (transactionOwner !== req.user.id) {
+        return next(new AppError("You are not allowed to update this transaction", 400));
+    }
 
-  if(transactionsStatus.find((el) => el.status === status)) {
-    return next(new AppError("This status has been already added", 400));
-  }
+    if (transactionsStatus.find((el) => el.status === status)) {
+        return next(new AppError("This status has been already added", 400));
+    }
 
-  transaction.status.push({
-    status: status,
-    date: Date.now(),
-  });
-  await transaction.save();
+    transaction.status.push({
+        status: status,
+        date: Date.now(),
+    });
+    await transaction.save();
 
-  res.status(200).json({
-    status: "Success",
-    message: "Transaction status updated successfully"
-  });
+    res.status(200).json({
+        status: "Success",
+        message: "Transaction status updated successfully"
+    });
 
 });
