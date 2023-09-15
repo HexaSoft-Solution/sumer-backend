@@ -886,7 +886,9 @@ exports.createConsultantTicket = catchAsync(async (req, res, next) => {
 
   const { title } = req.body;
 
-  if (!req.user.createConsultant.find((e) => e === consultatonId)) {
+  console.log(req.user.createConsultant)
+
+  if (!req.user.createConsultant.find((e) => e.toString() === consultatonId)) {
     return next(new AppError("You can not contant with this consultant", 401));
   }
 
