@@ -295,22 +295,24 @@ exports.likePost = catchAsync(async (req, res, next) => {
 
   console.log(userPost.likes);
 
-  if (
-    userPost.likes.find((e) => e._id.toString() !== userId.toString()) ||
-    userPost.likes.length === 0
-  ) {
-    console.log(userPost.likes);
-    await Community.findByIdAndUpdate(postId, {
-      $push: { likes: userId },
-    });
-  } else {
-    await Community.findByIdAndUpdate(postId, {
-      $pull: { likes: userId },
-    });
-  }
+  // Check if the user has already liked the post
+const hasLiked = userPost.likes.some((like) => like?._id.toString() === userId.toString());
+
+if (!hasLiked) {
+  // If the user hasn't liked the post, add their like
+  await Community.findByIdAndUpdate(postId, {
+    $push: { likes: userId },
+  });
+} else {
+  // If the user has already liked the post, remove their like
+  await Community.findByIdAndUpdate(postId, {
+    $pull: { likes: userId },
+  });
+}
 
   res.status(200).json({
     status: "success",
+    messgage: hasLiked? "Unliked" : "Liked"
   });
 });
 

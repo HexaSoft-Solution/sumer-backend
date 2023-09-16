@@ -2270,6 +2270,9 @@
                   },
                   "expireDate": {
                     "example": "any"
+                  },
+                  "type": {
+                    "example": "any"
                   }
                 }
               }
