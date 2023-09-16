@@ -8,7 +8,7 @@ const Booking = require("../models/salonBookingModel");
 const Invoice = require('../models/invoiceModel');
 const Transactions = require('../models/transactionModel');
 const Consultant = require('../models/consultantModel');
-const CreditCard = require('../models/creaditCardModel');
+const CreditCard = require('../models/creditCardModel');
 
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");

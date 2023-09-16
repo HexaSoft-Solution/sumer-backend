@@ -115,7 +115,7 @@ router
     );
 
 router
-    .route('/verify-promoting-product/:productId/:amount')
+    .route('/verify-promoting-product/:productId/:amount/:id')
     .get(paymentController.verifyPromoteProduct)
 
 router
@@ -126,7 +126,7 @@ router
     );
 
 router
-    .route('verify-promoting-salon/:salonId/:amount')
+    .route('verify-promoting-salon/:salonId/:amount/:id')
     .get(paymentController.verifyPromoteSalon)
 
 router
@@ -137,7 +137,7 @@ router
     );
 
 router
-    .route('verify-promoting-consultation/:consultationId/:amount')
+    .route('verify-promoting-consultation/:consultationId/:amount/:id')
     .get(paymentController.verifyPromoteConsultation)
 
 router
@@ -172,5 +172,16 @@ router
 router
     .route('/paypal/check-book-consulataion-status/:orderID')
     .get(paymentController.getPaypalConsultationBookingStatus)
+
+router
+    .route('/paypal/promote-product')
+    .get(
+        authController.protect,
+        paymentController.promoteProductPaypal
+    )
+
+router
+    .route('/paypal/check-promote-product-status/:orderID')
+    .get(paymentController.promoteProductCheckStatusPaypal)
 
 module.exports = router;

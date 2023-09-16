@@ -3323,10 +3323,10 @@
                   "paymentId": {
                     "example": "any"
                   },
-                  "save": {
+                  "planId": {
                     "example": "any"
                   },
-                  "promote": {
+                  "save": {
                     "example": "any"
                   },
                   "type": {
@@ -3354,7 +3354,7 @@
         }
       }
     },
-    "/api/v1/payment/verify-promoting-product/{productId}/{amount}": {
+    "/api/v1/payment/verify-promoting-product/{productId}/{amount}/{id}": {
       "get": {
         "tags": [
           "Payment"
@@ -3371,6 +3371,14 @@
           },
           {
             "name": "amount",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -3427,7 +3435,7 @@
                   "save": {
                     "example": "any"
                   },
-                  "promote": {
+                  "planId": {
                     "example": "any"
                   },
                   "type": {
@@ -3455,7 +3463,7 @@
         }
       }
     },
-    "/api/v1/paymentverify-promoting-salon/{salonId}/{amount}": {
+    "/api/v1/paymentverify-promoting-salon/{salonId}/{amount}/{id}": {
       "get": {
         "tags": [
           "Payment"
@@ -3472,6 +3480,14 @@
           },
           {
             "name": "amount",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -3528,7 +3544,7 @@
                   "save": {
                     "example": "any"
                   },
-                  "promote": {
+                  "planId": {
                     "example": "any"
                   },
                   "type": {
@@ -3556,7 +3572,7 @@
         }
       }
     },
-    "/api/v1/paymentverify-promoting-consultation/{consultationId}/{amount}": {
+    "/api/v1/paymentverify-promoting-consultation/{consultationId}/{amount}/{id}": {
       "get": {
         "tags": [
           "Payment"
@@ -3573,6 +3589,14 @@
           },
           {
             "name": "amount",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -3720,6 +3744,57 @@
     },
     "/api/v1/payment/paypal/check-book-consulataion-status/{orderID}": {
       "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "orderID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paypal/promote-product": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paypal/check-promote-product-status/{orderID}": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
         "description": "",
         "parameters": [
           {
