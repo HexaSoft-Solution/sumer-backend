@@ -3558,8 +3558,6 @@
           "400": {
             "description": "Bad Request"
           },
-<<<<<<< HEAD
-=======
           "500": {
             "description": "Internal Server Error"
           }
@@ -3659,7 +3657,6 @@
           "400": {
             "description": "Bad Request"
           },
->>>>>>> 42f125be349ba44ca86e1f44b21aa4824638ec9c
           "500": {
             "description": "Internal Server Error"
           }
