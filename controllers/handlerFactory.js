@@ -83,7 +83,7 @@ exports.search = (Model) =>
     const { key } = req.body;
 
     const features = new APIFeatures(
-      Model.find({ name: { $regex: ".*" + key + ".*" } }),
+      Model.find({ name: { $regex: new RegExp(key, "i") } }),
       req.query
     )
       .filter()

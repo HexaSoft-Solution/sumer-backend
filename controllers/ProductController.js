@@ -63,6 +63,11 @@ exports.getProduct = catchAsync(async (req, res, next) => {
         _id: {$in: product.Reviews},
     });
 
+    if (req.user && req.user.lovedProducts) {
+        product.isFavorite = req.user.lovedProducts.includes(product._id.toString());
+        await product.save();
+    }
+
     res.status(200).json({
         status: "Success",
         data: {

@@ -67,7 +67,10 @@ router.route("/search").get(ProductController.searchProduct);
 
 router
   .route("/:id")
-  .get(ProductController.getProduct)
+  .get(
+    authController.protect,
+    ProductController.getProduct
+    )
   .patch(
     authController.protect,
     authController.restrictTo("admin", "business"),
