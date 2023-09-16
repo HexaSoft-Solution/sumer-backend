@@ -2129,3 +2129,102 @@ exports.promoteSalonCheckStatusPaypal = catchAsync(async (req, res, next) => {
     }
 })
 
+exports.promoteConsultationPaypal = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+    const { consultationId, planId } = req.body;
+
+    const consultation = await Consultation.findById(consultationId)
+    const promotionPlan = await Promotion.findById(planId);
+
+    const metadata = [{
+        name: `promot consultation: ${consultation.name}`,
+        description: "promot consultation",
+        quantity: "1",
+        unit_amount: {
+            currency_code: 'USD',
+            value: promotionPlan.price.toString(),
+        }
+    }]
+
+    const paypalItems = metadata;
+    console.log(metadata)
+
+    let request = new paypal.orders.OrdersCreateRequest();
+    request.prefer("return=representation");
+
+    const ids =  {
+        consultationId: consultation.id.toString(),
+        planId: promotionPlan.id.toString()
+    }
+
+    request.requestBody({
+        intent: "CAPTURE",
+        application_context: {
+            brand_name: `promot consultation: ${consultation.name}`,
+            landing_page: "BILLING",
+            user_action: "CONTINUE",
+        },
+        purchase_units: [{
+            reference_id: "PUHF",
+            description: JSON.stringify(ids),
+            soft_descriptor: "promot consultation",
+            amount: {
+                currency_code: "USD",
+                value: promotionPlan.price.toString(), 
+                breakdown: {
+                    item_total: {
+                        currency_code: "USD",
+                        value: promotionPlan.price.toString()
+                    },
+                },
+            },
+        
+            items: paypalItems,
+        },],
+    });
+
+    const response = await client.execute(request);
+    const orderID = response.result.id;
+    const resJson = {
+        orderID
+    };
+
+    res.status(200).json(resJson);
+});
+
+exports.promoteConsultationCheckStatusPaypal = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+    try {
+        const orderID = req.params.orderID; // Get the order ID from the request params
+        // Create a request to get order details
+        let request = new paypal.orders.OrdersGetRequest(orderID);
+
+        // Execute the request
+        const response = await client.execute(request);
+
+        // Check the order status in the response
+        const orderStatus = response.result.status;
+
+        if (orderStatus === 'COMPLETED') {
+            const { consultationId, planId } = JSON.parse(response.result.purchase_units[0].description)
+            
+            const promotionPlan = await Promotion.findById(planId);
+            await Consultation.findByIdAndUpdate(
+                consultationId,
+                {
+                    $inc: {promotedAds: promotionPlan.promotionPoint},
+                    adsExpireDate: Date.now() + promotionPlan.day,
+                },
+                {new: true}
+            );
+
+            return res.json({ status: 'completed' });
+        } else {
+            // Order is not completed or has another status
+            return res.status(400).json({ status: 'not completed' });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json(err);
+    }
+})

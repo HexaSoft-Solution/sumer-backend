@@ -195,4 +195,15 @@ router
     .route('/paypal/check-promote-salon-status/:orderID')
     .get(paymentController.promoteSalonCheckStatusPaypal)
 
+router
+    .route('/paypal/promote-consultation')
+    .post(
+        authController.protect,
+        paymentController.promoteConsultationPaypal
+    )
+
+router
+    .route('/paypal/check-promote-consultation-status/:orderID')
+    .get(paymentController.promoteConsultationCheckStatusPaypal)
+
 module.exports = router;
