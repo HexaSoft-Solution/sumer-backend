@@ -38,9 +38,10 @@ exports.getVoucher = async (req, res, next) => {
 
 exports.createVoucher = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Vouchers & Discounts']
-  const { code, discountPercentage, maxDiscount, expireDate } = req.body;
+  const { code, discountPercentage, maxDiscount, expireDate, type } = req.body;
 
   const voucher = await Voucher.create({
+    type,
     code,
     discountPercentage,
     maxDiscount,
