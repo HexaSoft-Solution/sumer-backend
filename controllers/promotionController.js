@@ -1,5 +1,5 @@
 const catchAsync = require('../utils/catchAsync');
-const APIFeatures = require('../utils/apiFeatures');
+const APIFeatures = require("../utils/apiFeatures");
 
 const Promotion = require('../models/promotionModel');
 
@@ -53,7 +53,7 @@ exports.getAllPromotion = catchAsync(async (req, res, next) => {
         .filter()
         .sort()
         .limitFields()
-        .paginate();
+        .Pagination();
     const promotions = await features.query;
 
     res.status(200).json({

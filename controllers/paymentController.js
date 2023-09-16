@@ -1881,6 +1881,7 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
 });
 
 exports.getPaypalConsultationBookingStatus = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
     try {
         const orderID = req.params.orderID; // Get the order ID from the request params
         // Create a request to get order details
@@ -1932,16 +1933,16 @@ exports.promoteProductPaypal = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
     const { productId, planId } = req.body;
 
-    const product = await Product.findByIdproductId
+    const product = await Product.findById(productId)
     const promotionPlan = await Promotion.findById(planId);
 
     const metadata = [{
         name: `promot product: ${product.name}`,
-        description: "",
+        description: "promot product",
         quantity: "1",
         unit_amount: {
             currency_code: 'USD',
-            value: promotionPlan.price,
+            value: promotionPlan.price.toString(),
         }
     }]
 
@@ -1950,6 +1951,11 @@ exports.promoteProductPaypal = catchAsync(async (req, res, next) => {
 
     let request = new paypal.orders.OrdersCreateRequest();
     request.prefer("return=representation");
+
+    const ids =  {
+        productId: product.id.toString(),
+        planId: promotionPlan.id.toString()
+    }
 
     request.requestBody({
         intent: "CAPTURE",
@@ -1960,15 +1966,15 @@ exports.promoteProductPaypal = catchAsync(async (req, res, next) => {
         },
         purchase_units: [{
             reference_id: "PUHF",
-            description: product.id,
-            soft_descriptor: promotionPlan.id,
+            description: JSON.stringify(ids),
+            soft_descriptor: "promot produc",
             amount: {
                 currency_code: "USD",
-                value: promotionPlan.price, 
+                value: promotionPlan.price.toString(), 
                 breakdown: {
                     item_total: {
                         currency_code: "USD",
-                        value: promotionPlan.price
+                        value: promotionPlan.price.toString()
                     },
                 },
             },
@@ -1999,12 +2005,10 @@ exports.promoteProductCheckStatusPaypal = catchAsync(async (req, res, next) => {
         // Check the order status in the response
         const orderStatus = response.result.status;
 
-        console.log(response.result.amount)
-        if (true) {
-            // if (orderStatus === 'COMPLETED') {
-            console.log(response.result.purchase_units)
+        if (orderStatus === 'COMPLETED') {
+            const { productId, planId } = JSON.parse(response.result.purchase_units[0].description)
             
-            const promotionPlan = await Promotion.findById(id);
+            const promotionPlan = await Promotion.findById(planId);
             await Product.findByIdAndUpdate(
                 productId,
                 {
@@ -2025,217 +2029,103 @@ exports.promoteProductCheckStatusPaypal = catchAsync(async (req, res, next) => {
     }
 })
 
-/*
-
-exports.verifyPromoteProduct = catchAsync(async (req, res, next) => {
+exports.promoteSalonPaypal = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {productId, amount, id} = req.params;
-    const paymentId = req.query.id;
-    const payment = await moyasar.fetchPayment(paymentId);
+    const { salonId, planId } = req.body;
 
-    if (payment.status === "paid") {
-        const promotionPlan = await Promotion.findById(id);
-
-        await Product.findByIdAndUpdate(
-            productId,
-            {
-                $inc: {promotedAds: promotionPlan.promotionPoint},
-                adsExpireDate: Date.now() + promotionPlan.day,
-            },
-            {new: true}
-        );
-
-        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
-        })
-    } else {
-        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
-        })
-    }
-})
-
-exports.promoteSalon = catchAsync(async (req, res, next) => {
-    // #swagger.tags = ['Payment']
-    const {salonId, paymentId, save, planId, type, number, name, cvc, month, year} = req.body;
-
-    let source;
-
-    if (paymentId) {
-        const payment = await CreditCard.findById(paymentId);
-        source = {
-            type: "creditcard", 
-            number: payment.cardNumber, 
-            name: payment.name, 
-            cvc: payment.cvc,
-            month: payment.expiryMonth, 
-            year: payment.expiryYear
-        }
-    } else {
-        source = {type, number, name, cvc, month, year};
-    }
-
-    if (save === true) {
-        const creditCard = await CreditCard.create({
-            cardNumber: number,
-            name,
-            expiryMonth: month,
-            expiryYear: expiryYear,
-            cvc
-        })
-
-        req.user.creditCards.push(creditCard._id);
-        await req.user.save();
-    }
-
+    const salon = await Salon.findById(salonId)
     const promotionPlan = await Promotion.findById(planId);
 
-    await basicPayment(req, res, promotionPlan.id, promotionPlan.price, "Promote Salon", source, salonId, "promoteSalon");
-})
-
-exports.verifyPromoteSalon = catchAsync(async (req, res, next) => {
-    // #swagger.tags = ['Payment']
-    const {salonId, amount, id} = req.params;
-    const paymentId = req.query.id;
-    const payment = await moyasar.fetchPayment(paymentId);
-
-    if (payment.status === "paid") {
-        const promotionPlan = await Promotion.findById(id);
-        await Salon.findByIdAndUpdate(
-            salonId,
-            {
-                $inc: {promotedAds: promotionPlan.promotionPoint},
-                adsExpireDate: Date.now() + promotionPlan.day,
-            },
-            {new: true}
-        );
-
-        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
-        })
-    } else {
-        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
-        })
-    }
-})
-
-exports.promoteConsultation = catchAsync(async (req, res, next) => {
-    // #swagger.tags = ['Payment']
-    const {consultationId, paymentId, save, planId, type, number, name, cvc, month, year} = req.body;
-
-    let source;
-
-    if (paymentId) {
-        const payment = await CreditCard.findById(paymentId);
-        source = {
-            type: "creditcard", 
-            number: payment.cardNumber, 
-            name: payment.name, 
-            cvc: payment.cvc,
-            month: payment.expiryMonth, 
-            year: payment.expiryYear
+    const metadata = [{
+        name: `promot salon: ${salon.name}`,
+        description: "promot salon",
+        quantity: "1",
+        unit_amount: {
+            currency_code: 'USD',
+            value: promotionPlan.price.toString(),
         }
-    } else {
-        source = {type, number, name, cvc, month, year};
+    }]
+
+    const paypalItems = metadata;
+    console.log(metadata)
+
+    let request = new paypal.orders.OrdersCreateRequest();
+    request.prefer("return=representation");
+
+    const ids =  {
+        salonId: salon.id.toString(),
+        planId: promotionPlan.id.toString()
     }
 
-    if (save === true) {
-        const creditCard = await CreditCard.create({
-            cardNumber: number,
-            name,
-            expiryMonth: month,
-            expiryYear: expiryYear,
-            cvc
-        })
-
-        req.user.creditCards.push(creditCard._id);
-        await req.user.save();
-    }
-
-    const promotionPlan = await Promotion.findById(planId);
-
-    await basicPayment(req, res, promotionPlan.id, promotionPlan.price, "Promote Consultation", source, consultationId, "promoteConsultation");
-})
-
-exports.verifyPromoteConsultation = catchAsync(async (req, res, next) => {
-    // #swagger.tags = ['Payment']
-    const {consultationId, amount, id} = req.params;
-    const paymentId = req.query.id;
-    const payment = await moyasar.fetchPayment(paymentId);
-
-    if (payment.status === "paid") {
-        const promotionPlan = await Promotion.findById(id);
-        await Consultation.findByIdAndUpdate(
-            consultationId,
-            {
-                $inc: {promotedAds: promotionPlan.promotionPoint},
-                adsExpireDate: Date.now() + promotionPlan.day,
+    request.requestBody({
+        intent: "CAPTURE",
+        application_context: {
+            brand_name: `promot salon: ${salon.name}`,
+            landing_page: "BILLING",
+            user_action: "CONTINUE",
+        },
+        purchase_units: [{
+            reference_id: "PUHF",
+            description: JSON.stringify(ids),
+            soft_descriptor: "promot salon",
+            amount: {
+                currency_code: "USD",
+                value: promotionPlan.price.toString(), 
+                breakdown: {
+                    item_total: {
+                        currency_code: "USD",
+                        value: promotionPlan.price.toString()
+                    },
+                },
             },
-            {new: true}
-        );
+        
+            items: paypalItems,
+        },],
+    });
 
-        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
-        })
-    } else {
-        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
-        })
+    const response = await client.execute(request);
+    const orderID = response.result.id;
+    const resJson = {
+        orderID
+    };
+
+    res.status(200).json(resJson);
+});
+
+exports.promoteSalonCheckStatusPaypal = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+    try {
+        const orderID = req.params.orderID; // Get the order ID from the request params
+        // Create a request to get order details
+        let request = new paypal.orders.OrdersGetRequest(orderID);
+
+        // Execute the request
+        const response = await client.execute(request);
+
+        // Check the order status in the response
+        const orderStatus = response.result.status;
+
+        if (orderStatus === 'COMPLETED') {
+            const { salonId, planId } = JSON.parse(response.result.purchase_units[0].description)
+            
+            const promotionPlan = await Promotion.findById(planId);
+            await Salon.findByIdAndUpdate(
+                salonId,
+                {
+                    $inc: {promotedAds: promotionPlan.promotionPoint},
+                    adsExpireDate: Date.now() + promotionPlan.day,
+                },
+                {new: true}
+            );
+
+            return res.json({ status: 'completed' });
+        } else {
+            // Order is not completed or has another status
+            return res.status(400).json({ status: 'not completed' });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json(err);
     }
 })
- */
+

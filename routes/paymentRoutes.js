@@ -142,7 +142,7 @@ router
 
 router
     .route('/paypal/checkout-cart')
-    .get(
+    .post(
         authController.protect,
         paymentController.paypalCheckoutOrder
     )
@@ -153,10 +153,10 @@ router
 
 router
 .route('/paypal/checkout-book-salon')
-.get(
-    authController.protect,
-    paymentController.paypalBookSalon
-)
+    .post(
+        authController.protect,
+        paymentController.paypalBookSalon
+    )
 
 router
     .route('/paypal/check-book-salon-status/:orderID')
@@ -164,10 +164,10 @@ router
 
 router
 .route('/paypal/checkout-book-consulataion')
-.get(
-    authController.protect,
-    paymentController.paypalConsultationBook
-)
+    .post(
+        authController.protect,
+        paymentController.paypalConsultationBook
+    )
 
 router
     .route('/paypal/check-book-consulataion-status/:orderID')
@@ -175,7 +175,7 @@ router
 
 router
     .route('/paypal/promote-product')
-    .get(
+    .post(
         authController.protect,
         paymentController.promoteProductPaypal
     )
@@ -183,5 +183,16 @@ router
 router
     .route('/paypal/check-promote-product-status/:orderID')
     .get(paymentController.promoteProductCheckStatusPaypal)
+
+router
+    .route('/paypal/promote-salon')
+    .post(
+        authController.protect,
+        paymentController.promoteSalonPaypal
+    )
+
+router
+    .route('/paypal/check-promote-salon-status/:orderID')
+    .get(paymentController.promoteSalonCheckStatusPaypal)
 
 module.exports = router;
