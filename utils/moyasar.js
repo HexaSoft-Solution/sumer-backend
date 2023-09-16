@@ -13,7 +13,7 @@ const createPayment = async (amount, description, source, metadata, invoiceId, u
         } else if (type === "buyConsultationConnection") {
             callback = `${http}://${url}/api/v1/payment/verifyPaymentConsultationConnection/${invoiceId}/${user}/${metadata.title}`
         } else if (type === "buyConsultationTicket") {
-            callback = `${http}://${url}/api/v1/payment/verify-buying-consultation-ticket/${user}/${invoiceId}`
+            callback = `${http}://${url}/api/v1/payment/verify-buying-consultation-ticket/${user}/${invoiceId}/${metadata.title}`
         } else if (type === 'promoteProduct'){
             callback = `${http}://${url}/api/v1/payment/verify-promoting-product/${invoiceId}/${amount}`
         } else if (type === 'promoteSalon'){
