@@ -1,0 +1,1 @@
+{"title":"PaypalSalonOrders","required":["orderID","userId","bookingId","salonId","totalAmount"],"properties":{"orderID":{"type":"string"},"userId":{"type":"string"},"bookingId":{"type":"string"},"salonId":{"type":"string"},"totalAmount":{"type":"number"},"_id":{"type":"string"}}}

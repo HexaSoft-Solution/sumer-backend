@@ -3048,6 +3048,9 @@
                   "consultationId": {
                     "example": "any"
                   },
+                  "title": {
+                    "example": "any"
+                  },
                   "paymentId": {
                     "example": "any"
                   },
@@ -3079,7 +3082,7 @@
         }
       }
     },
-    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{consult}": {
+    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{consult}/{title}": {
       "get": {
         "tags": [
           "Payment"
@@ -3097,6 +3100,14 @@
           },
           {
             "name": "consult",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
             "in": "path",
             "required": true,
             "schema": {
@@ -3547,6 +3558,108 @@
           "400": {
             "description": "Bad Request"
           },
+<<<<<<< HEAD
+=======
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paypal/checkout-book-salon": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paypal/check-book-salon-status/{orderID}": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "orderID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paypal/checkout-book-consulataion": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/paypal/check-book-consulataion-status/{orderID}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "orderID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+>>>>>>> 42f125be349ba44ca86e1f44b21aa4824638ec9c
           "500": {
             "description": "Internal Server Error"
           }
@@ -7374,6 +7487,66 @@
           },
           "email": {
             "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "paypalConsultationOrdersSchema": {
+        "title": "PaypalConsultationOrders",
+        "required": [
+          "orderID",
+          "userId",
+          "consultationId",
+          "totalAmount",
+          "title"
+        ],
+        "properties": {
+          "orderID": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "consultationId": {
+            "type": "string"
+          },
+          "totalAmount": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "paypalSalonOrdersSchema": {
+        "title": "PaypalSalonOrders",
+        "required": [
+          "orderID",
+          "userId",
+          "bookingId",
+          "salonId",
+          "totalAmount"
+        ],
+        "properties": {
+          "orderID": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "bookingId": {
+            "type": "string"
+          },
+          "salonId": {
+            "type": "string"
+          },
+          "totalAmount": {
+            "type": "number"
           },
           "_id": {
             "type": "string"

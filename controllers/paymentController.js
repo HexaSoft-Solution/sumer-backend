@@ -9,6 +9,8 @@ const Consultant = require("../models/consultantModel");
 const BusinussProfile = require("../models/businessProfileModel");
 const Voucher = require('../models/voucherModel');
 const CreditCard = require('../models/creditCardModel');
+const PaypalSalonOrders = require('../models/paypalSalonOrdersSchema');
+const PaypalConsultationOrders = require('../models/paypalConsultationOrdersSchema');
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -1123,7 +1125,18 @@ exports.verifyBuyingConsultationsConnection = catchAsync(
 
 exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {consultationId, paymentId, save, type, number, name, cvc, month, year} = req.body;
+    const {
+        consultationId, 
+        title,
+        paymentId, 
+        save, 
+        type, 
+        number, 
+        name, 
+        cvc, 
+        month, 
+        year
+    } = req.body;
 
     let source;
 
@@ -1162,7 +1175,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
         consultation.price,
         "Buy Consultation Ticket",
         source,
-        [],
+        [{title}],
         consultation.id,
         req.user.id,
         req.protocol,
@@ -1217,14 +1230,30 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
     const paymentId = req.query.id;
     const userId = req.params.id;
     const consult = req.params.consult;
+    const title = req.params.title;
 
     console.log(consult, userId)
 
     let payment = await moyasar.fetchPayment(paymentId);
 
     if (payment.status === "paid") {
+        const consultant = await Consultant.create({
+            title,
+            user: userId,
+            consultant: consult,
+        });
+        
+        const consultation = await Consultation.findById(consult);
+
+        await Consultation.findByIdAndUpdate(consult, {
+            $inc: { balance: consultation.price },
+        });
+
         await User.findByIdAndUpdate(userId, {
-            $push: {createConsultant: consult}
+            $push: {
+                createConsultant: consult,
+                consultant: consultant.id
+            }
         });
 
         fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
@@ -1556,7 +1585,6 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
             }
         )
 
-            
             return res.json({ status: 'completed' });
         } else {
             // Order is not completed or has another status
@@ -1568,54 +1596,326 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
     }
 })
 
-/*
+exports.paypalBookSalon = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    
-    if (payment.status === "paid") {
-        const invoiceId = req.params.invoice_id;
+    const {
+        salonId,
+        startTime,
+        endTime,
+        service,
+        day,
+        date,
+    } = req.body;
 
-        const invoice = await Invoice.findOneAndUpdate(
-            {invoiceId: invoiceId},
-            {paymentIds: paymentId},
-            {new: true}
-        );
+    const salon = await Salon.findById(salonId);
+    if (!salon) {
+        return next(new AppError("Salon not found.", 404));
+    }
 
-        const transactionsArr = invoice.transactions;
-        for (const transactionId of transactionsArr) {
-            const transaction = await Transaction.findById(transactionId);
-            const product = await Product.findOneAndUpdate(
-                {_id: transaction.product},
-                {$inc: {availabilityCount: -transaction.quantity}},
-                {new: true}
-            );
-            await BusinussProfile.findOneAndUpdate(
-                {user: product.owner},
-                {
-                    $inc: {balance: transaction.price},
-                    $push: {Transactions: transaction.id},
+    const bookings = await SalonBooking.find({
+        salon: salonId,
+        day: day,
+        date: parseDate(date),
+    });
+
+    const newBookingCheck = {
+        startTime: startTime,
+        endTime: endTime,
+        day: day,
+        date: parseDate(date),
+    };
+
+    const conflicts = bookings.filter((booking) => {
+        const bookingDate = new Date(booking.date);
+        const newBookingDate = new Date(newBookingCheck.date);
+
+        if (booking.day === newBookingCheck.day && bookingDate.getTime() === newBookingDate.getTime()) {
+            const bookingStartTime = new Date(`1970-01-01T${booking.startTime}:00`);
+            const bookingEndTime = new Date(`1970-01-01T${booking.endTime}:00`);
+            const newBookingStartTime = new Date(`1970-01-01T${newBookingCheck.startTime}:00`);
+            const newBookingEndTime = new Date(`1970-01-01T${newBookingCheck.endTime}:00`);
+
+            if (
+                (newBookingStartTime >= bookingStartTime && newBookingStartTime < bookingEndTime) ||
+                (newBookingEndTime > bookingStartTime && newBookingEndTime <= bookingEndTime) ||
+                (newBookingStartTime <= bookingStartTime && newBookingEndTime >= bookingEndTime)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    });
+
+    console.log(conflicts)
+
+    if (conflicts.length > 0) {
+        return next(new AppError("Salon is already booked at this time.", 400));
+    }
+
+    const availability = await SalonTimeTable.find({
+        salon: salonId,
+        startTime,
+        endTime,
+        day,
+        date: parseDate(date),
+    })
+
+    console.log(parseDate(date))
+
+    if (availability.length === 0) {
+        return next(new AppError("Salon is not available at this time.", 400));
+    }
+
+    const newBooking = await SalonBooking.create({
+        salon: salonId,
+        startTime,
+        endTime,
+        day,
+        date,
+        service
+    });
+
+    const startParts = startTime.split(":");
+    const endParts = endTime.split(":");
+
+    const startHours = parseInt(startParts[0], 10);
+    const endHours = parseInt(endParts[0], 10);
+
+    const metadata = [{
+        name: salon.name,
+        description: salon.about || "",
+        quantity: "1",
+        unit_amount: {
+            currency_code: 'USD',
+            value: (endHours - startHours) * (salon.pricePerHour || 10),
+        }
+    }]
+
+    const paypalItems = metadata;
+    console.log(metadata)
+
+    let request = new paypal.orders.OrdersCreateRequest();
+    request.prefer("return=representation");
+
+    const exactValue = (endHours - startHours) * (salon.pricePerHour || 10)
+
+    request.requestBody({
+        intent: "CAPTURE",
+        application_context: {
+            brand_name: "Salon",
+            landing_page: "BILLING",
+            user_action: "CONTINUE",
+        },
+        purchase_units: [{
+            reference_id: "PUHF",
+            description: "Salon",
+            soft_descriptor: "Salon",
+            amount: {
+                currency_code: "USD",
+                value: exactValue.toString(), 
+                breakdown: {
+                    item_total: {
+                        currency_code: "USD",
+                        value: exactValue.toString()
+                    },
                 },
-                {new: true}
-            );
-        }
+            },
+        
+            items: paypalItems,
+        },],
+    });
 
-        const transactions = await Transaction.find({
-            _id: {$in: invoice.transactions},
-        });
-        for (const transaction of transactions) {
-            transaction.paymentId = paymentId;
-            await transaction.save();
-        }
+    const response = await client.execute(request);
+    console.log(`Response: ${JSON.stringify(response)}`);
+    const orderID = response.result.id;
+    console.log(`Order:    ${JSON.stringify(response.result)}`);
+    const resJson = {
+        orderID
+    };
 
-        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
-        })
- */
+    await PaypalSalonOrders.create({
+        orderID,
+        userId: req.user.id,
+        bookingId: newBooking.id,
+        salonId: salon._id.toString(),
+        totalAmount: exactValue.toString()
+    })
+    
+    salon.balance += salon.pricePerHour;
+    await salon.save();
+
+    salon.booking.push(newBooking._id);
+    await salon.save();
+
+    await req.user.save();
+    res.status(200).json(resJson);
+});
+
+exports.getPaypalSalonBookingStatus = catchAsync(async (req, res, next) => {
+
+    // #swagger.tags = ['Payment']
+    try {
+        const orderID = req.params.orderID; // Get the order ID from the request params
+        // Create a request to get order details
+        let request = new paypal.orders.OrdersGetRequest(orderID);
+
+        // Execute the request
+        const response = await client.execute(request);
+
+        // Check the order status in the response
+        const orderStatus = response.result.status;
+
+        console.log(response.result.amount)
+        if (orderStatus === 'COMPLETED') {
+            const PaypalOrder = await PaypalSalonOrders.findOne({ orderID })
+            const bookingId = PaypalOrder.bookingId;
+            const userId = PaypalOrder.userId;
+            const amount = PaypalOrder.totalAmount;
+            const salonId = PaypalOrder.salonId;
+
+            console.log(bookingId, userId, amount, salonId)
+
+            const salonBook = await SalonBooking.findByIdAndUpdate(bookingId, {paymentStatus: "Paid"});
+
+            await Salon.findByIdAndUpdate(salonId, {
+                $inc: {balance: amount},
+                $push: {booking: salonBook.id}
+            });
+
+            await User.findByIdAndUpdate(userId, {
+                $push: {salonBooking: salonBook.id}
+            });
+
+            return res.json({ status: 'completed' });
+        } else {
+            // Order is not completed or has another status
+            return res.status(400).json({ status: 'not completed' });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json(err);
+    }
+});
+
+exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+    const {
+        consultationId, 
+        title,
+    } = req.body;
+
+    const consultation = await Consultation.findById(consultationId);
+
+    const paypalItems = [{
+        name: consultation.title,
+        description: consultation.description || "",
+        quantity: "1",
+        unit_amount: {
+            currency_code: 'USD',
+            value: consultation.price,
+        }
+    }]
+
+    let request = new paypal.orders.OrdersCreateRequest();
+    request.prefer("return=representation");
+
+    request.requestBody({
+        intent: "CAPTURE",
+        application_context: {
+            brand_name: "Consultation",
+            landing_page: "BILLING",
+            user_action: "CONTINUE",
+        },
+        purchase_units: [{
+            reference_id: "PUHF",
+            description: "Consultation",
+            soft_descriptor: "Consultation",
+            amount: {
+                currency_code: "USD",
+                value: consultation.price.toString(), 
+                breakdown: {
+                    item_total: {
+                        currency_code: "USD",
+                        value: consultation.price.toString()
+                    },
+                },
+            },
+        
+            items: paypalItems,
+        },],
+    });
+
+    await PaypalConsultationOrders.create({
+        orderID,
+        userId: req.user.id,
+        consultationId: consultation.id,
+        totalAmount: consultation.price.toString(),
+        title
+    });
+
+    const response = await client.execute(request);
+    console.log(`Response: ${JSON.stringify(response)}`);
+    const orderID = response.result.id;
+    console.log(`Order:    ${JSON.stringify(response.result)}`);
+    const resJson = {
+        orderID
+    };
+
+    await PaypalConsultationOrders.create({
+        orderID,
+        userId: req.user.id,
+        consultationId: consultation.id,
+        totalAmount: consultation.price.toString()
+    })
+
+    res.status(200).json(resJson);
+});
+
+exports.getPaypalConsultationBookingStatus = catchAsync(async (req, res, next) => {
+    try {
+        const orderID = req.params.orderID; // Get the order ID from the request params
+        // Create a request to get order details
+        let request = new paypal.orders.OrdersGetRequest(orderID);
+
+        // Execute the request
+        const response = await client.execute(request);
+
+        // Check the order status in the response
+        const orderStatus = response.result.status;
+
+        console.log(response.result.amount)
+        if (orderStatus === 'COMPLETED') {
+            const PaypalOrder = await PaypalConsultationOrders.findOne({ orderID })
+            const consultationId = PaypalOrder.consultationId;
+            const userId = PaypalOrder.userId;
+            const amount = PaypalOrder.totalAmount;
+            const title = PaypalOrder.title;
+
+            const consultant = await Consultant.create({
+                title,
+                user: userId,
+                consultant: consult,
+            });
+
+            await Consultation.findByIdAndUpdate(consultationId, {
+                $inc: { balance: amount },
+            });
+    
+            await User.findByIdAndUpdate(userId, {
+                $push: {
+                    createConsultant: consult,
+                    consultant: consultant.id
+                }
+            });
+
+            return res.json({ status: 'completed' });
+        } else {
+            // Order is not completed or has another status
+            return res.status(400).json({ status: 'not completed' });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json(err);
+    }
+});

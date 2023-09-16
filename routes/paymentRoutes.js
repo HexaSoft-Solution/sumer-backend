@@ -102,7 +102,7 @@ router
 
 
 router
-    .route('/verify-buying-consultation-ticket/:id/:consult')
+    .route('/verify-buying-consultation-ticket/:id/:consult/:title')
     .get(
         paymentController.verifyBuyingConsultationsTicket
     );
@@ -150,5 +150,27 @@ router
 router
     .route('/paypal/check-order-status/:orderID')
     .get(paymentController.getOrderStatus)
+
+router
+.route('/paypal/checkout-book-salon')
+.get(
+    authController.protect,
+    paymentController.paypalBookSalon
+)
+
+router
+    .route('/paypal/check-book-salon-status/:orderID')
+    .get(paymentController.getPaypalSalonBookingStatus)
+
+router
+.route('/paypal/checkout-book-consulataion')
+.get(
+    authController.protect,
+    paymentController.paypalConsultationBook
+)
+
+router
+    .route('/paypal/check-book-consulataion-status/:orderID')
+    .get(paymentController.getPaypalConsultationBookingStatus)
 
 module.exports = router;

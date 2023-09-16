@@ -1,0 +1,1 @@
+{"title":"PaypalConsultationOrders","required":["orderID","userId","consultationId","totalAmount","title"],"properties":{"orderID":{"type":"string"},"userId":{"type":"string"},"consultationId":{"type":"string"},"totalAmount":{"type":"number"},"title":{"type":"string"},"_id":{"type":"string"}}}
