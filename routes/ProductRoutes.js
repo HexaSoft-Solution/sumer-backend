@@ -54,6 +54,22 @@ router
 router
   .route('/transactions')
   .get(ProductController.getAllTransactions)
+
+router
+  .route('/business/transactions')
+  .get(
+    authController.protect,
+    authController.restrictTo("business"),
+    ProductController.getMyBusinessOrder
+  )
+
+router
+  .route('/business/transactions/:id')
+  .get(
+    authController.protect,
+    authController.restrictTo("business"),
+    ProductController.getMyBusinessOrderDetails
+  )
   
   router
   .route('/invoices')

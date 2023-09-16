@@ -1,0 +1,1 @@
+{"title":"Promotion","required":["title","desc","day","promotionPoint","price"],"properties":{"title":{"type":"string"},"desc":{"type":"string"},"day":{"type":"number"},"promotionPoint":{"type":"number"},"price":{"type":"number"},"_id":{"type":"string"}}}

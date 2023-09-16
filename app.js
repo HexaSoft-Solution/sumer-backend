@@ -29,6 +29,8 @@ const consultationRoutes = require("./routes/consultationRoutes");
 const consultationReviewRoutes = require("./routes/consultationReviewRoutes");
 const communityRoutes = require("./routes/communityRoutes")
 const bannerRoutes = require('./routes/bannerRoutes');
+const promotionRoutes = require('./routes/promotionRoutes');
+
 const swaggerDocument = require("./path/swagger-output.json");
 
 const GoogleUsers = require('./models/googleUsersModel');
@@ -189,6 +191,7 @@ app.use("/api/v1/consultation", consultationRoutes);
 app.use('/api/v1/consultationReview', consultationReviewRoutes);
 app.use("/api/v1/community", communityRoutes);
 app.use("/api/v1/banner", bannerRoutes);
+app.use("/api/v1/promotion", promotionRoutes);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

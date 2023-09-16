@@ -78,6 +78,12 @@ router.get(
     userController.myProfile
 )
 
+router.get(
+  '/my-creditcard',
+  authController.protect,
+  userController.getMyCreditCard
+);
+
 router
   .route("/me")
   .get(authController.protect, userController.getMe, userController.getUser);

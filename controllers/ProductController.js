@@ -687,5 +687,35 @@ exports.changeTransactionStatus = catchAsync(async (req, res, next) => {
         status: "Success",
         message: "Transaction status updated successfully"
     });
-
 });
+
+exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Product']
+    const userId = req.user.id;
+
+    const transactions = await Transactions.find({
+        "product.owner._id": userId,
+    });
+
+    res.status(200).json({
+        status: "Success",
+        transactions
+    });
+});
+
+exports.getMyBusinessOrderDetails = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Product']
+    const userId = req.user.id;
+
+    const transactionId = req.params.id;
+
+    const transaction = await Transactions.findOne({
+        _id: transactionId,
+        "product.owner._id": userId,
+    });
+
+    res.status(200).json({
+        status: "Success",
+        transaction
+    });
+})

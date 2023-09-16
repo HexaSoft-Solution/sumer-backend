@@ -8,6 +8,7 @@ const Booking = require("../models/salonBookingModel");
 const Invoice = require('../models/invoiceModel');
 const Transactions = require('../models/transactionModel');
 const Consultant = require('../models/consultantModel');
+const CreditCard = require('../models/creaditCardModel');
 
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
@@ -85,6 +86,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
             stockName,
             username,
             phone,
+            paypalAccount,
+            paypalUsername
         },
         {
             new: true,
@@ -530,5 +533,27 @@ exports.getMyConsultants = catchAsync(async (req, res, next) => {
         status: "success",
         results: allConsultants.length,
         bookings: consultants,
+    });
+});
+
+exports.getMyCreditCard = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Authentication']
+    const creditCardId = req.user.creditCards;
+
+    const creditCard = await CreditCard.find({
+        _id: {$in: creditCardId},
+    });
+
+    const formattedCreditCards = creditCards.map((card) => {
+        const cardNumber = card.number;
+        const lastFourDigits = cardNumber.slice(-4); 
+        const maskedNumber = '**** **** **** ' + lastFourDigits;
+        return { ...card.toObject(), number: maskedNumber };
+    });
+
+    res.status(200).json({
+        status: "success",
+        results: formattedCreditCards.length,
+        creditCards: formattedCreditCards,
     });
 });
