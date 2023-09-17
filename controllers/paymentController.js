@@ -541,12 +541,12 @@ exports.promoteProduct = catchAsync(async (req, res, next) => {
 
 exports.verifyPromoteProduct = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {productId, amount, id} = req.params;
+    const {productId, amount, planId} = req.params;
     const paymentId = req.query.id;
     const payment = await moyasar.fetchPayment(paymentId);
 
     if (payment.status === "paid") {
-        const promotionPlan = await Promotion.findById(id);
+        const promotionPlan = await Promotion.findById(planId);
 
         await Product.findByIdAndUpdate(
             productId,
@@ -625,12 +625,12 @@ exports.promoteSalon = catchAsync(async (req, res, next) => {
 
 exports.verifyPromoteSalon = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {salonId, amount, id} = req.params;
+    const {salonId, amount, planId} = req.params;
     const paymentId = req.query.id;
     const payment = await moyasar.fetchPayment(paymentId);
 
     if (payment.status === "paid") {
-        const promotionPlan = await Promotion.findById(id);
+        const promotionPlan = await Promotion.findById(planId);
         await Salon.findByIdAndUpdate(
             salonId,
             {
@@ -708,12 +708,12 @@ exports.promoteConsultation = catchAsync(async (req, res, next) => {
 
 exports.verifyPromoteConsultation = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
-    const {consultationId, amount, id} = req.params;
+    const {consultationId, amount, planId} = req.params;
     const paymentId = req.query.id;
     const payment = await moyasar.fetchPayment(paymentId);
 
     if (payment.status === "paid") {
-        const promotionPlan = await Promotion.findById(id);
+        const promotionPlan = await Promotion.findById(planId);
         await Consultation.findByIdAndUpdate(
             consultationId,
             {
@@ -1339,7 +1339,7 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
     }
   */
     const paymentId = req.query.id;
-    const userId = req.params.id;
+    const userId = req.params.userId;
     const consult = req.params.consult;
     const title = req.params.title;
 

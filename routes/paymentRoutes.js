@@ -102,7 +102,7 @@ router
 
 
 router
-    .route('/verify-buying-consultation-ticket/:id/:consult/:title')
+    .route('/verify-buying-consultation-ticket/:userId/:consult/:title')
     .get(
         paymentController.verifyBuyingConsultationsTicket
     );
@@ -115,7 +115,7 @@ router
     );
 
 router
-    .route('/verify-promoting-product/:productId/:amount/:id')
+    .route('/verify-promoting-product/:productId/:amount/:planId')
     .get(paymentController.verifyPromoteProduct)
 
 router
@@ -126,7 +126,7 @@ router
     );
 
 router
-    .route('verify-promoting-salon/:salonId/:amount/:id')
+    .route('verify-promoting-salon/:salonId/:amount/:planId')
     .get(paymentController.verifyPromoteSalon)
 
 router
@@ -137,7 +137,7 @@ router
     );
 
 router
-    .route('verify-promoting-consultation/:consultationId/:amount/:id')
+    .route('verify-promoting-consultation/:consultationId/:amount/:planId')
     .get(paymentController.verifyPromoteConsultation)
 
 router

@@ -3163,7 +3163,7 @@
         }
       }
     },
-    "/api/v1/payment/verify-buying-consultation-ticket/{id}/{consult}/{title}": {
+    "/api/v1/payment/verify-buying-consultation-ticket/{userId}/{consult}/{title}": {
       "get": {
         "tags": [
           "Payment"
@@ -3171,13 +3171,12 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "query",
+            "name": "userId",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "ID of the payment"
+            }
           },
           {
             "name": "consult",
@@ -3200,6 +3199,15 @@
             "in": "query",
             "required": true,
             "description": "ID of the user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "ID of the payment",
             "schema": {
               "type": "string"
             }
@@ -3354,7 +3362,7 @@
         }
       }
     },
-    "/api/v1/payment/verify-promoting-product/{productId}/{amount}/{id}": {
+    "/api/v1/payment/verify-promoting-product/{productId}/{amount}/{planId}": {
       "get": {
         "tags": [
           "Payment"
@@ -3378,7 +3386,7 @@
             }
           },
           {
-            "name": "id",
+            "name": "planId",
             "in": "path",
             "required": true,
             "schema": {
@@ -3463,7 +3471,7 @@
         }
       }
     },
-    "/api/v1/paymentverify-promoting-salon/{salonId}/{amount}/{id}": {
+    "/api/v1/paymentverify-promoting-salon/{salonId}/{amount}/{planId}": {
       "get": {
         "tags": [
           "Payment"
@@ -3487,7 +3495,7 @@
             }
           },
           {
-            "name": "id",
+            "name": "planId",
             "in": "path",
             "required": true,
             "schema": {
@@ -3572,7 +3580,7 @@
         }
       }
     },
-    "/api/v1/paymentverify-promoting-consultation/{consultationId}/{amount}/{id}": {
+    "/api/v1/paymentverify-promoting-consultation/{consultationId}/{amount}/{planId}": {
       "get": {
         "tags": [
           "Payment"
@@ -3596,7 +3604,7 @@
             }
           },
           {
-            "name": "id",
+            "name": "planId",
             "in": "path",
             "required": true,
             "schema": {
@@ -4028,6 +4036,13 @@
         ],
         "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "limit",
             "in": "query",
@@ -7933,10 +7948,7 @@
       "consultationModel": {
         "title": "Consultation",
         "required": [
-          "owner",
-          "Specialization",
-          "about",
-          "price"
+          "owner"
         ],
         "properties": {
           "owner": {
@@ -8665,6 +8677,9 @@
           },
           "balance": {
             "type": "number"
+          },
+          "isFavorite": {
+            "type": "boolean"
           },
           "booking": {
             "type": "array",
