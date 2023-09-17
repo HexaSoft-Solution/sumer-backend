@@ -693,8 +693,13 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Product']
     const userId = req.user.id;
 
+
+    const business = await BusinussProfile.findOne({user: userId});
+
+    const transactionsId = business.Transactions
+
     const transactions = await Transactions.find({
-        "product.owner._id": userId,
+        _id: {$in: transactionsId},
     });
 
     res.status(200).json({
@@ -711,8 +716,14 @@ exports.getMyBusinessOrderDetails = catchAsync(async (req, res, next) => {
 
     const transaction = await Transactions.findOne({
         _id: transactionId,
-        "product.owner._id": userId,
+        // "product.owner._id": userId,
     });
+
+    const transactionOwner = transaction.product.owner._id.toString();
+
+    if (transactionOwner !== userId) {
+        return next(new AppError("You are not allowed to update this transaction", 400));
+    }
 
     res.status(200).json({
         status: "Success",
