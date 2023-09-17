@@ -85,7 +85,7 @@ router
     )
 
 router
-    .route('/service-photo')
+    .route('/service-photo/:id')
     .patch(
         authController.protect,
         authController.restrictTo('admin', 'salon service'),

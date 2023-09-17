@@ -15,8 +15,8 @@ const ConsultationSchema = new mongoose.Schema({
         required: [true, "Please enter the About"],
     },
     price: {
-      type: Number,
-      required: [true, "Please enter the Price"],
+        type: Number,
+        required: [true, "Please enter the Price"],
     },
     promotedAds: {
         type: Number,
@@ -67,6 +67,10 @@ const ConsultationSchema = new mongoose.Schema({
         ref: 'Consultation-Review',
         default: []
     }],
+    withdrawRequestes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'withdraw-requests',
+    }]
 }, {
     timestamps: true
 });

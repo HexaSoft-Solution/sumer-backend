@@ -4583,13 +4583,21 @@
         }
       }
     },
-    "/api/v1/salons/service-photo": {
+    "/api/v1/salons/service-photo/{id}": {
       "delete": {
         "tags": [
           "Salon"
         ],
         "description": "",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -4610,6 +4618,14 @@
         ],
         "description": "",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -7552,6 +7568,12 @@
           "promotedAdsCount": {
             "type": "number"
           },
+          "withdrawRequestes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "_id": {
             "type": "string"
           }
@@ -7822,6 +7844,12 @@
             "type": "number"
           },
           "Reviews": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "withdrawRequestes": {
             "type": "array",
             "items": {
               "type": "string"
@@ -8528,6 +8556,12 @@
           "owner": {
             "type": "string"
           },
+          "withdrawRequestes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "_id": {
             "type": "string"
           }
@@ -8752,6 +8786,9 @@
           "salonCreated": {
             "type": "string"
           },
+          "BusinussProfile": {
+            "type": "string"
+          },
           "salonBooking": {
             "type": "array",
             "items": {
@@ -8928,6 +8965,50 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "withdrawRequestModel": {
+        "title": "withdraw-requests",
+        "required": [
+          "userId",
+          "paypalEmail",
+          "userType",
+          "price",
+          "status"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "paypalEmail": {
+            "type": "string"
+          },
+          "userType": {
+            "type": "string",
+            "enum": [
+              "Business",
+              "Salon",
+              "Consultation"
+            ]
+          },
+          "price": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Success",
+              "Failed",
+              "Pending"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "_id": {
+            "type": "string"
           }
         }
       }

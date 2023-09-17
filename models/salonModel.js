@@ -35,13 +35,6 @@ const salonSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide your telephone'],
         unique: true,
-        validate: {
-            validator: function(v) {
-                const re = /^01[0125][0-9]{8}$/;
-                return (!v || !v.trim().length) || re.test(v)
-            },
-            message: 'Provided phone number is invalid.'
-        },
     },
     promotedAds: {
         type: Number,
@@ -77,7 +70,11 @@ const salonSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-    }
+    },
+    withdrawRequestes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'withdraw-requests',
+    }]
 });
 
 salonSchema.pre(/^find/, function (next) {

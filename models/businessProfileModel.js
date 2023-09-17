@@ -23,6 +23,10 @@ const BusinessProfileSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    withdrawRequestes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'withdraw-requests',
+    }]
 })
 
 BusinessProfileSchema.pre('save', async function (next) {

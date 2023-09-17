@@ -44,13 +44,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "telephone-required"],
       unique: true,
-      validate: {
-        validator: function (v) {
-          const re = /^(\+?\d{1,3}[- ]?)?\d{10}$/;
-          return !v || !v.trim().length || re.test(v);
-        },
-        message: "phone-invalid",
-      },
     },
     role: {
       type: String,
@@ -124,10 +117,15 @@ const userSchema = new mongoose.Schema(
       },
     ],
     salonCreated: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Salon",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Salon",
+      default: null,
     },
-
+    BusinussProfile: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      default: null,
+    },
     salonBooking: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "SalonBooking",
