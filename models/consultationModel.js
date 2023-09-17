@@ -8,15 +8,18 @@ const ConsultationSchema = new mongoose.Schema({
     },
     Specialization: {
         type: String,
-        required: [true, "Please enter the Specialization"],
+        // required: [true, "Please enter the Specialization"],
+        default: ""
     },
     about: {
         type: String,
-        required: [true, "Please enter the About"],
+        // required: [true, "Please enter the About"],
+        default: ""
     },
     price: {
         type: Number,
-        required: [true, "Please enter the Price"],
+        // required: [true, "Please enter the Price"],
+        default: 0
     },
     promotedAds: {
         type: Number,
