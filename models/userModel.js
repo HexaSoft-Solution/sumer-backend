@@ -174,7 +174,6 @@ const userSchema = new mongoose.Schema(
     },
     paypalAccount: {
       type: String,
-      validate: validator.isEmail,
       default: "",
     },
     paypalUsername: {
