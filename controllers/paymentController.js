@@ -1286,7 +1286,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
         "Buy Consultation Ticket",
         source,
         [{title}],
-        consultation.id,
+        consultation.owner,
         req.user.id,
         req.protocol,
         req.get("host"),

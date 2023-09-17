@@ -13,7 +13,7 @@ const ConsultantSchema = new mongoose.Schema({
     },
     consultant: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Consultant'
+        ref: 'User'
     },
     numOfMessages: {
         type: Number,
