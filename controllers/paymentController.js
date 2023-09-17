@@ -95,6 +95,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
         }
 
         cartDetails.push({
+            cartId: item._id,
             Product: product,
             quantity: item.quantity,
             cartId: item._id,
@@ -1399,6 +1400,10 @@ exports.checkoutPaypal = catchAsync(async (req, res, next) => {
     const cart = req.user.cart.items;
     const userId = req.user._id;
 
+    if (cart.length === 0) {
+        return next(new AppError("Cart is empty.", 400));
+    }
+
     let totalCartAmount = 0;
     const metadataArray = [];
     for (const item of cart) {
@@ -1513,13 +1518,17 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
     const cart = req.user.cart.items;
     const userId = req.user._id;
 
+    if (cart.length === 0) {
+        return next(new AppError("Cart is empty.", 400));
+    }
+
     let totalCartAmount = 0;
     const metadataArray = [];
     for (const item of cart) {
         const product = await Product.findById(item.product);
         if (product.availabilityCount < item.quantity) {
             return next(
-                new AppError(`Product ${product.name} is out of stock.`, 400)
+                new AppError(`Product ${product.name} is out of stock.`, 300)
             );
         }
 
@@ -1628,7 +1637,8 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
             paypalId: orderID,
         });
         await invoice.save();
-
+        req.user.cart.items = [];
+        req.user.cart.voucher = null;
         await req.user.save();
         res.status(200).json(resJson);
 });
