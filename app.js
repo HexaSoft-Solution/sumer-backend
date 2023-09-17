@@ -30,6 +30,7 @@ const consultationReviewRoutes = require("./routes/consultationReviewRoutes");
 const communityRoutes = require("./routes/communityRoutes")
 const bannerRoutes = require('./routes/bannerRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
+const withdrawRoutes = require('./routes/withdrawRoutes');
 
 const swaggerDocument = require("./path/swagger-output.json");
 
@@ -192,6 +193,7 @@ app.use('/api/v1/consultationReview', consultationReviewRoutes);
 app.use("/api/v1/community", communityRoutes);
 app.use("/api/v1/banner", bannerRoutes);
 app.use("/api/v1/promotion", promotionRoutes);
+app.use("/api/v1/withdraw", withdrawRoutes);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

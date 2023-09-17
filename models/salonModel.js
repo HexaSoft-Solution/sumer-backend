@@ -11,7 +11,7 @@ const salonSchema = new mongoose.Schema({
     }],
     about: {
         type: String,
-        default: null,
+        default: "",
     },
     address:[{
         type: mongoose.Schema.Types.ObjectId,
@@ -24,6 +24,10 @@ const salonSchema = new mongoose.Schema({
     balance: {
         type: Number,
         default: 0
+    },
+    isFavorite : {
+        type: Boolean,
+        default: false,
     },
     booking: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -78,7 +82,7 @@ const salonSchema = new mongoose.Schema({
 });
 
 salonSchema.pre(/^find/, function (next) {
-    this.populate('booking').populate('service').populate('availableTable');
+    this.populate('booking').populate('service').populate('availableTable').populate('address');
     next();
 });
 

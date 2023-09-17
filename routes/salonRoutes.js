@@ -9,7 +9,10 @@ const router = express.Router();
 
 router
     .route('/')
-    .get(salonController.getAllSalons)
+    .get(
+        authController.protect,
+        salonController.getAllSalons
+    )
     .post(
         authController.protect,
         authController.restrictTo('admin', 'salon service'),

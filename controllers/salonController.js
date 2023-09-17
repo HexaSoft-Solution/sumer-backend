@@ -64,6 +64,11 @@ type: 'number'
         .Pagination();
     const salons = await features.query;
 
+    if (req.user && req.user.lovedProducts) {
+        salons.forEach((salon) => {
+            salon.isFavorite = req.user.lovedSalons.includes(salon._id.toString());
+        });
+    }
 
     res.status(200).json({
         status: 'success',
@@ -125,10 +130,10 @@ exports.unloveSalon = catchAsync(async (req, res, next) => {
 
     const user = await User.findById(userId);
 
-    if (!user.lovedProducts.includes(salonId)) {
+    if (!user.lovedSalons.includes(salonId)) {
         return res.status(400).json({
             status: 'fail',
-            message: "You have not loved this product"
+            message: "You have not loved this salon"
         });
     }
 

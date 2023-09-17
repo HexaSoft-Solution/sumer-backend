@@ -1,7 +1,7 @@
 const Withdraw = require('../models/withdrawRequestModel');
 const BusinessProfile = require('../models/businessProfileModel');
 const Salon = require('../models/salonModel');
-const Consultation = requier('../models/consultationModel');
+const Consultation = require('../models/consultationModel');
 
 const catchAsync = require('../utils/catchAsync');
 const APIFeatures = require('../utils/apiFeatures');
@@ -235,7 +235,7 @@ exports.acceptRequest = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.declineRequest = catchAsync(async (req, res, next) => {
+exports.rejectWithdrawRequest = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Withdraw']
     const requestId = req.params.id;
 
