@@ -6,7 +6,7 @@ const axios = require("axios");
 const User = require("../models/userModel");
 const Salon = require("../models/salonModel");
 const BusinussProfile = require("../models/businessProfileModel");
-const Consultant = require("../models/consultantModel");
+const Consultation = require("../models/consultationModel");
 
 const sendEmail = require("../utils/emails");
 const catchAsync = require("../utils/catchAsync");
@@ -90,7 +90,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
 
   if (req?.body?.role === "consultant") {
-    const consultation = await Consultant.create({
+    const consultation = await Consultation.create({
       owner: newUser.id,
       Specialization: "",
       about: "",
