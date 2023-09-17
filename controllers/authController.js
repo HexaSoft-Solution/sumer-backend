@@ -6,6 +6,7 @@ const axios = require("axios");
 const User = require("../models/userModel");
 const Salon = require("../models/salonModel");
 const BusinussProfile = require("../models/businessProfileModel");
+const Consultant = require("../models/consultantModel");
 
 const sendEmail = require("../utils/emails");
 const catchAsync = require("../utils/catchAsync");
@@ -86,6 +87,16 @@ exports.signup = catchAsync(async (req, res, next) => {
       phone: req.body.phone,
     });
     newUser.salonCreated = salon.id;
+  }
+
+  if (req?.body?.role === "consultant") {
+    const consultation = await Consultant.create({
+      owner: newUser.id,
+      Specialization: "",
+      about: "",
+      price: 0,
+    });
+    newUser.consultation = consultation.id;
   }
 
   const OTP = Math.floor(100000 + Math.random() * 900000).toString();
