@@ -440,6 +440,27 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
         for (const transaction of transactions) {
             transaction.paymentId = paymentId;
             await transaction.save();
+    
+            // Assuming the transaction has a product property you can use to fetch product details
+            const product = await Product.findById(transaction.product);
+    
+            const ownerId = String(product.owner._id);
+    
+            if (groupedTransactions[ownerId]) {
+                groupedTransactions[ownerId].transactions.push(transaction._id);
+                groupedTransactions[ownerId].total += transaction.price;
+            } else {
+                groupedTransactions[ownerId] = {
+                    businessId: product.owner._id,
+                    transactions: [transaction._id],
+                    total: transaction.price
+                };
+            }
+        }
+
+        for (let ownerId in groupedTransactions) {
+            const order = new BusinessOrder(groupedTransactions[ownerId]);
+            await order.save();
         }
 
         const transactionsIds = invoice.transactions.map(transaction => {
@@ -827,12 +848,12 @@ exports.verifyBuyConnection = catchAsync(async (req, res, next) => {
                 console.error('Error reading HTML file:', err);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
                 res.end('Internal Server Error');
-              } else {
+            } else {
                 // Set the Content-Type header to indicate that you're sending HTML
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 // Send the HTML content as the response
                 res.end(data);
-              }
+            }
         })
     } else {
         fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
@@ -840,12 +861,12 @@ exports.verifyBuyConnection = catchAsync(async (req, res, next) => {
                 console.error('Error reading HTML file:', err);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
                 res.end('Internal Server Error');
-              } else {
+            } else {
                 // Set the Content-Type header to indicate that you're sending HTML
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 // Send the HTML content as the response
                 res.end(data);
-              }
+            }
         })
     }
 });
@@ -1795,6 +1816,7 @@ exports.paypalBookSalon = catchAsync(async (req, res, next) => {
         startTime,
         endTime,
         day,
+        user: req.user.id,
         date,
         service
     });
@@ -1931,12 +1953,12 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
     const consultation = await Consultation.findById(consultationId);
 
     const paypalItems = [{
-        name: title || 'Consultation',
+        name: title || "Consultation",
         description: consultation.about || "",
         quantity: "1",
         unit_amount: {
             currency_code: 'USD',
-            value: consultation.price,
+            value: consultation.price.toString(),
         }
     }]
 
@@ -1986,8 +2008,6 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
         title
     });
 
-   
-
     res.status(200).json(resJson);
 });
 
@@ -2029,7 +2049,10 @@ exports.getPaypalConsultationBookingStatus = catchAsync(async (req, res, next) =
                 }
             });
 
-            return res.json({ status: 'completed' });
+            return res.json({ 
+                status: 'completed',
+                consultant
+            });
         } else {
             // Order is not completed or has another status
             return res.status(400).json({ status: 'not completed' });
