@@ -2015,6 +2015,7 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
             reference_id: "PUHF",
             description: "Consultation",
             soft_descriptor: "Consultation",
+            
             amount: {
                 currency_code: "USD",
                 value: consultation.price.toString(), 
@@ -2082,7 +2083,7 @@ exports.getPaypalConsultationBookingStatus = catchAsync(async (req, res, next) =
     
             await User.findByIdAndUpdate(userId, {
                 $push: {
-                    createConsultant: consult,
+                    createConsultant: consultationId,
                     consultant: consultant.id
                 }
             });
