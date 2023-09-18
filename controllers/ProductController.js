@@ -5,6 +5,7 @@ const User = require("../models/userModel");
 const BusinussProfile = require("../models/businessProfileModel");
 const Invoice = require("../models/invoiceModel");
 const Transactions = require("../models/transactionModel");
+const BusinessOrders = require('../models/businessOrderSchema');
 
 const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
@@ -693,18 +694,58 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Product']
     const userId = req.user.id;
 
+    const business = await BusinussProfile.findOne({user: userId});
+
+    const orders = await BusinessOrders.findOne({ businessId: business.user });
+
+    if (!orders) {
+        return next(new AppError("You dont have any orders", 400));
+    }
+
+    console.log(business._id)
+
+    const transactions = orders.transactions
+
+    const transactionsDetails = await Transactions.find({
+        _id: {$in: transactions},
+    });
+    res.status(200).json({
+        status: "Success",
+        orders,
+        transactionsDetails
+    });
+});
+
+exports.changeOrderStatus = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Product']
+    const userId = req.user.id;
+    const orderId = req.params.id;
+    const {status} = req.body;
 
     const business = await BusinussProfile.findOne({user: userId});
 
-    const transactionsId = business.Transactions
+    const order = await BusinessOrders.findById(orderId);
 
-    const transactions = await Transactions.find({
-        _id: {$in: transactionsId},
-    });
+    if (business.id.toString() !== order.businessId.toString()) {
+        return next(new AppError("You are not allowed to update this order", 400));
+    }
+
+    const transactionsIds = order.transactions.map((el) => el._id.toString());
+
+    for (transactionId of transactionsIds) {
+        await Transactions.findByIdAndUpdate(transactionId, {
+            $push: {
+                status: {
+                    status: status,
+                    date: Date.now(),
+                }
+            }
+        });
+    }
 
     res.status(200).json({
         status: "Success",
-        transactions
+        message: "Order status updated successfully"
     });
 });
 

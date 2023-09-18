@@ -72,6 +72,15 @@ router
   )
 
 router
+    .route('/business/change-order-status')
+    .patch(
+      authController.protect,
+
+      authController.restrictTo("business"),
+      ProductController.changeOrderStatus
+    );
+
+router
     .route('/business/products-ads')
     .get(
       authController.protect,
