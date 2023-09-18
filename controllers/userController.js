@@ -557,3 +557,13 @@ exports.getMyCreditCard = catchAsync(async (req, res, next) => {
         creditCards: formattedCreditCards,
     });
 });
+
+// exports.deleteCreditcard = catchAsync(async (req, res, next) => {
+//     const creditCardId = req.params.id;
+
+//     const creditCart = CreditCard.findById(creditCardId)
+
+//     if(!creditCart) {
+
+//     }
+// });

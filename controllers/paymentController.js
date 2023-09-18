@@ -168,8 +168,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
     const cart = req.user.cart.items;
     const userId = req.user._id;
-    const {paymentId, save, type, number, name, cvc, month, year} = req.body;
-
+    const { paymentId, save, type, number, name, cvc, month, year } = req.body;
 
     let totalCartAmount = 0;
     const metadataArray = [];
@@ -1966,14 +1965,6 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
         },],
     });
 
-    await PaypalConsultationOrders.create({
-        orderID,
-        userId: req.user.id,
-        consultationId: consultation.id,
-        totalAmount: consultation.price.toString(),
-        title
-    });
-
     const response = await client.execute(request);
     console.log(`Response: ${JSON.stringify(response)}`);
     const orderID = response.result.id;
@@ -1981,6 +1972,14 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
     const resJson = {
         orderID
     };
+
+    await PaypalConsultationOrders.create({
+        orderID,
+        userId: req.user.id,
+        consultationId: consultation.id,
+        totalAmount: consultation.price.toString(),
+        title
+    });
 
     await PaypalConsultationOrders.create({
         orderID,
