@@ -2048,7 +2048,10 @@ exports.getPaypalConsultationBookingStatus = catchAsync(async (req, res, next) =
                 }
             });
 
-            return res.json({ status: 'completed' });
+            return res.json({ 
+                status: 'completed',
+                consultant
+            });
         } else {
             // Order is not completed or has another status
             return res.status(400).json({ status: 'not completed' });
