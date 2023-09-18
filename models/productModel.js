@@ -59,7 +59,7 @@ const productSchema = new mongoose.Schema({
     size: {
         type: String,
         required: true,
-        enum: ['Gift Set', 'Mini', 'Refill', 'Value',],
+        enum: ['Gift Set', 'Mini', 'Refill', 'Value'],
     },
     trending: {
         type: Boolean,

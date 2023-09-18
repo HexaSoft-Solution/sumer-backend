@@ -1734,6 +1734,28 @@
         }
       }
     },
+    "/api/v1/products/business/products-ads": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/products/invoices/{id}": {
       "get": {
         "tags": [
@@ -7715,6 +7737,30 @@
           }
         }
       },
+      "businessOrderSchema": {
+        "title": "BusinessOrder",
+        "required": [
+          "businessId",
+          "total"
+        ],
+        "properties": {
+          "businessId": {
+            "type": "string"
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "total": {
+            "type": "number"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
       "businessProfileModel": {
         "title": "businessProfile",
         "properties": {
@@ -8631,6 +8677,9 @@
               "Paid",
               "Unpaid"
             ]
+          },
+          "user": {
+            "type": "string"
           },
           "salon": {
             "type": "string"

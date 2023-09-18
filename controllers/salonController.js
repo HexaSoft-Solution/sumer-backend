@@ -81,8 +81,10 @@ exports.getSalon = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
     const salon = await Salon.findById(req.params.id);
     const Reviews = await SalonReview.find({
-        _id: { $in: salon.salonReviews }
+        salon: salon.id
     });
+
+    // console.log(salon)
 
     res.status(200).json({
         status: "Success",

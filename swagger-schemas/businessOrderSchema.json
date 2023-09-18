@@ -1,0 +1,1 @@
+{"title":"BusinessOrder","required":["businessId","total"],"properties":{"businessId":{"type":"string"},"transactions":{"type":"array","items":{"type":"string"}},"total":{"type":"number"},"_id":{"type":"string"}}}

@@ -70,6 +70,14 @@ router
     authController.restrictTo("business"),
     ProductController.getMyBusinessOrderDetails
   )
+
+router
+    .route('/business/products-ads')
+    .get(
+      authController.protect,
+      authController.restrictTo("business"),
+      ProductController.bussinessGetAdsProduct
+    )
   
   router
   .route('/invoices')

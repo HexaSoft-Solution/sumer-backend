@@ -86,8 +86,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
             stockName,
             username,
             phone,
-            paypalAccount,
-            paypalUsername
         },
         {
             new: true,

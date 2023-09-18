@@ -730,3 +730,23 @@ exports.getMyBusinessOrderDetails = catchAsync(async (req, res, next) => {
         transaction
     });
 })
+
+exports.bussinessGetAdsProduct = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Product']
+    const userId = req.user.id;
+
+    const business = await BusinussProfile.findOne({user: userId});
+
+    const productsId = business.products
+
+    const products = await Product.find({
+        _id: {$in: productsId},
+        promotedAds: { $gt: 0 },
+        adsExpireDate: { $gt: Date.now() }
+    });
+
+    res.status(200).json({
+        status: "Success",
+        products
+    });
+});

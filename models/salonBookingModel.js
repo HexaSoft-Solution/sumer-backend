@@ -26,6 +26,10 @@ const salonBookingModel = new mongoose.Schema({
         enum: ['Paid', 'Unpaid'],
         default: 'Unpaid'
     },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
     salon: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Salon',

@@ -12,6 +12,7 @@ const CreditCard = require('../models/creditCardModel');
 const PaypalSalonOrders = require('../models/paypalSalonOrdersSchema');
 const PaypalConsultationOrders = require('../models/paypalConsultationOrdersSchema');
 const Promotion = require('../models/promotionModel')
+const businessOrder = require('../models/businessOrderSchema');
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -220,6 +221,8 @@ exports.checkout = catchAsync(async (req, res, next) => {
             {_id: product.owner._id},
             {$inc: {balance: product.price}},
         )
+
+        
     }
 
     if (req.user.cart.voucher) {
@@ -960,6 +963,7 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         startTime,
         endTime,
         day,
+        user: req.user.id,
         date,
         service
     });

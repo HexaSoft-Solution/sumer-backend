@@ -22,7 +22,7 @@ const ConsultantSchema = new mongoose.Schema({
     messages: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message',
-        default: null
+        default: ""
     }],
     status: {
         type: String,
