@@ -12,7 +12,7 @@ const CreditCard = require('../models/creditCardModel');
 const PaypalSalonOrders = require('../models/paypalSalonOrdersSchema');
 const PaypalConsultationOrders = require('../models/paypalConsultationOrdersSchema');
 const Promotion = require('../models/promotionModel')
-const businessOrder = require('../models/businessOrderSchema');
+const BusinessOrder = require('../models/businessOrderSchema');
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -159,6 +159,16 @@ exports.addVoucher = catchAsync(async (req, res, next) => {
     voucher.user = userId;
     await voucher.save();
 
+    await User.findOneAndUpdate(
+        { _id: userId },
+        {
+            cart: {
+                items: [],
+                voucher: null,
+            },
+        }
+    )
+
     res.status(200).json({
         status: "success",
         message: "Voucher added successfully.",
@@ -170,6 +180,10 @@ exports.checkout = catchAsync(async (req, res, next) => {
     const cart = req.user.cart.items;
     const userId = req.user._id;
     const { paymentId, save, type, number, name, cvc, month, year } = req.body;
+
+    if (cart.length === 0) {
+        return next(new AppError("Cart is empty.", 400));
+    }
 
     let totalCartAmount = 0;
     const metadataArray = [];
@@ -241,7 +255,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
 
     if (paymentId) {
         const payment = await CreditCard.findById(paymentId);
-        console.log('\n =========================', ayment, '\n =========================');
+        console.log('\n =========================', payment, '\n =========================');
         source = {
             type: "creditcard", 
             number: payment.cardNumber, 
@@ -437,6 +451,9 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
         const transactions = await Transaction.find({
             _id: {$in: invoice.transactions},
         });
+
+        let groupedTransactions = {};
+
         for (const transaction of transactions) {
             transaction.paymentId = paymentId;
             await transaction.save();
@@ -1294,7 +1311,7 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
             cardNumber: number,
             name,
             expiryMonth: month,
-            expiryYear: expiryYear,
+            expiryYear: year,
             cvc
         })
 
@@ -1709,10 +1726,32 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
         const transactions = await Transaction.find({
             _id: {$in: invoice.transactions},
         });
-        for (const transaction of transactions) {
+        let groupedTransactions = {};
 
-            transaction.paymentId = response.result.id;
+        for (const transaction of transactions) {
+            transaction.paymentId = paymentId;
             await transaction.save();
+    
+            // Assuming the transaction has a product property you can use to fetch product details
+            const product = await Product.findById(transaction.product);
+    
+            const ownerId = String(product.owner._id);
+    
+            if (groupedTransactions[ownerId]) {
+                groupedTransactions[ownerId].transactions.push(transaction._id);
+                groupedTransactions[ownerId].total += transaction.price;
+            } else {
+                groupedTransactions[ownerId] = {
+                    businessId: product.owner._id,
+                    transactions: [transaction._id],
+                    total: transaction.price
+                };
+            }
+        }
+
+        for (let ownerId in groupedTransactions) {
+            const order = new BusinessOrder(groupedTransactions[ownerId]);
+            await order.save();
         }
 
 
