@@ -1,6 +1,7 @@
 const express = require('express');
 
 const paymentController = require('../controllers/paymentController');
+const paymentShreifController = require('../controllers/paymentShreifController');
 const authController = require('../controllers/authController');
 
 const router = express.Router();
@@ -24,6 +25,13 @@ router
     .patch(
         authController.protect,
         paymentController.checkout
+    );
+
+router
+    .route('/sherif/checkout')
+    .patch(
+        authController.protect,
+        paymentShreifController.checkout
     );
 
 router

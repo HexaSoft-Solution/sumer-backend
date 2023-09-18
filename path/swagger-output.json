@@ -2691,6 +2691,28 @@
         }
       }
     },
+    "/api/v1/payment/sherif/checkout": {
+      "patch": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/payment/paymentCallback/{invoice_id}": {
       "get": {
         "tags": [
