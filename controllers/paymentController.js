@@ -1953,12 +1953,12 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
     const consultation = await Consultation.findById(consultationId);
 
     const paypalItems = [{
-        name: consultation.title || "",
-        description: consultation.description || "",
+        name: title || "Consultation",
+        description: consultation.about || "",
         quantity: "1",
         unit_amount: {
             currency_code: 'USD',
-            value: consultation.price,
+            value: consultation.price.toString(),
         }
     }]
 
@@ -2007,13 +2007,6 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
         title
     });
 
-    await PaypalConsultationOrders.create({
-        orderID,
-        userId: req.user.id,
-        consultationId: consultation.id,
-        totalAmount: consultation.price.toString()
-    })
-
     res.status(200).json(resJson);
 });
 
@@ -2041,7 +2034,7 @@ exports.getPaypalConsultationBookingStatus = catchAsync(async (req, res, next) =
             const consultant = await Consultant.create({
                 title,
                 user: userId,
-                consultant: consult,
+                consultant: consultationId,
             });
 
             await Consultation.findByIdAndUpdate(consultationId, {
