@@ -2941,6 +2941,57 @@
         }
       }
     },
+    "/api/v1/payment/sherif/bookSalon": {
+      "patch": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "salonId": {
+                    "example": "any"
+                  },
+                  "startTime": {
+                    "example": "any"
+                  },
+                  "endTime": {
+                    "example": "any"
+                  },
+                  "service": {
+                    "example": "any"
+                  },
+                  "day": {
+                    "example": "any"
+                  },
+                  "date": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/payment/verifyPaymentSalon/{bookingId}/{amount}/{salonId}/{user}": {
       "get": {
         "tags": [
@@ -3234,6 +3285,42 @@
                     "example": "any"
                   },
                   "year": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payment/sherif/buy-consultation-ticket": {
+      "patch": {
+        "tags": [
+          "Payment"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "consultationId": {
                     "example": "any"
                   }
                 }
@@ -3551,7 +3638,7 @@
         }
       }
     },
-    "/api/v1/paymentverify-promoting-salon/{salonId}/{amount}/{planId}": {
+    "/api/v1/payment/verify-promoting-salon/{salonId}/{amount}/{planId}": {
       "get": {
         "tags": [
           "Payment"
@@ -3660,7 +3747,7 @@
         }
       }
     },
-    "/api/v1/paymentverify-promoting-consultation/{consultationId}/{amount}/{planId}": {
+    "/api/v1/payment/verify-promoting-consultation/{consultationId}/{amount}/{planId}": {
       "get": {
         "tags": [
           "Payment"

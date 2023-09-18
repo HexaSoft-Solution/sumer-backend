@@ -5,33 +5,14 @@ const Invoice = require("../models/invoiceModel");
 const Salon = require("../models/salonModel");
 const SalonBooking = require("../models/salonBookingModel");
 const Consultation = require("../models/consultationModel");
-const Consultant = require("../models/consultantModel");
 const BusinussProfile = require("../models/businessProfileModel");
 const Voucher = require('../models/voucherModel');
-const CreditCard = require('../models/creditCardModel');
-const PaypalSalonOrders = require('../models/paypalSalonOrdersSchema');
-const PaypalConsultationOrders = require('../models/paypalConsultationOrdersSchema');
-const Promotion = require('../models/promotionModel')
 const BusinessOrder = require('../models/businessOrderSchema');
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const moyasar = require("../utils/moyasar");
-const Paypal = require('../utils/paypal');
 const SalonTimeTable = require("../models/salonAvailableTimeModel");
-
-const paypal = require("@paypal/checkout-server-sdk");
-const clientId = process.env.PAYPAL_CLIENT_ID;
-const clientSecret = process.env.PAYPAL_SECRET_KEY;
-const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
-const client = new paypal.core.PayPalHttpClient(environment);
-
-const fs = require('fs');
-const path = require('path');
-
-const getProductDetails = async (productId) => {
-    return await Product.findById(productId);
-};
 
 const generateRandomInvoiceId = () => {
     return Math.floor(10000 + Math.random() * 90000).toString();
@@ -223,30 +204,136 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
             }
         )
 
-        fs.readFile(path.join(__dirname, '../views/payment-success.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
+        res.status(200).json({
+            status: "success",
+            message: "Payment successful!",
         })
     } else {
-        fs.readFile(path.join(__dirname, '../views/payment-failed.html'), 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading HTML file:', err);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-              } else {
-                // Set the Content-Type header to indicate that you're sending HTML
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                // Send the HTML content as the response
-                res.end(data);
-              }
+        res.status.json({
+            status: "failed",
+            message: "Payment failed!",
         })
     }
+});
+
+
+exports.salonBooking = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+    const {
+        salonId,
+        startTime,
+        endTime,
+        service,
+        day,
+        date,
+    } = req.body;
+
+    const salon = await Salon.findById(salonId);
+    if (!salon) {
+        return next(new AppError("Salon not found.", 404));
+    }
+
+    const bookings = await SalonBooking.find({
+        salon: salonId,
+        day: day,
+        date: parseDate(date),
+    });
+
+    const newBookingCheck = {
+        startTime: startTime,
+        endTime: endTime,
+        day: day,
+        date: parseDate(date),
+    };
+
+    const conflicts = bookings.filter((booking) => {
+        const bookingDate = new Date(booking.date);
+        const newBookingDate = new Date(newBookingCheck.date);
+
+        if (booking.day === newBookingCheck.day && bookingDate.getTime() === newBookingDate.getTime()) {
+            const bookingStartTime = new Date(`1970-01-01T${booking.startTime}:00`);
+            const bookingEndTime = new Date(`1970-01-01T${booking.endTime}:00`);
+            const newBookingStartTime = new Date(`1970-01-01T${newBookingCheck.startTime}:00`);
+            const newBookingEndTime = new Date(`1970-01-01T${newBookingCheck.endTime}:00`);
+
+            if (
+                (newBookingStartTime >= bookingStartTime && newBookingStartTime < bookingEndTime) ||
+                (newBookingEndTime > bookingStartTime && newBookingEndTime <= bookingEndTime) ||
+                (newBookingStartTime <= bookingStartTime && newBookingEndTime >= bookingEndTime)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    });
+
+    console.log(conflicts)
+
+    if (conflicts.length > 0) {
+        return next(new AppError("Salon is already booked at this time.", 400));
+    }
+
+    const availability = await SalonTimeTable.find({
+        salon: salonId,
+        startTime,
+        endTime,
+        day,
+        date: parseDate(date),
+    })
+
+    console.log(parseDate(date))
+
+    if (availability.length === 0) {
+        return next(new AppError("Salon is not available at this time.", 400));
+    }
+
+
+    const newBooking = await SalonBooking.create({
+        salon: salonId,
+        startTime,
+        endTime,
+        day,
+        user: req.user.id,
+        date,
+        service
+    });
+
+    const startParts = startTime.split(":");
+    const endParts = endTime.split(":");
+
+    const startHours = parseInt(startParts[0], 10);
+    const endHours = parseInt(endParts[0], 10);
+
+    salon.balance += salon.pricePerHour;
+    await salon.save();
+
+    salon.booking.push(newBooking._id);
+    await salon.save();
+
+    res.status(201).json({
+        status: "Success",
+        message: "Booking created successfully",
+        booking: newBooking,
+    });
+});
+
+exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Payment']
+    const {
+        consultationId, 
+    } = req.body;
+
+    const consultation = await Consultation.findById(consultationId);
+
+    await User.findByIdAndUpdate(
+        {_id: consultation.owner._id},
+        {$inc: {balance: consultation.price}},
+    )
+
+    res.status(200).json({
+        status: "success",
+        message: "Checkout successful!",
+        paymentId: payment.id,
+    });
 });

@@ -70,6 +70,13 @@ router
     );
 
 router
+    .route('/sherif/bookSalon')
+    .patch(
+        authController.protect,
+        paymentShreifController.salonBooking
+    );
+
+router
     .route('/verifyPaymentSalon/:bookingId/:amount/:salonId/:user')
     .get(
         paymentController.verifyBookingSalon
@@ -108,6 +115,12 @@ router
         paymentController.buyConsultantTicket
     );
 
+router
+    .route('/sherif/buy-consultation-ticket')
+    .patch(
+        authController.protect,
+        paymentShreifController.buyConsultantTicket
+    )
 
 router
     .route('/verify-buying-consultation-ticket/:userId/:consult/:title')
@@ -134,7 +147,7 @@ router
     );
 
 router
-    .route('verify-promoting-salon/:salonId/:amount/:planId')
+    .route('/verify-promoting-salon/:salonId/:amount/:planId')
     .get(paymentController.verifyPromoteSalon)
 
 router
@@ -145,7 +158,7 @@ router
     );
 
 router
-    .route('verify-promoting-consultation/:consultationId/:amount/:planId')
+    .route('/verify-promoting-consultation/:consultationId/:amount/:planId')
     .get(paymentController.verifyPromoteConsultation)
 
 router
