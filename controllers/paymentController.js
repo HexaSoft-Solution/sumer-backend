@@ -1472,9 +1472,6 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
         return next(new AppError("Cart is empty.", 400));
     }
 
-    if (req.user.addresses.find(address => address._id.toString() === addressId.toString())) {
-        return next(new AppError("Address not found.", 400));
-    }
 
     let totalCartAmount = 0;
     const metadataArray = [];
