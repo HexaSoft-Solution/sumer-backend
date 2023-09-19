@@ -2669,6 +2669,9 @@
                   "type": {
                     "example": "any"
                   },
+                  "addressId": {
+                    "example": "any"
+                  },
                   "number": {
                     "example": "any"
                   },
@@ -3811,6 +3814,20 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "addressId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -7886,10 +7903,15 @@
         "title": "BusinessOrder",
         "required": [
           "businessId",
+          "buyer",
+          "address",
           "total"
         ],
         "properties": {
           "businessId": {
+            "type": "string"
+          },
+          "buyer": {
             "type": "string"
           },
           "transactions": {
@@ -7897,6 +7919,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "address": {
+            "type": "string"
           },
           "total": {
             "type": "number"
@@ -9000,6 +9025,7 @@
         "required": [
           "product",
           "quantity",
+          "address",
           "price"
         ],
         "properties": {
@@ -9030,6 +9056,9 @@
               },
               "required": []
             }
+          },
+          "address": {
+            "type": "string"
           },
           "price": {
             "type": "number"
