@@ -1222,13 +1222,14 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
     const consultation = await Consultation.findById(consultationId);
 
     console.log(consultation.owner._id.toString());
+    console.log(title)
 
     const payment = await moyasar.createPayment(
         consultation.price,
         "Buy Consultation Ticket",
         source,
-        [{title}],
-        consultation.owner._id.toString(),
+        [{title: title}],
+        consultation.id.toString(),
         req.user.id,
         req.protocol,
         req.get("host"),
@@ -1296,6 +1297,8 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
         });
         
         const consultation = await Consultation.findById(consult);
+
+        console.log(consult)
 
         await Consultation.findByIdAndUpdate(consult, {
             $inc: { balance: consultation.price },
@@ -1632,7 +1635,7 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
                 );
             }
 
-            
+
             const transactions = await Transaction.find({
                 _id: {$in: invoice.transactions},
             });

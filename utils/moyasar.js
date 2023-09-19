@@ -11,9 +11,9 @@ const createPayment = async (amount, description, source, metadata, invoiceId, u
         } else if (type === "createSalonProfile"){
             callback = `${http}://${url}/api/v1/payment/verifyPaymentCreateConsultation/${user}`
         } else if (type === "buyConsultationConnection") {
-            callback = `${http}://${url}/api/v1/payment/verifyPaymentConsultationConnection/${invoiceId}/${user}/${metadata.title}`
+            callback = `${http}://${url}/api/v1/payment/verifyPaymentConsultationConnection/${invoiceId}/${user}/${metadata[0].title}`
         } else if (type === "buyConsultationTicket") {
-            callback = `${http}://${url}/api/v1/payment/verify-buying-consultation-ticket/${user}/${invoiceId}/${metadata.title}`
+            callback = `${http}://${url}/api/v1/payment/verify-buying-consultation-ticket/${user}/${invoiceId}/${metadata[0].title}`
         } else if (type === 'promoteProduct'){
             callback = `${http}://${url}/api/v1/payment/verify-promoting-product/${invoiceId}/${amount}/${metadata.id}`
         } else if (type === 'promoteSalon'){
