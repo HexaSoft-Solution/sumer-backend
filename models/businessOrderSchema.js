@@ -6,10 +6,20 @@ const businessOrderSchema = new mongoose.Schema({
         ref: 'Business',
         required: true
     },
+    buyer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     transactions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Transaction',
     }],
+    address: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Address',
+        required: true
+    },
     total: {
         type: Number,
         required: true

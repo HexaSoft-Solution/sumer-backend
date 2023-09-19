@@ -20,6 +20,11 @@ const transactionSchema = new mongoose.Schema({
             default: Date.now(),
         }
     }],
+    address: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Address',
+        required: true
+    },
     price: {
         type: Number,
         required: true,

@@ -6,6 +6,7 @@ const BusinussProfile = require("../models/businessProfileModel");
 const Invoice = require("../models/invoiceModel");
 const Transactions = require("../models/transactionModel");
 const BusinessOrders = require('../models/businessOrderSchema');
+const Address = require('../models/addressModel')
 
 const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
@@ -659,7 +660,6 @@ exports.getTransactionsbyInvoiceId = catchAsync(async (req, res, next) => {
     });
 });
 
-
 exports.changeTransactionStatus = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Product']
     const transactionId = req.params.id;
@@ -696,7 +696,10 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
 
     const business = await BusinussProfile.findOne({user: userId});
 
-    const orders = await BusinessOrders.findOne({ businessId: business.user });
+    const orders = await BusinessOrders.findOne({ businessId: business.user }).populate({
+        path: "buyer",
+        select: "name",
+    });
 
     if (!orders) {
         return next(new AppError("You dont have any orders", 400));
@@ -705,6 +708,10 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     console.log(business._id)
 
     const transactions = orders.transactions
+    
+    const address = await Address.findOne({
+        _id: orders.address,
+    });
 
     const transactionsDetails = await Transactions.find({
         _id: {$in: transactions},
@@ -712,7 +719,8 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: "Success",
         orders,
-        transactionsDetails
+        transactionsDetails,
+        address
     });
 });
 
@@ -753,22 +761,16 @@ exports.getMyBusinessOrderDetails = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Product']
     const userId = req.user.id;
 
-    const transactionId = req.params.id;
+    const orderId = req.params.id;
 
-    const transaction = await Transactions.findOne({
-        _id: transactionId,
-        // "product.owner._id": userId,
-    });
+    const order = await BusinessOrders.findOne({
+        _id: orderId,
+    }).populate('buyer').populate('address').populate('transactions');
 
-    const transactionOwner = transaction.product.owner._id.toString();
-
-    if (transactionOwner !== userId) {
-        return next(new AppError("You are not allowed to update this transaction", 400));
-    }
 
     res.status(200).json({
         status: "Success",
-        transaction
+        order
     });
 })
 

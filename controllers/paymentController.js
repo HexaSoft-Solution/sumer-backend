@@ -179,10 +179,14 @@ exports.checkout = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
     const cart = req.user.cart.items;
     const userId = req.user._id;
-    const { paymentId, save, type, number, name, cvc, month, year } = req.body;
+    const { paymentId, save, type, addressId, number, name, cvc, month, year } = req.body;
 
     if (cart.length === 0) {
         return next(new AppError("Cart is empty.", 400));
+    }
+
+    if (req.user.addresses.find((address) => address._id.toString() === addressId) === undefined) {
+        return next(new AppError("Address not found.", 404));
     }
 
     let totalCartAmount = 0;
@@ -224,6 +228,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
                 status: "Placed",
                 date: Date.now(),
             }],
+            address: addressId,
             user: userId,
         });
         await transaction.save();
@@ -368,6 +373,8 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
                 groupedTransactions[ownerId] = {
                     businessId: product.owner._id,
                     transactions: [transaction._id],
+                    buyer: transaction.user,
+                    address: transaction.address,
                     total: transaction.price
                 };
             }
@@ -1339,8 +1346,16 @@ exports.checkoutPaypal = catchAsync(async (req, res, next) => {
     const cart = req.user.cart.items;
     const userId = req.user._id;
 
+
+    const { addressId } = req.body
+
     if (cart.length === 0) {
         return next(new AppError("Cart is empty.", 400));
+    }
+
+
+    if (req.user.addresses.find(address => address._id.toString() === addressId.toString())) {
+        return next(new AppError("Address not found.", 400));
     }
 
     let totalCartAmount = 0;
@@ -1378,6 +1393,10 @@ exports.checkoutPaypal = catchAsync(async (req, res, next) => {
             product: item.product,
             quantity: item.quantity,
             price: metadataArray[i].price,
+            status: [{
+                status: "Placed",
+            }],
+            address: addressId,
             user: userId,
         });
         await transaction.save();
@@ -1457,8 +1476,14 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
     const cart = req.user.cart.items;
     const userId = req.user._id;
 
+    const { addressId } = req.body
+
     if (cart.length === 0) {
         return next(new AppError("Cart is empty.", 400));
+    }
+
+    if (req.user.addresses.find(address => address._id.toString() === addressId.toString())) {
+        return next(new AppError("Address not found.", 400));
     }
 
     let totalCartAmount = 0;
@@ -1504,6 +1529,7 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
                 status: "Placed",
                 date: Date.now(),
             }],
+            address: addressId,
             user: userId,
         });
         await transaction.save();
@@ -1642,6 +1668,8 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
                 groupedTransactions[ownerId] = {
                     businessId: product.owner._id,
                     transactions: [transaction._id],
+                    buyer: transaction.user,
+                    address: transaction.address,
                     total: transaction.price
                 };
             }

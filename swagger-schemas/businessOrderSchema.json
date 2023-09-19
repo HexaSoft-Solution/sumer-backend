@@ -1,1 +1,1 @@
-{"title":"BusinessOrder","required":["businessId","total"],"properties":{"businessId":{"type":"string"},"transactions":{"type":"array","items":{"type":"string"}},"total":{"type":"number"},"_id":{"type":"string"}}}
+{"title":"BusinessOrder","required":["businessId","buyer","address","total"],"properties":{"businessId":{"type":"string"},"buyer":{"type":"string"},"transactions":{"type":"array","items":{"type":"string"}},"address":{"type":"string"},"total":{"type":"number"},"_id":{"type":"string"}}}
