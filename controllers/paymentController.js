@@ -1302,7 +1302,9 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
 
         await Consultation.findByIdAndUpdate(consult, {
             $inc: { balance: consultation.price },
+            $push: { consultant: consultant.id }
         });
+
 
         await User.findByIdAndUpdate(userId, {
             $push: {
