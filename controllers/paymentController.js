@@ -1341,7 +1341,6 @@ exports.checkoutPaypal = catchAsync(async (req, res, next) => {
     const cart = req.user.cart.items;
     const userId = req.user._id;
 
-
     const { addressId } = req.body
 
     if (cart.length === 0) {
@@ -1471,7 +1470,6 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
     if (cart.length === 0) {
         return next(new AppError("Cart is empty.", 400));
     }
-
 
     let totalCartAmount = 0;
     const metadataArray = [];
@@ -1612,74 +1610,74 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
         if (orderStatus === 'COMPLETED') {
 
 
-        const invoice = await Invoice.findOne(
-            {paypalId: orderID},
-        );
-
-        const transactionsArr = invoice.transactions;
-        for (const transactionId of transactionsArr) {
-            const transaction = await Transaction.findById(transactionId);
-            const product = await Product.findOneAndUpdate(
-                {_id: transaction.product},
-                {$inc: {availabilityCount: -transaction.quantity}},
-                {new: true}
+            const invoice = await Invoice.findOne(
+                {paypalId: orderID},
             );
-            await BusinussProfile.findOneAndUpdate(
-                {user: product.owner},
-                {
-                    $inc: {balance: transaction.price},
-                    $push: {Transactions: transaction.id},
-                },
-                {new: true}
-            );
-        }
 
-        const transactions = await Transaction.find({
-            _id: {$in: invoice.transactions},
-        });
-        let groupedTransactions = {};
-
-        for (const transaction of transactions) {
-            transaction.paymentId = paymentId;
-            await transaction.save();
-    
-            // Assuming the transaction has a product property you can use to fetch product details
-            const product = await Product.findById(transaction.product);
-    
-            const ownerId = String(product.owner._id);
-    
-            if (groupedTransactions[ownerId]) {
-                groupedTransactions[ownerId].transactions.push(transaction._id);
-                groupedTransactions[ownerId].total += transaction.price;
-            } else {
-                groupedTransactions[ownerId] = {
-                    businessId: product.owner._id,
-                    transactions: [transaction._id],
-                    buyer: transaction.user,
-                    address: transaction.address,
-                    total: transaction.price
-                };
+            const transactionsArr = invoice.transactions;
+            for (const transactionId of transactionsArr) {
+                const transaction = await Transaction.findById(transactionId);
+                const product = await Product.findOneAndUpdate(
+                    {_id: transaction.product},
+                    {$inc: {availabilityCount: -transaction.quantity}},
+                    {new: true}
+                );
+                await BusinussProfile.findOneAndUpdate(
+                    {user: product.owner},
+                    {
+                        $inc: {balance: transaction.price},
+                        $push: {Transactions: transaction.id},
+                    },
+                    {new: true}
+                );
             }
-        }
 
-        for (let ownerId in groupedTransactions) {
-            const order = new BusinessOrder(groupedTransactions[ownerId]);
-            await order.save();
-        }
+            const transactions = await Transaction.find({
+                _id: {$in: invoice.transactions},
+            });
+            let groupedTransactions = {};
 
-
-            await User.findOneAndUpdate(
-            { id: invoice.user },
-            {
-                $push: {
-                    invoices: invoice.id,
-                    transactions: invoice.transactions
-                },
-                $set: {
-                    'cart.items': [] // This will clear the cart items
+            for (const transaction of transactions) {
+                transaction.paymentId = orderID;
+                await transaction.save();
+        
+                // Assuming the transaction has a product property you can use to fetch product details
+                const product = await Product.findById(transaction.product);
+        
+                const ownerId = String(product.owner._id);
+        
+                if (groupedTransactions[ownerId]) {
+                    groupedTransactions[ownerId].transactions.push(transaction._id);
+                    groupedTransactions[ownerId].total += transaction.price;
+                } else {
+                    groupedTransactions[ownerId] = {
+                        businessId: product.owner._id,
+                        transactions: [transaction._id],
+                        buyer: transaction.user,
+                        address: transaction.address,
+                        total: transaction.price
+                    };
                 }
             }
-        )
+
+            for (let ownerId in groupedTransactions) {
+                const order = new BusinessOrder(groupedTransactions[ownerId]);
+                await order.save();
+            }
+
+
+                await User.findOneAndUpdate(
+                { id: invoice.user },
+                {
+                    $push: {
+                        invoices: invoice.id,
+                        transactions: invoice.transactions
+                    },
+                    $set: {
+                        'cart.items': [] // This will clear the cart items
+                    }
+                }
+            )
 
             return res.json({ status: 'completed' });
         } else {
