@@ -1996,6 +1996,7 @@ exports.getPaypalConsultationBookingStatus = catchAsync(async (req, res, next) =
 
             await Consultation.findByIdAndUpdate(consultationId, {
                 $inc: { balance: amount },
+                $push: { consultant: consultant.id }
             });
     
             await User.findByIdAndUpdate(userId, {
