@@ -111,8 +111,9 @@ type: 'number'
       } */
 
   const user = req.user;
-  const consultants = await new APIFeatures(
-    Consultant.find({ consultant: user.consultant }),
+  const consultation = await Consultation.findOne({ owner: user._id });
+  const consultants = new APIFeatures(
+    Consultant.find({ consultant: { $in: Consultation.consultants } }),
     req.query
   )
     .filter()
