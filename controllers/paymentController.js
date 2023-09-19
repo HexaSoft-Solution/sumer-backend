@@ -1221,14 +1221,14 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
 
     const consultation = await Consultation.findById(consultationId);
 
-    console.log(consultation.owner);
+    console.log(consultation.owner._id.toString());
 
     const payment = await moyasar.createPayment(
         consultation.price,
         "Buy Consultation Ticket",
         source,
         [{title}],
-        consultation.owner,
+        consultation.owner._id.toString(),
         req.user.id,
         req.protocol,
         req.get("host"),
