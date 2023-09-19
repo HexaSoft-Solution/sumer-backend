@@ -1302,7 +1302,7 @@ exports.verifyBuyingConsultationsTicket = catchAsync(async (req, res, next) => {
 
         await Consultation.findByIdAndUpdate(consult, {
             $inc: { balance: consultation.price },
-            $push: { consultant: consultant.id }
+            $push: { consultants: consultant.id }
         });
 
 
@@ -1996,7 +1996,7 @@ exports.getPaypalConsultationBookingStatus = catchAsync(async (req, res, next) =
 
             await Consultation.findByIdAndUpdate(consultationId, {
                 $inc: { balance: amount },
-                $push: { consultant: consultant.id }
+                $push: { consultants: consultant.id }
             });
     
             await User.findByIdAndUpdate(userId, {
