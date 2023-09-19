@@ -282,8 +282,6 @@ exports.salonBooking = catchAsync(async (req, res, next) => {
         date: parseDate(date),
     })
 
-    console.log(parseDate(date))
-
     if (availability.length === 0) {
         return next(new AppError("Salon is not available at this time.", 400));
     }
@@ -334,6 +332,5 @@ exports.buyConsultantTicket = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: "success",
         message: "Checkout successful!",
-        paymentId: payment.id,
     });
 });
