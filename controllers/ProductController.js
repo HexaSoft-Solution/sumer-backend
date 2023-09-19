@@ -696,7 +696,7 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
 
     const business = await BusinussProfile.findOne({user: userId});
 
-    const orders = await BusinessOrders.findOne({ businessId: business.user }).populate({
+    const orders = await BusinessOrders.find({ businessId: business.user }).populate({
         path: "buyer",
         select: "name",
     });
@@ -707,11 +707,12 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
 
     console.log(business._id)
 
-    const transactions = orders.transactions
+
+    const transactions = orders.map((el) => el.transactions);
     
-    const address = await Address.findOne({
-        _id: orders.address,
-    });
+    console.log(orders)
+
+    const address = await Address.findById(orders.address);
 
     const transactionsDetails = await Transactions.find({
         _id: {$in: transactions},
