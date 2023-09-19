@@ -32,7 +32,6 @@ const parseDate = (date) => {
     return date;
 };
 
-
 exports.checkout = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
     const cart = req.user.cart.items;
@@ -215,7 +214,6 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
         })
     }
 });
-
 
 exports.salonBooking = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']

@@ -185,10 +185,6 @@ exports.checkout = catchAsync(async (req, res, next) => {
         return next(new AppError("Cart is empty.", 400));
     }
 
-    if (req.user.addresses.find((address) => address._id.toString() === addressId) === undefined) {
-        return next(new AppError("Address not found.", 404));
-    }
-
     let totalCartAmount = 0;
     const metadataArray = [];
     for (const item of cart) {
@@ -426,7 +422,6 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
         })
     }
 });
-
 
 exports.checkPayment = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Payment']
@@ -1351,11 +1346,6 @@ exports.checkoutPaypal = catchAsync(async (req, res, next) => {
 
     if (cart.length === 0) {
         return next(new AppError("Cart is empty.", 400));
-    }
-
-
-    if (req.user.addresses.find(address => address._id.toString() === addressId.toString())) {
-        return next(new AppError("Address not found.", 400));
     }
 
     let totalCartAmount = 0;
