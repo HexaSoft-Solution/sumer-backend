@@ -37,6 +37,8 @@ exports.checkout = catchAsync(async (req, res, next) => {
     const cart = req.user.cart.items;
     const userId = req.user._id;
 
+    const { addressId } = req.body
+
     if (cart.length === 0) {
         return next(new AppError("Cart is empty.", 400));
     }
@@ -80,6 +82,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
                 status: "Placed",
                 date: Date.now(),
             }],
+            address: addressId,
             user: userId,
         });
         await transaction.save();
@@ -179,6 +182,8 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
                 groupedTransactions[ownerId] = {
                     businessId: product.owner._id,
                     transactions: [transaction._id],
+                    buyer: transaction.user,
+                    address: transaction.address,
                     total: transaction.price
                 };
             }

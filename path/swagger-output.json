@@ -2713,6 +2713,20 @@
           "200": {
             "description": "OK"
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "addressId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
