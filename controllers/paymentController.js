@@ -83,6 +83,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
 
     const cartDetails = [];
     let totalPrice = 0;
+    let discount
 
     for (const item of cart) {
         const product = await getProductDetails(item.product);
@@ -94,6 +95,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
             totalPriceForProduct = product.price * item.quantity;
             totalPrice += totalPriceForProduct;
         }
+        discount += product.price - product.discountedPrice
 
         cartDetails.push({
             cartId: item._id,
@@ -125,6 +127,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
         status: "success",
         cartDetails: cartDetails,
         totalPriceForAllProducts: totalPrice,
+        discount
         voucherDiscount,
         voucher,
     });
