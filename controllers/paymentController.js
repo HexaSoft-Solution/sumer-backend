@@ -83,7 +83,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
 
     const cartDetails = [];
     let totalPrice = 0;
-    let discount
+    let discount = 0;
 
     for (const item of cart) {
         const product = await getProductDetails(item.product);
