@@ -94,7 +94,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       owner: newUser.id,
       Specialization: "",
       about: "",
-      price: 0,
+      price: 10,
     });
     newUser.consultation = consultation.id;
   }
