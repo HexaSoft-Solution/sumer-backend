@@ -201,7 +201,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
             totalPriceForProduct = product.price * item.quantity;
             totalCartAmount += totalPriceForProduct;
         } else {
-            totalPriceForProduct = product.price * item.quantity;
+            totalPriceForProduct = product.discountedPrice * item.quantity;
             totalCartAmount += totalPriceForProduct;
         }
 
