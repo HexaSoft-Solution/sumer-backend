@@ -112,8 +112,9 @@ type: 'number'
 
   const user = req.user;
   const consultation = await Consultation.findOne({ owner: user._id });
+  const consultantsIds = consultation.consultants.map((e) => e._id.toString());
   const consultants = new APIFeatures(
-    Consultant.find({ consultant: { $in: Consultation.consultants } }),
+    Consultant.find({ _id: { $in: consultantsIds} }),
     req.query
   )
     .filter()

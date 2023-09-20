@@ -585,10 +585,14 @@ exports.getAllTransactions = catchAsync(async (req, res, next) => {
         .Pagination();
     const transactions = await features.query;
 
+    const recivedTranactions = transactions.filter((el) => el.status.find((el) => el.status === "Received"));
+    const otherTransactions = transactions.filter((el) => !el.status.find((el) => el.status === "Received"));
+
     res.status(200).json({
         status: "success",
         results: count.length,
-        transactions,
+        recivedTranactions,
+        otherTransactions
     });
 });
 
