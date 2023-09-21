@@ -1734,13 +1734,21 @@
         }
       }
     },
-    "/api/v1/products/business/change-order-status": {
+    "/api/v1/products/business/change-order-status/{orderId}": {
       "patch": {
         "tags": [
           "Product"
         ],
         "description": "",
         "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "authorization",
             "in": "header",
