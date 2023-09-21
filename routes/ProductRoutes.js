@@ -72,7 +72,7 @@ router
   )
 
 router
-    .route('/business/change-order-status/:id')
+    .route('/business/change-order-status/:orderId')
     .patch(
       authController.protect,
       authController.restrictTo("business"),

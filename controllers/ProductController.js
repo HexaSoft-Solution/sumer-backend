@@ -709,22 +709,21 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
         return next(new AppError("You dont have any orders", 400));
     }
 
-    console.log(business._id)
-
-
     const transactions = orders.map((el) => el.transactions);
-    
-    console.log(orders)
 
     const address = await Address.findById(orders.address);
 
     const transactionsDetails = await Transactions.find({
         _id: {$in: transactions},
     });
+
+    const status = transactionsDetails[0].status
+
     res.status(200).json({
         status: "Success",
         orders,
         transactionsDetails,
+        status,
         address
     });
 });
@@ -732,14 +731,14 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
 exports.changeOrderStatus = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Product']
     const userId = req.user.id;
-    const orderId = req.params.id;
+    const orderId = req.params.orderId;
     const {status} = req.body;
 
     const business = await BusinussProfile.findOne({user: userId});
 
     const order = await BusinessOrders.findById(orderId);
 
-    if (business.id.toString() !== order.businessId.toString()) {
+    if (business.user.toString() !== order.businessId.toString()) {
         return next(new AppError("You are not allowed to update this order", 400));
     }
 

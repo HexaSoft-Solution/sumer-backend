@@ -132,6 +132,11 @@ exports.myProfile = catchAsync(async (req, res, next) => {
             return next(new AppError("You don't have a salon profile", 400));
         }
         const salon = await Salon.findById(req.user.salonCreated);
+        const salonBookings = await Booking.find({salon: salon._id});
+        const clientsIds = salonBookings.map((e) => {
+            return e.user;
+        });
+        const clients = await User.find({salonBooking: {$in: clientsIds}});
 
         if (!salon) {
             return next(new AppError("You don't have a salon profile", 400));
@@ -141,6 +146,7 @@ exports.myProfile = catchAsync(async (req, res, next) => {
             status: "success",
             profile: salon,
             owner: req.user,
+            clients,
         });
     } else if (req.user.role === "business") {
         const businessProfile = await BusinessProfile.findOne({user: userId});
