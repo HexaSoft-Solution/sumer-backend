@@ -1734,11 +1734,7 @@
         }
       }
     },
-<<<<<<< HEAD
-    "/api/v1/products/business/change-order-status/{id}": {
-=======
     "/api/v1/products/business/change-order-status/{orderId}": {
->>>>>>> b5c170ba7fcb5a705e29872d0d2e466909b99e00
       "patch": {
         "tags": [
           "Product"
@@ -1746,11 +1742,7 @@
         "description": "",
         "parameters": [
           {
-<<<<<<< HEAD
-            "name": "id",
-=======
             "name": "orderId",
->>>>>>> b5c170ba7fcb5a705e29872d0d2e466909b99e00
             "in": "path",
             "required": true,
             "schema": {
@@ -4388,6 +4380,28 @@
             "name": "sort",
             "in": "query",
             "description": "example: ?sort=name,-createdAt",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/salons/my-clients": {
+      "get": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
             "schema": {
               "type": "string"
             }
