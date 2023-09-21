@@ -721,10 +721,14 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     const transactionsDetails = await Transactions.find({
         _id: {$in: transactions},
     });
+
+    const status = transactionsDetails[0].status
+
     res.status(200).json({
         status: "Success",
         orders,
         transactionsDetails,
+        status,
         address
     });
 });
