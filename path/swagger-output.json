@@ -4392,6 +4392,28 @@
         }
       }
     },
+    "/api/v1/salons/my-clients": {
+      "get": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/salons/search": {
       "get": {
         "description": "",
