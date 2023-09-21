@@ -3,6 +3,7 @@ const SalonReview = require('../models/salonReviewModel');
 const User = require('../models/userModel');
 const Service = require("../models/serviceModel");
 const SalonTimeTable = require('../models/salonAvailableTimeModel');
+const Booking = require('../models/salonBookingModel');
 
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
@@ -590,8 +591,7 @@ exports.getMyBookings = catchAsync(async (req, res, next) => {
         results: bookings.length,
         bookings
     });
-})
-
+});
 
 exports.addTimeTable = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
@@ -709,7 +709,7 @@ exports.updateAddress = catchAsync(async (req, res, next) => {
         message: "Address update successful",
         updatedAddress,
     });
-})
+});
 
 exports.deleteAddress = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
@@ -724,5 +724,23 @@ exports.deleteAddress = catchAsync(async (req, res, next) => {
     res.status(201).json({
         status: "success",
         message: "address remove successful",
+    });
+});
+
+exports.myClients = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    const salon = await Salon.findById(req.user.salonCreated);
+    const salonBookings = await Booking.find({salon: salon._id});
+    const clientsIds = salonBookings.map((e) => {
+        return e.user;
+    });
+    const clients = await User.find({salonBooking: {$in: clientsIds}});
+
+    if (!salon) {
+        return next(new AppError("You don't have a salon profile", 400));
+    }
+
+    res.status(200).json({
+        clients,
     });
 });

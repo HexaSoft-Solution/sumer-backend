@@ -27,6 +27,13 @@ router
     )
 
 router
+    .route('/my-clients')
+    .get(
+        authController.protect,
+        salonController.myClients
+    )
+
+router
     .route('/search')
     .get(salonController.searchSalon);
 
