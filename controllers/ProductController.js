@@ -709,6 +709,8 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
         return next(new AppError("You dont have any orders", 400));
     }
 
+    // Group orders by buyer ID if needed (as shown in previous examples)
+
     const transactions = orders.map((el) => el.transactions);
 
     const address = await Address.findById(orders.address);
@@ -736,6 +738,14 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
             };
         }
         return order;
+    });
+
+    // Custom sorting function to sort by last status
+    const statusOrder = ['Placed', 'Dispatched', 'On Way', 'Received'];
+    orderGroup.sort((a, b) => {
+        const lastStatusA = a.status[a.status.length - 1].status;
+        const lastStatusB = b.status[b.status.length - 1].status;
+        return statusOrder.indexOf(lastStatusA) - statusOrder.indexOf(lastStatusB);
     });
 
     res.status(200).json({
