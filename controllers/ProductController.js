@@ -703,7 +703,7 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     const orders = await BusinessOrders.find({ businessId: business.user }).populate({
         path: "buyer",
         select: "name",
-    });
+    }).populate('address');
 
     if (!orders) {
         return next(new AppError("You dont have any orders", 400));
