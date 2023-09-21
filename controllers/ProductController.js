@@ -698,14 +698,14 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Product']
     const userId = req.user.id;
 
-    const business = await BusinussProfile.findOne({user: userId});
+    const business = await BusinussProfile.findOne({ user: userId });
 
     const orders = await BusinessOrders.find({ businessId: business.user }).populate({
         path: "buyer",
         select: "name",
     }).populate('address');
 
-    if (!orders) {
+    if (!orders || orders.length === 0) {
         return next(new AppError("You dont have any orders", 400));
     }
 
@@ -714,19 +714,37 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     const address = await Address.findById(orders.address);
 
     const transactionsDetails = await Transactions.find({
-        _id: {$in: transactions},
+        _id: { $in: transactions },
     });
 
-    const status = transactionsDetails[0].status
+    if (!transactionsDetails || transactionsDetails.length === 0) {
+        return next(new AppError("No transaction details found", 400));
+    }
+
+    const transactionsMap = new Map();
+    transactionsDetails.forEach((transaction) => {
+        transactionsMap.set(transaction._id.toString(), transaction);
+    });
+
+    const orderGroup = orders.map((order) => {
+        const transactionId = order.transactions.toString();
+        const transaction = transactionsMap.get(transactionId);
+        if (transaction) {
+            return {
+                ...order.toObject(),
+                status: transaction.status,
+            };
+        }
+        return order;
+    });
 
     res.status(200).json({
         status: "Success",
-        orders,
-        transactionsDetails,
-        status,
-        address
+        orderGroup,
+        address,
     });
 });
+
 
 exports.changeOrderStatus = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Product']
