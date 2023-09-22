@@ -56,9 +56,9 @@ exports.createWithdrawRequest = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Withdraw']
     const { price, paypalEmail } = req.body;
 
-    if (req.user.BusinussProfile) {
-        const businussProfile = await BusinessProfile.findById(req.user.BusinussProfile);
-        
+    const businussProfile = await BusinessProfile.findOne({ user: req.user.id });
+
+    if (businussProfile) {
         if (businussProfile.balance < price) {
             return next(new AppError('You dont have enough money to withdraw', 400));
         }
@@ -122,6 +122,8 @@ exports.createWithdrawRequest = catchAsync(async (req, res, next) => {
             status: 'success',
             withdraw,
         });
+    } else {
+        return next(new AppError('You not Consultation, salon owner or Business', 400));
     }
 })
 
