@@ -122,6 +122,8 @@ exports.createWithdrawRequest = catchAsync(async (req, res, next) => {
             status: 'success',
             withdraw,
         });
+    }else{
+         return next(new AppError('Error', 500));
     }
 })
 
