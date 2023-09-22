@@ -4370,6 +4370,28 @@
         }
       }
     },
+    "/api/v1/salons/my-salon": {
+      "get": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/salons/my-bookings": {
       "get": {
         "tags": [

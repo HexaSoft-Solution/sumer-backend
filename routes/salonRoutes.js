@@ -20,6 +20,13 @@ router
     )
 
     router
+    .route('/my-salon')
+    .get(
+        authController.protect,
+        authController.restrictTo('salon service'),
+        salonController.getMySalon
+    )
+    router
     .route('/my-bookings')
     .get(
         authController.protect,
