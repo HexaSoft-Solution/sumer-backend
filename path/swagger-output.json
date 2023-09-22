@@ -448,7 +448,7 @@
         "tags": [
           "Authentication"
         ],
-        "description": "",
+        "description": "for consultant",
         "parameters": [
           {
             "name": "authorization",

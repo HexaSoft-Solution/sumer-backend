@@ -113,6 +113,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 
 exports.myProfile = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Authentication']
+    // #swagger.description = 'for consultant'
     const userId = req.user.id;
 
     if (req.user.role === "consultant") {
