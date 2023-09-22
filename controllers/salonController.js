@@ -244,7 +244,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
 
     const salon = await Salon.create({
         name,
-        service: [{name: service}],
+        service: service ? [{name}] : [],
         about,
         pricePerHour,
         address,
