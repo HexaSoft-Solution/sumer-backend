@@ -4987,6 +4987,25 @@
           "200": {
             "description": "OK"
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
+          }
         }
       }
     },
@@ -5019,15 +5038,23 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "_id": {
-                    "example": "any"
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "serviceId": {
+                    "type": "string"
                   }
-                }
+                },
+                "required": [
+                  "image"
+                ]
               }
             }
           }
@@ -5444,6 +5471,28 @@
         }
       }
     },
+    "/api/v1/consultation/my-profile": {
+      "get": {
+        "tags": [
+          "Consultations"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
     "/api/v1/consultation/consltant": {
       "get": {
         "tags": [
@@ -5497,28 +5546,6 @@
         "responses": {
           "default": {
             "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/consultation/my-profile": {
-      "get": {
-        "tags": [
-          "Consultations"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
