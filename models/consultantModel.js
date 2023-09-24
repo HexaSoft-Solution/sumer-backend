@@ -13,7 +13,7 @@ const ConsultantSchema = new mongoose.Schema({
     },
     consultant: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Consultation'
     },
     numOfMessages: {
         type: Number,
@@ -38,9 +38,6 @@ const ConsultantSchema = new mongoose.Schema({
 ConsultantSchema.pre(/^find/, function (next) {
     this.populate({
         path: 'user',
-        select: 'firstName lastName userPhoto',
-    }).populate({
-        path: 'consultant',
         select: 'firstName lastName userPhoto',
     }).populate('messages');
     next();

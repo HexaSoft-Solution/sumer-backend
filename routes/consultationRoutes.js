@@ -16,6 +16,13 @@ router
         consultationController.createConsultationProfile
     );
 
+    router
+    .route('/my-profile')
+    .get(
+        authController.protect,
+        authController.restrictTo('consultant'),
+        consultationController.getMyProfile
+    )
 
     router
         .route('/consltant')
@@ -24,14 +31,6 @@ router
 router
     .route('/search')
     .get(consultationController.searchConsultations)
-
-router
-    .route('/my-profile')
-    .get(
-        authController.protect,
-        authController.restrictTo('admin', 'consultant'),
-        consultationController.getMyProfile
-    )
 
 router
     .route('/my-consultation')

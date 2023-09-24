@@ -151,7 +151,7 @@ exports.myProfile = catchAsync(async (req, res, next) => {
         });
     } else if (req.user.role === "business") {
         const businessProfile = await BusinessProfile.findOne({user: userId});
-       
+
         if (!businessProfile) {
             return next(new AppError("You don't have a business profile", 400));
         }
@@ -160,6 +160,11 @@ exports.myProfile = catchAsync(async (req, res, next) => {
             status: "success",
             profile: businessProfile,
             owner: req.user,
+        });
+    } else {
+        res.status(200).json({
+            status: "success",
+            profile: req.user,
         });
     }
 });

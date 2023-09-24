@@ -29,6 +29,11 @@ const BusinessProfileSchema = new mongoose.Schema({
     }]
 })
 
+BusinessProfileSchema.pre(/^find/, function (next) {
+    this.populate('withdrawRequestes');
+    next();
+});
+
 BusinessProfileSchema.pre('save', async function (next) {
     try {
         const totalPromotedAdsCount = await this.model('Product')

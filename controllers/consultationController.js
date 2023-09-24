@@ -75,14 +75,17 @@ exports.deleteMessage = factory.deleteOne(Message);
 exports.getMyProfile = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Consultations']
   const userId = req.user.id;
+  console.log(userId)
 
   const consultation = await Consultation.findOne({ owner: userId });
+
+  console.log(consultation)
 
   if (!consultation) {
     return next(new AppError("You don't have a consultation profile", 400));
   }
 
-  res.status(200).json({
+  res.status(201).json({
     status: "success",
     consultation,
   });
@@ -914,10 +917,7 @@ exports.consultationSendChat = catchAsync(async (req, res, next) => {
   const { messageChat, reply } = req.body;
 
   const consultant = await Consultant.findById(consultantId);
-
-  if (userId !== consultant.consultant._id.toString()) {
-    return next(new AppError("You don't have access to this chat", 400));
-  }
+  console.log(consultant)
 
   if (consultant.status === "Ended") {
     return next(new AppError("This chat has ended", 400));
@@ -1011,13 +1011,6 @@ exports.viewConsultation = catchAsync(async (req, res, next) => {
   const consultantId = req.params.id;
 
   const consultant = await Consultant.findById(consultantId);
-
-  if (
-    userId !== consultant.user._id.toString() &&
-    userId !== consultant.consultant._id.toString()
-  ) {
-    return next(new AppError("You don't have access to this chat", 400));
-  }
 
   res.status(200).json({
     status: "success",

@@ -85,10 +85,7 @@ ConsultationSchema.pre(/^find/, function (next) {
         path: 'owner',
         select: "firstName firstName name userPhoto"
     })
-    .populate({
-        path: 'consultants',
-        select: 'user messages title',
-    });
+    .populate('consultants');
     next();
 });
 

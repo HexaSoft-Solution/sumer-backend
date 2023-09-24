@@ -183,31 +183,33 @@ exports.uploadPhoto = catchAsync(async (req, res, next) => {
 exports.uploadServicePhoto = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
     const salonId = req.params.id;
-    const { _id } = req.body;
+    const { serviceId } = req.body;
 
     const salon = await Salon.findById(salonId)
 
-    const serviceIndex = salon.service.find(e => e._id === _id)
+    const serviceIndex = salon.service.findIndex(e => e._id.toString() === serviceId);
+
+    if (!salon.service[serviceIndex]) {
+        return next(new AppError("You don't have this service", 400));
+    }
 
     const result = await cloudinary.uploader.upload(req.file.path, {
-        public_id: `/${salon._id}/${salon.service[serviceIndex].name}//${salon.service[serviceIndex].name}Photo`,
+        public_id: `/${salon._id}/${Math.random() * 100000000}/${Math.random() * 100000000}-Photo`,
         folder: 'salons',
         resource_type: 'image',
     });
 
-    const updatedSalon = await Salon.findByIdAndUpdate(salonId, {
-        $set: {
-            'service.$.ServicePhoto': result.secure_url,
-            'service.$.cloudinaryId': result.public_id,
-        }
-    })
+
+    salon.service[serviceIndex].servicePhoto = result.secure_url;
+    salon.service[serviceIndex].cloudinaryId = result.public_id
+
+    await salon.save();
 
     res.status(200).json({
         status: "success",
-        updatedSalon
+        salon
     })
 })
-
 
 exports.createSalon = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']

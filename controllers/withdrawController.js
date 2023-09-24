@@ -56,6 +56,8 @@ exports.createWithdrawRequest = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Withdraw']
     const { price, paypalEmail } = req.body;
 
+    console.log(req.user.id)
+
     const businussProfile = await BusinessProfile.findOne({ user: req.user.id });
 
     if (businussProfile) {
