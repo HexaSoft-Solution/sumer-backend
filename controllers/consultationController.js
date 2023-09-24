@@ -60,11 +60,11 @@ type: 'number'
               description: 'example: ?sort=name,-createdAt',
       } */
 
-      return factory.getAllMagdy(req, res, next, Consultant);
-}
+  return factory.getAllMagdy(req, res, next, Consultant);
+};
 
 exports.searchConsultations = factory.search(Consultation);
-exports.getConsultantation =  async (req, res, next) => {
+exports.getConsultantation = async (req, res, next) => {
   // #swagger.tags = ['Consultations']
 
   return factory.getOne(req, res, next, Consultation);
@@ -117,7 +117,7 @@ type: 'number'
   const consultation = await Consultation.findOne({ owner: user._id });
   const consultantsIds = consultation.consultants.map((e) => e._id.toString());
   const consultants = new APIFeatures(
-    Consultant.find({ _id: { $in: consultantsIds} }),
+    Consultant.find({ _id: { $in: consultantsIds } }),
     req.query
   )
     .filter()
@@ -186,8 +186,6 @@ exports.createConsultationProfile = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user._id, {
     consultation: consultationProfile.id,
   });
-
-  
 
   res.status(201).json({
     status: "success",
@@ -887,11 +885,11 @@ exports.deleteCoursePhoto = catchAsync(async (req, res, next) => {
 exports.createConsultantTicket = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Consultations']
   const userId = req.user.id;
-  const consultatonId = req.params.id
+  const consultatonId = req.params.id;
 
   const { title } = req.body;
 
-  console.log(req.user.createConsultant)
+  console.log(req.user.createConsultant);
 
   if (!req.user.createConsultant.find((e) => e.toString() === consultatonId)) {
     return next(new AppError("You can not contant with this consultant", 401));
@@ -1008,6 +1006,7 @@ exports.editMessage = catchAsync(async (req, res, next) => {
 exports.viewConsultation = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Consultations']
   const userId = req.user.id;
+  
   const consultantId = req.params.id;
 
   const consultant = await Consultant.findById(consultantId);

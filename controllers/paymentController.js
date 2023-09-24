@@ -479,7 +479,8 @@ exports.promoteProduct = catchAsync(async (req, res, next) => {
 
     const promotionPlan = await Promotion.findById(planId);
 
-    await basicPayment(req, res, promotionPlan.id, promotionPlan.price, "Promote Salon", source, productId, "promoteProduct");
+    console.log(promotionPlan);
+    await basicPayment(req, res, promotionPlan.id, promotionPlan?.price, "Promote Salon", source, productId, "promoteProduct");
 })
 
 exports.verifyPromoteProduct = catchAsync(async (req, res, next) => {
@@ -2029,7 +2030,7 @@ exports.promoteProductPaypal = catchAsync(async (req, res, next) => {
 
     const product = await Product.findById(productId)
     const promotionPlan = await Promotion.findById(planId);
-
+    console.log(planId, promotionPlan);
     const metadata = [{
         name: `promot product: ${product.name}`,
         description: "promot product",

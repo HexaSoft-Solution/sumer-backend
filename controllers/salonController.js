@@ -78,6 +78,26 @@ type: 'number'
     });
 })
 
+exports.getMySalon = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Salon']
+    const userId = req.user.id;
+    console.log(req.user?._id?.toString());
+    const salon = await Salon.findOne({ owner: userId });
+    if(!salon){
+        return next(new AppError('No salon', 404))
+    }
+    const Reviews = await SalonReview.find({
+        salon: salon?.id
+    });
+
+    // console.log(salon)
+
+    res.status(200).json({
+        status: "Success",
+        salon,
+        Reviews
+    })
+})
 exports.getSalon = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Salon']
     const salon = await Salon.findById(req.params.id);
@@ -226,7 +246,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
 
     const salon = await Salon.create({
         name,
-        service: [{name: service}],
+        service: service ? [{name}] : [],
         about,
         pricePerHour,
         address,
