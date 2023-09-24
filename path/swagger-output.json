@@ -5044,17 +5044,12 @@
               "schema": {
                 "type": "object",
                 "properties": {
-<<<<<<< HEAD
                   "image": {
                     "type": "string",
                     "format": "binary"
                   },
                   "serviceId": {
                     "type": "string"
-=======
-                  "serviceId": {
-                    "example": "any"
->>>>>>> b5da5d6105f6263dcee080d17d452792e9154ec7
                   }
                 },
                 "required": [
