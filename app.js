@@ -66,6 +66,7 @@ app.use(
       "http://localhost:8000",
       "https://sumer.vercel.app",
       "https://sumer-dashboard.vercel.app",
+      "https://sumer-fr.vercel.app",
       "http://localhost:4200",
     ],
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
