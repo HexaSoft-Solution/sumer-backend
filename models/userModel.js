@@ -213,6 +213,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Consultation"
     }],
+    supprots: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Support"
+    }],
     userPhoto: String,
     cloudinaryId: String,
     forgetPasswordOTP: String,

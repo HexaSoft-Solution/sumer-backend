@@ -5044,12 +5044,17 @@
               "schema": {
                 "type": "object",
                 "properties": {
+<<<<<<< HEAD
                   "image": {
                     "type": "string",
                     "format": "binary"
                   },
                   "serviceId": {
                     "type": "string"
+=======
+                  "serviceId": {
+                    "example": "any"
+>>>>>>> b5da5d6105f6263dcee080d17d452792e9154ec7
                   }
                 },
                 "required": [
@@ -7938,6 +7943,240 @@
           }
         }
       }
+    },
+    "/api/v1/support/": {
+      "get": {
+        "tags": [
+          "Supports Tickets"
+        ],
+        "description": "TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Page size: ex: ?limit=10",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "example: ?fields=name,description",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "indexing page: ex: ?page=2",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "example: ?sort=name,-createdAt",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Supports Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/support/{ticketId}": {
+      "get": {
+        "tags": [
+          "Supports Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Supports Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/support/user-send-message/{ticketId}": {
+      "post": {
+        "tags": [
+          "Supports Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/support/admin-send-message/{ticketId}": {
+      "post": {
+        "tags": [
+          "Supports Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -9145,6 +9384,40 @@
           }
         }
       },
+      "supportModel": {
+        "title": "Support",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "message": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Active",
+              "Ended"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
       "transactionModel": {
         "title": "Transaction",
         "required": [
@@ -9391,6 +9664,12 @@
             }
           },
           "createConsultant": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "supprots": {
             "type": "array",
             "items": {
               "type": "string"

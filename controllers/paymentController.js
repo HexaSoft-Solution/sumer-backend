@@ -469,7 +469,7 @@ exports.promoteProduct = catchAsync(async (req, res, next) => {
             cardNumber: number,
             name,
             expiryMonth: month,
-            expiryYear: expiryYear,
+            expiryYear: year,
             cvc
         })
 

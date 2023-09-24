@@ -1,0 +1,1 @@
+{"title":"Support","required":["title"],"properties":{"user":{"type":"string"},"title":{"type":"string"},"message":{"type":"array","items":{"type":"string"}},"status":{"type":"string","enum":["Active","Ended"]},"createdAt":{"type":"string","format":"date-time"},"_id":{"type":"string"}}}
