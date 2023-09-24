@@ -162,16 +162,6 @@ exports.addVoucher = catchAsync(async (req, res, next) => {
     voucher.user = userId;
     await voucher.save();
 
-    await User.findOneAndUpdate(
-        { _id: userId },
-        {
-            cart: {
-                items: [],
-                voucher: null,
-            },
-        }
-    )
-
     res.status(200).json({
         status: "success",
         message: "Voucher added successfully.",
@@ -359,6 +349,10 @@ exports.paymentCallback = catchAsync(async (req, res, next) => {
         for (const transaction of transactions) {
             transaction.paymentId = paymentId;
             await transaction.save();
+            
+            const user = await User.findById(transaction.user);
+            user.transactions.push(transaction._id);
+            await user.save();
     
             // Assuming the transaction has a product property you can use to fetch product details
             const product = await Product.findById(transaction.product);
