@@ -127,6 +127,7 @@ exports.viewCart = catchAsync(async (req, res, next) => {
         status: "success",
         cartDetails: cartDetails,
         totalPriceForAllProducts: totalPrice,
+        userVoucher: user.cart.voucher, 
         discount,
         voucherDiscount,
         voucher,
