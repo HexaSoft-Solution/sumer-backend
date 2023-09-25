@@ -10,7 +10,7 @@ router
     .get(discountVoucherController.getAllVouchers)
     .post(
         authController.protect,
-        authController.restrictTo('admin', "business"),
+        authController.restrictTo('admin', "business", "salon service", "consultant"),
         discountVoucherController.createVoucher
     )
 
