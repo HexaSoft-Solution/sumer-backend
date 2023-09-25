@@ -471,25 +471,58 @@ exports.getMyInvoices = catchAsync(async (req, res, next) => {
 
 exports.getMyTransactions = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Authentication']
+    /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
+  /*  #swagger.parameters['limit'] = {
+                in: 'query',
+                description: 'Page size: ex: ?limit=10',
+  type: 'number'
+        } */
+  /*  #swagger.parameters['fields'] = {
+                in: 'query',
+                description: 'example: ?fields=name,description' ,
+        } */
+  /*  #swagger.parameters['page'] = {
+                in: 'query',
+                description: 'indexing page: ex: ?page=2',
+  type: 'number'
+        } */
+  /*  #swagger.parameters['sort'] = {
+                in: 'query',
+                description: 'example: ?sort=name,-createdAt',
+        } */
+        /*  #swagger.parameters['status'] = {
+                in: 'query'
+        } 
+    */
     const transactionsIds = req.user.transactions;
-
+    const status = req.query.status;
+        
     const allTransactions = await Transactions.find({
         id: { $in: transactionsIds }
     })
 
     const features = new APIFeatures(Transactions.find({
         _id: {$in: transactionsIds},
-    }), req.query)
+    }), req.query.status ? {} : req.query)
         .filter()
         .sort()
         .limitFields()
         .Pagination();
     const transactions = await features.query;
+    console.log("here")
+    let transactionsDetails = [];
+
+    transactionsDetails = transactions.filter((transaction) => {
+    if (status !== null && status !== undefined) {
+        return transaction.status[transaction.status.length - 1].status === status
+    }
+    return transaction;
+    });
 
     res.status(200).json({
         status: "success",
         results: allTransactions.length,
-        transactions
+        transactions: transactionsDetails
     });
 });
 
