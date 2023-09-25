@@ -68,6 +68,7 @@ exports.addPost = catchAsync(async (req, res, next) => {
 
 
   let result;
+  let userPost;
 
   if (req?.file?.path) {
     result = await cloudinary.uploader.upload(req.file.path, {
@@ -82,7 +83,7 @@ exports.addPost = catchAsync(async (req, res, next) => {
       );
     }
 
-    const userPost = await Community.create({
+    userPost = await Community.create({
       post,
       user: userId,
       postPhoto: result?.secure_url,
@@ -95,12 +96,12 @@ exports.addPost = catchAsync(async (req, res, next) => {
         userPost,
       },
     });
+  } else {
+    userPost = await Community.create({
+      post,
+      user: userId,
+    });
   }
-
-  const userPost = await Community.create({
-    post,
-    user: userId,
-  });
 
   res.status(200).json({
     status: "success",

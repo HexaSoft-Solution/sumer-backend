@@ -583,15 +583,15 @@ exports.getMyCreditCard = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Authentication']
     const creditCardId = req.user.creditCards;
 
-    const creditCard = await CreditCard.find({
+    const creditCards = await CreditCard.find({
         _id: {$in: creditCardId},
     });
 
     const formattedCreditCards = creditCards.map((card) => {
-        const cardNumber = card.number;
+        const cardNumber = card.cardNumber;
         const lastFourDigits = cardNumber.slice(-4); 
         const maskedNumber = '**** **** **** ' + lastFourDigits;
-        return { ...card.toObject(), number: maskedNumber };
+        return { id: card.id, number: maskedNumber };
     });
 
     res.status(200).json({
