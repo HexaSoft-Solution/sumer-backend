@@ -6776,12 +6776,11 @@
         "parameters": [
           {
             "name": "id",
-            "in": "body",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "example: ?sort=name,-createdAt"
+            }
           }
         ],
         "responses": {
