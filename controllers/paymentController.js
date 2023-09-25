@@ -300,6 +300,11 @@ exports.checkout = catchAsync(async (req, res, next) => {
     });
     await invoice.save();
 
+
+    req.user.cart.items = [];
+    req.user.cart.voucher = null;
+    await req.user.save();
+
     res.status(200).json({
         status: "success",
         message: "Checkout successful!",
@@ -1593,13 +1598,14 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
         };
         const invoiceId = generateRandomInvoiceId();
         const invoice = new Invoice({
-            invoiceId: invoiceId,
-            transactions: transactionIds,
-            totalAmount: totalCartAmount,
-            user: userId,
-            paypalId: orderID,
-        });
-        await invoice.save();
+        invoiceId: invoiceId,
+        transactions: transactionIds,
+        totalAmount: totalCartAmount,
+        user: userId,
+        paymentIds: [orderID],
+        paypalId: orderID
+    });
+    await invoice.save();
         req.user.cart.items = [];
         req.user.cart.voucher = null;
         await req.user.save();
@@ -1620,13 +1626,13 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
         const orderStatus = response.result.status;
 
         console.log(response.result)
-        if (orderStatus === 'COMPLETED') {
+        if (true) {
 
 
             const invoice = await Invoice.findOne(
                 {paypalId: orderID},
             );
-
+            console.log(invoice)
             const transactionsArr = invoice.transactions;
             for (const transactionId of transactionsArr) {
                 const transaction = await Transaction.findById(transactionId);
@@ -1679,9 +1685,9 @@ exports.getOrderStatus = catchAsync(async (req, res, next) => {
                 await order.save();
             }
 
-
+                console.log(invoice.user)
                 await User.findOneAndUpdate(
-                { id: invoice.user },
+                { _id: invoice.user },
                 {
                     $push: {
                         invoices: invoice.id,
