@@ -7,6 +7,7 @@ const Invoice = require("../models/invoiceModel");
 const Transactions = require("../models/transactionModel");
 const BusinessOrders = require("../models/businessOrderSchema");
 const Address = require("../models/addressModel");
+const Vouchers = require('../models/voucherModel');
 
 const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
@@ -807,41 +808,14 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("You dont have any orders", 300));
   }
 
-  const transactions = orders.map((el) => el.transactions);
-
   const address = await Address.findById(orders.address);
 
-  let transactionsDetails = await Promise.all(
-    transactions.map(async (e) => {
-      const transactions = await Transactions.find({
-        _id: { $in: e },
-      });
+  const transactions = orders.flatMap((el) => el.transactions);
+  
 
-      // Filter transactions by status if status is provided
-      if (status !== null && status !== undefined) {
-        return transactions.filter(
-          (transaction) =>
-            transaction.status[transaction.status.length - 1].status === status
-        );
-      }
-
-      return transactions;
-    })
-  );
-
-  transactionsDetails = transactionsDetails.reduce((accumulator, current) => {
-    current.forEach((transaction) => {
-      const transactionId = transaction._id.toString();
-      if (
-        !accumulator.some(
-          (existing) => existing._id.toString() === transactionId
-        )
-      ) {
-        accumulator.push(transaction);
-      }
-    });
-    return accumulator;
-  }, []);
+  const transactionsDetails = await Transactions.find({
+    _id: { $in: transactions },
+  });
 
   if (!transactionsDetails || transactionsDetails.length === 0) {
     return next(new AppError("No transaction details found", 400));
@@ -863,6 +837,23 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     }
     return order;
   });
+
+  const statusOrder = ['Placed', 'Dispatched', 'On Way', 'Received'];
+  orderGroup.sort((a, b) => {
+    const lastStatusA = a.status[a.status.length - 1]?.status;
+    const lastStatusB = b.status[b.status.length - 1]?.status;
+
+    if (lastStatusA === undefined && lastStatusB === undefined) {
+        return 0; // Both items have undefined status, no change in order.
+    } else if (lastStatusA === undefined) {
+        return 1; // Move item with undefined status (a) to the end.
+    } else if (lastStatusB === undefined) {
+        return -1; // Move item with undefined status (b) to the end.
+    } else {
+        return statusOrder.indexOf(lastStatusA) - statusOrder.indexOf(lastStatusB);
+    }
+});
+
 
   res.status(200).json({
     status: "Success",
@@ -942,3 +933,22 @@ exports.bussinessGetAdsProduct = catchAsync(async (req, res, next) => {
     products,
   });
 });
+
+exports.getMyVouchers = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Product']
+
+  const business = await BusinussProfile.findOne({ user: req.user.id });
+
+  const vouchers = await Vouchers.find({
+    id: { $in: business.vouchers },
+  });
+
+  if (!vouchers || vouchers.length === 0) {
+    return next(new AppError("You dont have any vouchers", 300));
+  }
+
+  res.status(200).json({
+    status: "Success",
+    vouchers,
+  });
+})

@@ -5,6 +5,7 @@ const Course = require("../models/courseModel");
 const User = require("../models/userModel");
 const Consultant = require("../models/consultantModel");
 const Message = require("../models/messageModel");
+const  Voucher = require("../models/voucherModel");
 
 const factory = require("./handlerFactory");
 
@@ -1030,5 +1031,18 @@ exports.activeConsultation = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     updatedConsultant,
+  });
+});
+
+exports.getMyVouchers = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Consultations']
+
+  const consultation = Consultation.findOne({ owner: req.user.id });
+
+  const vouchers = await Voucher.find({ id: { $in: consultation.vouchers } });
+
+  res.status(200).json({
+    status: "success",
+    vouchers,
   });
 });

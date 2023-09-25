@@ -26,7 +26,11 @@ const BusinessProfileSchema = new mongoose.Schema({
     withdrawRequestes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'withdraw-requests',
-    }]
+    }],
+    vouchers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'voucher',
+    }],
 })
 
 BusinessProfileSchema.pre(/^find/, function (next) {

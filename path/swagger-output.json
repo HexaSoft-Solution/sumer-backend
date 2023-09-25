@@ -1878,6 +1878,28 @@
         }
       }
     },
+    "/api/v1/products/business/my-vouchers": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/products/invoices/{id}": {
       "get": {
         "tags": [
@@ -4836,6 +4858,28 @@
         }
       }
     },
+    "/api/v1/salons/my-vouchers": {
+      "get": {
+        "tags": [
+          "Salon"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/salons/service/{id}": {
       "delete": {
         "tags": [
@@ -5810,6 +5854,28 @@
                 ]
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/consultation/my-vouchers": {
+      "get": {
+        "tags": [
+          "Consultations"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -8360,6 +8426,12 @@
               "type": "string"
             }
           },
+          "vouchers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "_id": {
             "type": "string"
           }
@@ -8633,6 +8705,12 @@
             }
           },
           "withdrawRequestes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "vouchers": {
             "type": "array",
             "items": {
               "type": "string"
@@ -9361,6 +9439,12 @@
             "type": "string"
           },
           "withdrawRequestes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "vouchers": {
             "type": "array",
             "items": {
               "type": "string"

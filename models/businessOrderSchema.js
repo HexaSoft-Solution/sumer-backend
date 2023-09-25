@@ -20,6 +20,10 @@ const businessOrderSchema = new mongoose.Schema({
         ref: 'Address',
         required: true
     },
+    status: [{
+        type: String,
+        enum: ['Placed', 'Dispatched', "On Way", "Received"],
+    }],
     total: {
         type: Number,
         required: true

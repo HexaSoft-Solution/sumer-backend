@@ -86,8 +86,16 @@ router
       authController.restrictTo("business"),
       ProductController.bussinessGetAdsProduct
     )
+
+router
+  .route('/business/my-vouchers')
+  .get(
+    authController.protect,
+    authController.restrictTo("business"),
+    ProductController.getMyVouchers
+  )
   
-  router
+router
   .route('/invoices')
   .get(ProductController.getAllInvoices)
 

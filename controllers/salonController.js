@@ -4,6 +4,7 @@ const User = require("../models/userModel");
 const Service = require("../models/serviceModel");
 const SalonTimeTable = require("../models/salonAvailableTimeModel");
 const Booking = require("../models/salonBookingModel");
+const Voucher = require("../models/voucherModel");
 
 const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
@@ -820,5 +821,23 @@ exports.myClients = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     clients,
+  });
+});
+
+exports.getMyVouchers = catchAsync(async (req, res, next) => {
+  // #swagger.tags = ['Salon']
+  const salonId = req.user.salonCreated;
+
+  if (!salonId) {
+    return next(new AppError("You don't have a salon profile", 400));
+  }
+
+  const Salon = await Salon.findById(salonId);
+
+  const vouchers = await Voucher.find({ id: { $id: Salon.vouchers } });
+
+  res.status(200).json({
+    status: "success",
+    vouchers,
   });
 });

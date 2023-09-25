@@ -1,6 +1,9 @@
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const Voucher = require("../models/voucherModel");
+const BusinessProfile = require("../models/businessProfileModel");
+const SalonService = require("../models/salonModel");
+const Consultant = require("../models/consultationModel");
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -47,6 +50,20 @@ exports.createVoucher = catchAsync(async (req, res, next) => {
     maxDiscount,
     expireDate,
   });
+
+  if (req.user.role === "business") {
+    const business = await BusinessProfile.findOne({ user: req.user.id });
+    business.vouchers.push(voucher._id);
+    business.save();
+  } else if (req.user.role === "salon service") {
+    const salonService = await SalonService.findOne({ _id: req.user.salonCreated });
+    salonService.vouchers.push(voucher._id);
+    salonService.save();
+  } else if (req.user.role === "consultant") {
+    const consultant = await Consultant.findOne({ owner: req.user.id });
+    consultant.vouchers.push(voucher._id);
+    consultant.save();
+  }
 
   res.status(201).json({
     status: "success",

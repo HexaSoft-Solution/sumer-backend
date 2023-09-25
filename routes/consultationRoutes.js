@@ -71,6 +71,15 @@ router
         consultationController.addServices
     )
 
+
+router
+    .route('/my-vouchers')
+    .get(
+        authController.protect,
+        authController.restrictTo('consultant'),
+        consultationController.getMyVouchers
+    )
+
 router
     .route('/service/:id')
     .patch(

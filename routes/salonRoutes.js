@@ -89,6 +89,14 @@ router
     )
 
 router
+    .route('/my-vouchers')
+    .get(
+        authController.protect,
+        authController.restrictTo('salon service'),
+        salonController.getMyVouchers
+    )
+    
+router
     .route('/service/:id')
     .patch(
         authController.protect,
