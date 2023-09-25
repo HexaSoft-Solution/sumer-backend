@@ -54,7 +54,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     }
 
     Products.forEach((product) => {
-        if (product.promotedAds > 0) {
+        if (product.promotedAds > 0 && product.adsExpireDate > Date.now()) {
             product.trending = true;
         } else {
             product.trending = false;
@@ -76,12 +76,22 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     }
 
     Products.sort((a, b) => {
+        const currentTime = Date.now();
+        const aAdsExpireDate = new Date(a.adsExpireDate).getTime();
+        const bAdsExpireDate = new Date(b.adsExpireDate).getTime();
+    
+        if (aAdsExpireDate > currentTime && bAdsExpireDate <= currentTime) {
+            return -1; 
+        } else if (aAdsExpireDate <= currentTime && bAdsExpireDate > currentTime) {
+            return 1; 
+        }
+    
         if (b.promotedAds !== a.promotedAds) {
             return b.promotedAds - a.promotedAds;
         }
+    
         return a.distanceToUser - b.distanceToUser;
     });
-
     const filteredProducts = Products.filter((product) => product.availabilityCount > 0);
 
     res.status(200).json({
