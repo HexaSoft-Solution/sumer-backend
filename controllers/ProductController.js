@@ -14,6 +14,8 @@ const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
 
+const geolib = require('geolib'); 
+
 exports.getAllProducts = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Product']
     /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
@@ -51,10 +53,41 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
         });
     }
 
+    Products.forEach((product) => {
+        if (product.promotedAds > 0) {
+            product.trending = true;
+        } else {
+            product.trending = false;
+        }
+        
+    });
+
+    if (req.user.addresses[0]) {
+        const userCoordinates = { latitude: req.user.addresses[0].latitude, longitude: req.user.addresses[0].longitude };
+
+        Products.forEach((product) => {
+            if (product.owner.addresses[0] && product.owner.addresses[0]) {
+                const ownerCoordinates = { latitude: product.owner.addresses[0].latitude, longitude: product.owner.addresses[0].longitude };
+                product.distanceToUser = geolib.getDistance(userCoordinates, ownerCoordinates);
+            } else {
+                product.distanceToUser = Number.MAX_VALUE;
+            }
+        });
+    }
+
+    Products.sort((a, b) => {
+        if (b.promotedAds !== a.promotedAds) {
+            return b.promotedAds - a.promotedAds;
+        }
+        return a.distanceToUser - b.distanceToUser;
+    });
+
+    const filteredProducts = Products.filter((product) => product.availabilityCount > 0);
+
     res.status(200).json({
         status: "success",
         results: count.length,
-        Products,
+        Products: filteredProducts,
     });
 });
 
@@ -714,29 +747,55 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
     /*  #swagger.parameters['sort'] = {
                 in: 'query',
                 description: 'example: ?sort=name,-createdAt',
-        } */
+        } 
+    */
+    /*  #swagger.parameters['status'] = {
+                in: 'query',
+                description: 'example: [""Placed", "Dispatched", "On Way", "Received"]',
+        } 
+    */
     const userId = req.user.id;
+    const status = req.query.status;
 
     const business = await BusinussProfile.findOne({ user: userId });
 
-    const orders = await BusinessOrders.find({ businessId: business.user }).populate({
+    let orders = await BusinessOrders.find({ businessId: business.user }).populate({
         path: "buyer",
         select: "name",
     }).populate('address');
 
     if (!orders || orders.length === 0) {
-        return next(new AppError("You dont have any orders", 400));
+        return next(new AppError("You dont have any orders", 300));
     }
-
-    // Group orders by buyer ID if needed (as shown in previous examples)
 
     const transactions = orders.map((el) => el.transactions);
 
     const address = await Address.findById(orders.address);
 
-    const transactionsDetails = await Transactions.find({
-        _id: { $in: transactions },
-    });
+    let transactionsDetails = await Promise.all(
+        transactions.map(async (e) => {
+            const transactions = await Transactions.find({
+                _id: { $in: e },
+            });
+    
+            // Filter transactions by status if status is provided
+            if (status !== null && status !== undefined) {
+                return transactions.filter((transaction) => transaction.status[transaction.status.length - 1].status === status);
+            }
+    
+            return transactions;
+        })
+    )
+    
+    transactionsDetails = transactionsDetails.reduce((accumulator, current) => {
+        current.forEach((transaction) => {
+            const transactionId = transaction._id.toString();
+            if (!accumulator.some((existing) => existing._id.toString() === transactionId)) {
+                accumulator.push(transaction);
+            }
+        });
+        return accumulator;
+    }, []);
 
     if (!transactionsDetails || transactionsDetails.length === 0) {
         return next(new AppError("No transaction details found", 400));
@@ -757,14 +816,6 @@ exports.getMyBusinessOrder = catchAsync(async (req, res, next) => {
             };
         }
         return order;
-    });
-
-    // Custom sorting function to sort by last status
-    const statusOrder = ['Placed', 'Dispatched', 'On Way', 'Received'];
-    orderGroup.sort((a, b) => {
-        const lastStatusA = a.status[a.status.length - 1].status;
-        const lastStatusB = b.status[b.status.length - 1].status;
-        return statusOrder.indexOf(lastStatusA) - statusOrder.indexOf(lastStatusB);
     });
 
     res.status(200).json({

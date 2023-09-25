@@ -95,7 +95,13 @@ exports.viewCart = catchAsync(async (req, res, next) => {
             totalPriceForProduct = product.price * item.quantity;
             totalPrice += totalPriceForProduct;
         }
-        discount += product.price - product.discountedPrice
+
+
+        
+
+        if (product.discountedPrice > 0) {
+            discount += product.price - product.discountedPrice
+        }
 
         cartDetails.push({
             cartId: item._id,
