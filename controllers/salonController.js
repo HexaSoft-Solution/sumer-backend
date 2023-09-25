@@ -297,6 +297,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
     about,
     pricePerHour,
     address,
+    depositPrice,
     phone,
     owner: userId,
   });

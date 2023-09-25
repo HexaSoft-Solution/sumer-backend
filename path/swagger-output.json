@@ -9229,6 +9229,7 @@
         "title": "Salon",
         "required": [
           "name",
+          "depositPrice",
           "phone"
         ],
         "properties": {
@@ -9251,6 +9252,9 @@
             }
           },
           "pricePerHour": {
+            "type": "number"
+          },
+          "depositPrice": {
             "type": "number"
           },
           "balance": {
