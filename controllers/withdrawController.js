@@ -2,6 +2,7 @@ const Withdraw = require('../models/withdrawRequestModel');
 const BusinessProfile = require('../models/businessProfileModel');
 const Salon = require('../models/salonModel');
 const Consultation = require('../models/consultationModel');
+const PaypalEmails = require('../models/paypalEmails');
 
 const catchAsync = require('../utils/catchAsync');
 const APIFeatures = require('../utils/apiFeatures');
@@ -35,7 +36,7 @@ exports.getAllRequestes = catchAsync(async (req, res, next) => {
                 in: 'query',
                 description: 'example: ?sort=name,-createdAt',
         } */
-        let filter = {};
+        let filter = { status: "Pending" };
         if (req.params.id) filter = {model: req.params.id};
         const count = await Withdraw.find();
         const features = new APIFeatures(Withdraw.find(filter), req.query)
@@ -43,6 +44,8 @@ exports.getAllRequestes = catchAsync(async (req, res, next) => {
             .sort()
             .limitFields()
             .Pagination();
+
+        features.query = features.query.limit(5);
         const withraws = await features.query;
     
         res.status(200).json({
@@ -54,9 +57,15 @@ exports.getAllRequestes = catchAsync(async (req, res, next) => {
 
 exports.createWithdrawRequest = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['Withdraw']
-    const { price, paypalEmail } = req.body;
+    const { price, paypalEmail, save, paypalEmailId } = req.body;
 
     console.log(req.user.id)
+
+    const withdrawRequest = await Withdraw.findOne({ userId: req.user.id });
+
+    if (withdrawRequest) {
+        return next(new AppError('You already have a withdraw request', 400));
+    }
 
     const businussProfile = await BusinessProfile.findOne({ user: req.user.id });
 
@@ -65,13 +74,38 @@ exports.createWithdrawRequest = catchAsync(async (req, res, next) => {
             return next(new AppError('You dont have enough money to withdraw', 400));
         }
 
-        const withdraw = await Withdraw.create({
-            userId: businussProfile.id,
-            paypalEmail,
-            userType: 'Business',
-            price,
-            status: 'Pending',
-        });
+        let withdraw;
+
+        if (paypalEmailId) {
+            const paypalEmail = await PaypalEmails.findById(paypalEmailId);
+            if (!paypalEmail) {
+                return next(new AppError('No paypal email found with that ID', 404));
+            }
+            withdraw = await Withdraw.create({
+                userId: businussProfile.id,
+                paypalEmail: paypalEmail.paypalEmail,
+                userType: 'Business',
+                price,
+                status: 'Pending',
+            });
+        } else {
+            withdraw = await Withdraw.create({
+                userId: businussProfile.id,
+                paypalEmail,
+                userType: 'Business',
+                price,
+                status: 'Pending',
+            });
+        }
+
+        if ( save === true ) {
+            const paypalEmail = await PaypalEmails.create({
+                paypalEmail
+            });
+
+            req.user.paypalEmails.push(paypalEmail.id);
+            await req.user.save();
+        }
 
         businussProfile.withdrawRequestes.push(withdraw.id);
         await businussProfile.save();
@@ -256,4 +290,8 @@ exports.rejectWithdrawRequest = catchAsync(async (req, res, next) => {
         status: 'success',
         request,
     });
+});
+
+exports.getMyWithdrawRequestes = catchAsync(async (req, res, next) => {
+
 });

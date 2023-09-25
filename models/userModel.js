@@ -221,6 +221,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Support"
     }],
+    paypalEmails: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "paypal-emails"
+    }],
     userPhoto: String,
     cloudinaryId: String,
     forgetPasswordOTP: String,
