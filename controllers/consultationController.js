@@ -1013,9 +1013,12 @@ exports.viewConsultation = catchAsync(async (req, res, next) => {
 
   const consultant = await Consultant.findById(consultantId);
 
+  const consultation = await Consultation.findById(consultant.consultant);
+
   res.status(200).json({
     status: "success",
     consultant,
+    reviews: consultation.Reviews,
   });
 });
 
