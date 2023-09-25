@@ -6776,11 +6776,12 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "body",
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "example: ?sort=name,-createdAt"
           }
         ],
         "responses": {
@@ -6812,8 +6813,8 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "201": {
+            "description": "Created"
           }
         },
         "requestBody": {
@@ -8387,6 +8388,18 @@
           },
           "address": {
             "type": "string"
+          },
+          "status": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Placed",
+                "Dispatched",
+                "On Way",
+                "Received"
+              ]
+            }
           },
           "total": {
             "type": "number"
