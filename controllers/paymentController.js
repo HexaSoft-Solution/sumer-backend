@@ -1403,6 +1403,10 @@ exports.checkoutPaypal = catchAsync(async (req, res, next) => {
             {_id: product.owner._id},
             {$inc: {balance: product.price}},
         )
+
+        req.user.transactions.push(transaction._id)
+        await req.user.save();
+
     }
 
     if (req.user.cart.voucher) {
