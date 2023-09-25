@@ -402,6 +402,8 @@ exports.addServices = catchAsync(async (req, res, next) => {
     service = await Service.create({
       name,
       description,
+      servicePhoto: result.secure_url,
+      cloudinaryId: result.public_id,
     });
   } else {
     service = await Service.create({

@@ -138,13 +138,14 @@ exports.endConsultant = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const consultantId = req.params.id;
 
+  const consultation = await Consultation.findOne({ owner: userId });
   const consultant = await Consultant.findById(consultantId);
 
   if (!consultant) {
     return next(new AppError("You don't have access to this chat", 400));
   }
 
-  if (userId !== consultant.consultant._id.toString()) {
+  if (consultation._id.toString() !== consultant.consultant._id.toString()) {
     return next(new AppError("You don't have access to this chat", 400));
   }
 

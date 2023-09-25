@@ -223,6 +223,8 @@ exports.checkout = catchAsync(async (req, res, next) => {
         });
         await transaction.save();
         transactionIds.push(transaction._id);
+        req.user.transactions.push(transaction._id)
+        await req.user.save();
 
         const product = await Product.findById(item.product);
 
