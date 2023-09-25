@@ -58,10 +58,7 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
 
 exports.getReview = async (req, res, next) => {
   // #swagger.tags = ['Community']
-  /*  #swagger.parameters['id'] = {
-                in: 'body',
-                description: 'example: ?sort=name,-createdAt',
-        } */
+ 
   return factory.getOne(req, res, next, ConsultationReview);
 };
 
