@@ -2952,16 +2952,7 @@
                   "salonId": {
                     "example": "any"
                   },
-                  "startTime": {
-                    "example": "any"
-                  },
-                  "endTime": {
-                    "example": "any"
-                  },
-                  "service": {
-                    "example": "any"
-                  },
-                  "day": {
+                  "salonAvailabilityId": {
                     "example": "any"
                   },
                   "date": {
@@ -3944,16 +3935,10 @@
                   "salonId": {
                     "example": "any"
                   },
-                  "startTime": {
-                    "example": "any"
-                  },
-                  "endTime": {
+                  "salonAvailabilityId": {
                     "example": "any"
                   },
                   "service": {
-                    "example": "any"
-                  },
-                  "day": {
                     "example": "any"
                   },
                   "date": {
@@ -5162,7 +5147,7 @@
                   "day": {
                     "example": "any"
                   },
-                  "date": {
+                  "capacity": {
                     "example": "any"
                   }
                 }
@@ -9079,7 +9064,6 @@
           "startTime",
           "endTime",
           "day",
-          "date",
           "salon"
         ],
         "properties": {
@@ -9133,9 +9117,8 @@
               "Sunday"
             ]
           },
-          "date": {
-            "type": "string",
-            "format": "date-time"
+          "capacity": {
+            "type": "number"
           },
           "salon": {
             "type": "string"

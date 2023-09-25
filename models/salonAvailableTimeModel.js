@@ -16,10 +16,9 @@ const salonAvailableTableSchema = new mongoose.Schema({
         enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         required: true
     },
-    date: {
-        type: Date,
-        set: parseDate,
-        required: true
+    capacity: {
+        type: Number,
+        default: 1,
     },
     salon: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,19 +26,6 @@ const salonAvailableTableSchema = new mongoose.Schema({
         required: true
     },
 })
-
-function parseDate(date) {
-    if (typeof date === 'string') {
-        const parts = date.split('/');
-        if (parts.length === 3) {
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10) - 1;
-            const year = parseInt(parts[2], 10);
-            return new Date(year, month, day);
-        }
-    }
-    return date;
-}
 
 const SalonAvailableTable = mongoose.model('Salon-table', salonAvailableTableSchema);
 

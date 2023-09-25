@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Transaction",
     }],
+    salonBooking: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SalonBooking",
+    }],
     email: {
       type: String,
       required: [true, "email-required"],

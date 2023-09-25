@@ -672,12 +672,11 @@ exports.addTimeTable = catchAsync(async (req, res, next) => {
     return next(new AppError("You are not the owner of this salon", 400));
   }
 
-  const { startTime, endTime, day, date } = req.body;
+  const { startTime, endTime, day, capacity } = req.body;
 
   const available = await SalonTimeTable.find({
     salon: salonId,
     day: day,
-    date: parseDate(date),
   });
 
   let conflict = available.map((available) => {
@@ -698,7 +697,7 @@ exports.addTimeTable = catchAsync(async (req, res, next) => {
     startTime,
     endTime,
     day,
-    date,
+    capacity,
   });
 
   await Salon.findOneAndUpdate(

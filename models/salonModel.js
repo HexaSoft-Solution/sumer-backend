@@ -23,7 +23,7 @@ const salonSchema = new mongoose.Schema({
     },
     depositPrice: {
         type: Number,
-        required: [true, 'A salon must have a deposit price'],  
+        default: 0 
     },
     balance: {
         type: Number,
