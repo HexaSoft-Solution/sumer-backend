@@ -58,7 +58,10 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
 
 exports.getReview = async (req, res, next) => {
   // #swagger.tags = ['Community']
-
+  /*  #swagger.parameters['id'] = {
+                in: 'body',
+                description: 'example: ?sort=name,-createdAt',
+        } */
   return factory.getOne(req, res, next, ConsultationReview);
 };
 
@@ -69,8 +72,11 @@ exports.createReview = catchAsync(async (req, res, next) => {
 
   const consultation = await Consultation.findById(consultationId);
 
-  console.log(consultation)
-  if (!consultation.consultants.find((e) => e.user._id === userId)) {
+
+  if (
+    !consultation.consultants.find((e) => e.user?._id?.toString() === userId)
+  ) {
+
     return next(
       new AppError("You are not allowed to review this consultation", 401)
     );
@@ -88,7 +94,7 @@ exports.createReview = catchAsync(async (req, res, next) => {
   consultation.Reviews.push(freshReview._id);
   await consultation.save();
 
-  res.status.json({
+  res.status(201).json({
     status: "success",
     review: freshReview,
   });
