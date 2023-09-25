@@ -7863,6 +7863,12 @@
                   },
                   "paypalEmail": {
                     "example": "any"
+                  },
+                  "save": {
+                    "example": "any"
+                  },
+                  "paypalEmailId": {
+                    "example": "any"
                   }
                 }
               }
@@ -8842,6 +8848,20 @@
           }
         }
       },
+      "paypalEmails": {
+        "title": "paypal-emails",
+        "required": [
+          "paypalEmail"
+        ],
+        "properties": {
+          "paypalEmail": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
       "paypalSalonOrdersSchema": {
         "title": "PaypalSalonOrders",
         "required": [
@@ -9661,6 +9681,12 @@
             }
           },
           "supprots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paypalEmails": {
             "type": "array",
             "items": {
               "type": "string"

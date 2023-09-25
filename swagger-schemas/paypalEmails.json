@@ -1,0 +1,1 @@
+{"title":"paypal-emails","required":["paypalEmail"],"properties":{"paypalEmail":{"type":"string"},"_id":{"type":"string"}}}
