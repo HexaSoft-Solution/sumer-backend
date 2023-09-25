@@ -89,7 +89,7 @@ ConsultationSchema.pre(/^find/, function (next) {
         path: 'owner',
         select: "firstName firstName name userPhoto"
     })
-    .populate('consultants');
+    .populate('consultants').populate('Reviews');
     next();
 });
 

@@ -69,6 +69,7 @@ exports.createReview = catchAsync(async (req, res, next) => {
 
   const consultation = await Consultation.findById(consultationId);
 
+  console.log(consultation)
   if (!consultation.consultants.find((e) => e.user._id === userId)) {
     return next(
       new AppError("You are not allowed to review this consultation", 401)
