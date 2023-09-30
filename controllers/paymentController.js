@@ -205,9 +205,6 @@ exports.checkout = catchAsync(async (req, res, next) => {
             totalCartAmount += totalPriceForProduct;
         }
 
-
-        console.log(totalCartAmount)
-
         const metadata = {
             productName: product.name,
             quantity: item.quantity,
