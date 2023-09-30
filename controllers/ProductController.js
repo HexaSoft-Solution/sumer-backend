@@ -64,7 +64,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     }
   });
 
-  if (req.user.addresses[0]) {
+  if (req?.user?.addresses[0]) {
     const userCoordinates = {
       latitude: req.user.addresses[0].latitude,
       longitude: req.user.addresses[0].longitude,
