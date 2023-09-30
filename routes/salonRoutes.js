@@ -10,7 +10,6 @@ const router = express.Router();
 router
     .route('/')
     .get(
-        authController.protect,
         salonController.getAllSalons
     )
     .post(

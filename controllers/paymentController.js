@@ -198,10 +198,10 @@ exports.checkout = catchAsync(async (req, res, next) => {
         let totalPriceForProduct;
 
         if (product.discountedPrice > 0) {
-            totalPriceForProduct = product.price * item.quantity;
+            totalPriceForProduct = product.discountedPrice * item.quantity;
             totalCartAmount += totalPriceForProduct;
         } else {
-            totalPriceForProduct = product.discountedPrice * item.quantity;
+            totalPriceForProduct = product.price * item.quantity;
             totalCartAmount += totalPriceForProduct;
         }
 
@@ -283,6 +283,8 @@ exports.checkout = catchAsync(async (req, res, next) => {
         req.user.creditCards.push(creditCard._id);
         await req.user.save();
     }
+
+    console.log(totalCartAmount)
 
     const invoiceId = generateRandomInvoiceId();
     const payment = await moyasar.createPayment(
