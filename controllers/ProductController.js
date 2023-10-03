@@ -64,24 +64,33 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     }
   });
 
-  if (req.user.addresses[0]) {
-    const userCoordinates = {
-      latitude: req.user.addresses[0].latitude,
-      longitude: req.user.addresses[0].longitude,
-    };
+  let userCoordinates = {
+    latitude: Number.MAX_VALUE,
+    longitude: Number.MAX_VALUE,
+  }
+
+  if (req?.user?.addresses !== undefined) {
+    if (req.user.addresses[0]) {
+      userCoordinates = {
+        latitude: req.user.addresses[0].latitude,
+        longitude: req.user.addresses[0].longitude,
+      };
+  }
 
     Products.forEach((product) => {
-      if (product.owner.addresses[0] && product.owner.addresses[0]) {
-        const ownerCoordinates = {
-          latitude: product.owner.addresses[0].latitude,
-          longitude: product.owner.addresses[0].longitude,
-        };
-        product.distanceToUser = geolib.getDistance(
-          userCoordinates,
-          ownerCoordinates
-        );
-      } else {
-        product.distanceToUser = Number.MAX_VALUE;
+      if (product.owner.addresses){
+        if (product.owner.addresses[0] && product.owner.addresses[0]) {
+          const ownerCoordinates = {
+            latitude: product.owner.addresses[0].latitude,
+            longitude: product.owner.addresses[0].longitude,
+          };
+          product.distanceToUser = geolib.getDistance(
+            userCoordinates,
+            ownerCoordinates
+          );
+        } else {
+          product.distanceToUser = Number.MAX_VALUE;
+        }
       }
     });
   }
