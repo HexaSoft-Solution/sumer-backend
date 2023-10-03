@@ -107,7 +107,6 @@ router.route("/search").get(ProductController.searchProduct);
 router
   .route("/:id")
   .get(
-    authController.protect,
     ProductController.getProduct
     )
   .patch(
@@ -120,6 +119,7 @@ router
     authController.restrictTo("admin", "business"),
     ProductController.deleteProduct
   );
+  
 
 router
   .route("/uploadProductPhoto/:id")
