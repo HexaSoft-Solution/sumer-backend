@@ -77,6 +77,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
       };
   }
 
+  
     Products.forEach((product) => {
       if (product.owner.addresses){
         if (product.owner.addresses[0] && product.owner.addresses[0]) {
