@@ -1476,11 +1476,11 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
 
         const metadata = {
             name: product.name,
-            description: product.desc,
+            description: product.desc.slice(0, 30),
             quantity: item.quantity,
             unit_amount: {
                 currency_code: 'USD',
-                value: (product.price * 0.24).toString(),
+                value: (product.price * 0.24).toFixed(2),
             }
         };
         metadataArray.push(metadata);
@@ -1545,11 +1545,11 @@ exports.paypalCheckoutOrder = catchAsync(async (req, res, next) => {
             soft_descriptor: "Products",
             amount: {
                 currency_code: "USD",
-                value: (totalCartAmount * 0.24).toString(), 
+                value: (totalCartAmount * 0.24).toFixed(2), 
                 breakdown: {
                     item_total: {
                         currency_code: "USD",
-                        value: (totalCartAmount * 0.24).toString()
+                        value: (totalCartAmount * 0.24).toFixed(2)
                     },
                 },
             },
@@ -1728,11 +1728,11 @@ exports.paypalBookSalon = catchAsync(async (req, res, next) => {
 
     const metadata = [{
         name: salon.name,
-        description: salon.about || "",
+        description: salon.about.slice(0,20) || "",
         quantity: "1",
         unit_amount: {
             currency_code: 'USD',
-            value: (endHours - startHours) * (salon.pricePerHour || 10),
+            value: ((endHours - startHours) * (salon.pricePerHour || 10)).toFixed(2),
         }
     }]
 
@@ -1757,11 +1757,11 @@ exports.paypalBookSalon = catchAsync(async (req, res, next) => {
             soft_descriptor: "Salon",
             amount: {
                 currency_code: "USD",
-                value: exactValue.toString(), 
+                value: exactValue.toFixed(2), 
                 breakdown: {
                     item_total: {
                         currency_code: "USD",
-                        value: exactValue.toString()
+                        value: exactValue.toFixed(2)
                     },
                 },
             },
@@ -1854,11 +1854,11 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
 
     const paypalItems = [{
         name: title || "Consultation",
-        description: consultation.about || "",
+        description: consultation.about.slice(0,20) || "",
         quantity: "1",
         unit_amount: {
             currency_code: 'USD',
-            value: consultation.price.toString(),
+            value: consultation.price.toFixed(2),
         }
     }]
 
@@ -1879,11 +1879,11 @@ exports.paypalConsultationBook = catchAsync(async (req, res, next) => {
             
             amount: {
                 currency_code: "USD",
-                value: consultation.price.toString(), 
+                value: consultation.price.toFixed(2), 
                 breakdown: {
                     item_total: {
                         currency_code: "USD",
-                        value: consultation.price.toString()
+                        value: consultation.price.toFixed(2)
                     },
                 },
             },
