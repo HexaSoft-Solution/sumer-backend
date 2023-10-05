@@ -126,7 +126,7 @@ productSchema.pre(/^find/, function (next) {
         select: 'name',
     }).populate({
         path: 'owner',
-        select: 'stockName',
+        select: 'stockName name firstName lastName',
     })
 
     next();
