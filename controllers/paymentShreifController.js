@@ -56,10 +56,10 @@ exports.checkout = catchAsync(async (req, res, next) => {
         let totalPriceForProduct;
 
         if (product.discountedPrice > 0) {
-            totalPriceForProduct = product.price * item.quantity;
+            totalPriceForProduct = product.discountedPrice * item.quantity;
             totalCartAmount += totalPriceForProduct;
         } else {
-            totalPriceForProduct = product.discountedPrice * item.quantity;
+            totalPriceForProduct = product.price * item.quantity;
             totalCartAmount += totalPriceForProduct;
         }
 
