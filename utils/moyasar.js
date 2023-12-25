@@ -24,7 +24,7 @@ const createPayment = async (amount, description, source, metadata, invoiceId, u
         const response = await axios.post(
             'https://api.moyasar.com/v1/payments',
             {
-                amount: amount  * 1000,
+                amount: amount  * 100,
                 description: description,
                 source: source,
                 metadata: metadata,
