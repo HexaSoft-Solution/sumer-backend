@@ -14,6 +14,8 @@ const AppError = require("../utils/appError");
 const cloudinary = require("../utils/cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
 
+const { io } = require("../server");
+
 exports.getAllConsultations = async (req, res, next) => {
   // #swagger.tags = ['Consultations']
   /*  #swagger.description = 'TO CUSTOMIZE YOUR REQUEST: ?price[gte]=1000&price[lte]=5000 OR ?category[in]=electronics,clothing OR ?page=3&sort=-createdAt&limit=20&fields=name,description ' */
@@ -973,6 +975,9 @@ exports.userSendChat = catchAsync(async (req, res, next) => {
     $push: { messages: message._id },
     $inc: { numOfMessages: -1 },
   });
+
+  // io.getIO().emit("chat message", message);
+  console.log(io);
 
   res.status(200).json({
     status: "success",

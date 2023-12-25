@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const socketIO = require('socket.io');
 
 process.on('uncaughtException', err => {
     console.log('UNCAUGHT EXCEPTION! Shutting down...');
@@ -27,6 +28,55 @@ const server = app.listen(port, () => {
     console.log(`App running on port ${port}...`);
 });
 
+const io = socketIO(server);
+
+let activUsers = [];
+
+io.on('connection', (socket) => {
+    console.log('User connected:', socket.id);
+    // socket.emit('chat message', 'Hello there!');
+    socket.on('add-new-user', (newUserId => {
+        if (!activUsers.includes(newUserId)) {
+            activUsers.push({userId: newUserId, socketId: socket.id});
+        }
+        console.log('New user connected', activUsers);
+        io.emit('get-users', activUsers);
+    }))
+    socket.on('chat message', (data) => {
+        // socket.emit('chat message', 'Hello there!');
+        // io.emit('chat message', data);
+    // const message = new Message(data);
+    //     message.save((err) => {
+    //         if (err) {
+    //             console.error('Error saving message to MongoDB:', err);
+    //         } else {
+    //             io.emit('chat message', data);
+    //         }
+    //     });
+        console.log(data)
+        console.log('message saved')
+    });
+
+    
+    io.on("send-message", (data) => {
+        const { receiverId } = data;
+
+        console.log("Sending from socket to :", receiverId)
+        const user = activUsers.find((user) => user.userId === receiverId);
+        console.log("Sending from socket to :", receiverId)
+        console.log("Data: ", data)
+        if (user) {
+            io.to(user.socketId).emit("recieve-message", data);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        activUsers = activUsers.filter(user => user.socketId !== socket.id);
+        console.log('User disconnected', activUsers);
+        io.emit('get-users', activUsers);
+    });
+});
+
 process.on('unhandledRejection', err => {
     console.log('UNHANDLED REJECTION!  Shutting down...');
     console.log(err.name, err.message);
@@ -34,3 +84,5 @@ process.on('unhandledRejection', err => {
         process.exit(1);
     });
 });
+
+module.exports = { io, server } ;
