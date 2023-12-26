@@ -25,7 +25,7 @@ mongoose.connect(DB, {
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
-    console.log(`App running on port ${port}...`);
+    console.log(`App running on http://localhost:${port}`);
 });
 
 const io = socketIO(server);
@@ -68,6 +68,10 @@ io.on('connection', (socket) => {
         if (user) {
             io.to(user.socketId).emit("recieve-message", data);
         }
+    });
+
+    socket.on('notification', (data) => {
+        io.emit('notification', data);
     });
 
     socket.on('disconnect', () => {
