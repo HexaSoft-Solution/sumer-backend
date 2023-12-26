@@ -290,7 +290,7 @@ exports.createSalon = catchAsync(async (req, res, next) => {
   // #swagger.tags = ['Salon']
   const userId = req.user.id;
 
-  const { name, service, about, pricePerHour, address, phone } = req.body;
+  const { name, service, about, pricePerHour, address, phone, depositPrice } = req.body;
 
   const salon = await Salon.create({
     name,
